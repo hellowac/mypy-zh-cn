@@ -1,51 +1,40 @@
 .. _class-basics:
 
-Class basics
+Class 基础
 ============
 
-This section will help get you started annotating your
-classes. Built-in classes such as ``int`` also follow these same
-rules.
+本节将帮助您开始注解类(class)。包括内置类(Built-in classes)，如 `int`，也遵循相同的规则。
 
-Instance and class attributes
+实例和类属性
 *****************************
 
-The mypy type checker detects if you are trying to access a missing
-attribute, which is a very common programming error. For this to work
-correctly, instance and class attributes must be defined or
-initialized within the class. Mypy infers the types of attributes:
+mypy 类型检查器可以检测您是否试图访问缺失的属性，这是一个非常常见的编程错误。为了使这一点正常工作，实例和类属性必须在类内定义或初始化。mypy 推断属性的类型:
 
 .. code-block:: python
 
    class A:
        def __init__(self, x: int) -> None:
-           self.x = x  # Aha, attribute 'x' of type 'int'
+           self.x = x  # Aha，属性 'x' 的类型为 'int'
 
    a = A(1)
-   a.x = 2  # OK!
-   a.y = 3  # Error: "A" has no attribute "y"
+   a.x = 2  # OK！
+   a.y = 3  # 错误:“A”没有属性“y”
 
-This is a bit like each class having an implicitly defined
-:py:data:`__slots__ <object.__slots__>` attribute. This is only enforced during type
-checking and not when your program is running.
+这有点像每个类都有一个隐式定义的 :py:data:`__slots__ <object.__slots__>` 属性。这只在类型检查期间强制执行，而不是在程序运行时。
 
-You can declare types of variables in the class body explicitly using
-a type annotation:
+您可以在类体中显式声明变量的类型:
 
 .. code-block:: python
 
    class A:
-       x: list[int]  # Declare attribute 'x' of type list[int]
+       x: list[int]  # 声明属性 'x' 的类型为 list[int]
 
    a = A()
    a.x = [1]     # OK
 
-As in Python generally, a variable defined in the class body can be used
-as a class or an instance variable. (As discussed in the next section, you
-can override this with a :py:data:`~typing.ClassVar` annotation.)
+在 Python 中，类体中定义的变量可以作为类变量或实例变量使用。（如下一节所述，您可以使用 :py:data:`~typing.ClassVar` 注解覆盖此行为。）
 
-Similarly, you can give explicit types to instance variables defined
-in a method:
+类似地，您可以为在方法中定义的实例变量提供显式类型:
 
 .. code-block:: python
 
@@ -56,26 +45,20 @@ in a method:
        def f(self) -> None:
            self.y: Any = 0
 
-You can only define an instance variable within a method if you assign
-to it explicitly using ``self``:
+您只能在方法内通过使用 ``self`` 显式赋值来定义实例变量:
 
 .. code-block:: python
 
    class A:
        def __init__(self) -> None:
-           self.y = 1   # Define 'y'
+           self.y = 1   # 定义 'y'
            a = self
-           a.x = 1      # Error: 'x' not defined
+           a.x = 1      # 错误:'x' 未定义
 
-Annotating __init__ methods
+注解 __init__ 方法
 ***************************
 
-The :py:meth:`__init__ <object.__init__>` method is somewhat special -- it doesn't return a
-value.  This is best expressed as ``-> None``.  However, since many feel
-this is redundant, it is allowed to omit the return type declaration
-on :py:meth:`__init__ <object.__init__>` methods **if at least one argument is annotated**.  For
-example, in the following classes :py:meth:`__init__ <object.__init__>` is considered fully
-annotated:
+:py:meth:`__init__ <object.__init__>` 方法有些特别——它不返回值。最佳表达方式是 ``-> None``。然而，由于许多人认为这很冗余，如果 **至少有一个参数被注解**，则可以省略 :py:meth:`__init__ <object.__init__>` 方法的返回类型声明。例如，在以下类中，`:py:meth:`__init__ <object.__init__>` 被视为完全注解:
 
 .. code-block:: python
 
@@ -87,68 +70,57 @@ annotated:
        def __init__(self, arg: int):
            self.var = arg
 
-However, if :py:meth:`__init__ <object.__init__>` has no annotated arguments and no return type
-annotation, it is considered an untyped method:
+但是，如果 :py:meth:`__init__ <object.__init__>` 方法没有注解参数且没有返回类型注解，它将被视为未注解的方法:
 
 .. code-block:: python
 
    class C3:
        def __init__(self):
-           # This body is not type checked
+           # 这个主体不进行类型检查
            self.var = 42 + 'abc'
 
-Class attribute annotations
+类属性注解(ClassVar)
 ***************************
 
-You can use a :py:data:`ClassVar[t] <typing.ClassVar>` annotation to explicitly declare that a
-particular attribute should not be set on instances:
+您可以使用 :py:data:`ClassVar[t] <typing.ClassVar>` 注解显式声明特定属性不应在实例上设置:
 
 .. code-block:: python
 
   from typing import ClassVar
 
   class A:
-      x: ClassVar[int] = 0  # Class variable only
+      x: ClassVar[int] = 0  # 仅类变量
 
   A.x += 1  # OK
 
   a = A()
-  a.x = 1  # Error: Cannot assign to class variable "x" via instance
-  print(a.x)  # OK -- can be read through an instance
+  a.x = 1  # 错误:无法通过实例赋值给类变量 "x"
+  print(a.x)  # OK — 可以通过实例读取
 
-It's not necessary to annotate all class variables using
-:py:data:`~typing.ClassVar`. An attribute without the :py:data:`~typing.ClassVar` annotation can
-still be used as a class variable. However, mypy won't prevent it from
-being used as an instance variable, as discussed previously:
+并非所有类变量都需要使用 :py:data:`~typing.ClassVar` 注解。没有 :py:data:`~typing.ClassVar` 注解的属性仍然可以用作类变量。然而，mypy 不会防止它被用作实例变量，如前所述:
 
 .. code-block:: python
 
   class A:
-      x = 0  # Can be used as a class or instance variable
+      x = 0  # 可以用作类或实例变量
 
   A.x += 1  # OK
 
   a = A()
-  a.x = 1  # Also OK
+  a.x = 1  # 也可以
 
-Note that :py:data:`~typing.ClassVar` is not a class, and you can't use it with
-:py:func:`isinstance` or :py:func:`issubclass`. It does not change Python
-runtime behavior -- it's only for type checkers such as mypy (and
-also helpful for human readers).
+请注意，:py:data:`~typing.ClassVar` 不是一个类，您不能使用 :py:func:`isinstance` 或 :py:func:`issubclass`。它不会改变 Python 的运行时行为——它仅用于类型检查器，如 mypy（同时也对人类读者有帮助）。
 
-You can also omit the square brackets and the variable type in
-a :py:data:`~typing.ClassVar` annotation, but this might not do what you'd expect:
+您还可以省略方括号和变量类型，但这可能不会如您所期望:
 
 .. code-block:: python
 
    class A:
-       y: ClassVar = 0  # Type implicitly Any!
+       y: ClassVar = 0  # 类型隐式为 Any!
 
-In this case the type of the attribute will be implicitly ``Any``.
-This behavior will change in the future, since it's surprising.
+在这种情况下，属性的类型将隐式为 ``Any`` 。这种行为将来会改变，因为它令人惊讶。
 
-An explicit :py:data:`~typing.ClassVar` may be particularly handy to distinguish
-between class and instance variables with callable types. For example:
+显式的 :py:data:`~typing.ClassVar` 在区分可调用类型的类变量和实例变量时尤其方便。例如:
 
 .. code-block:: python
 
@@ -162,19 +134,15 @@ between class and instance variables with callable types. For example:
 
    A().foo(42)  # OK
    A().bar(42)  # OK
-   A().bad()  # Error: Too few arguments
+   A().bad()  # 错误:参数数量不足
 
 .. note::
-   A :py:data:`~typing.ClassVar` type parameter cannot include type variables:
-   ``ClassVar[T]`` and ``ClassVar[list[T]]``
-   are both invalid if ``T`` is a type variable (see :ref:`generic-classes`
-   for more about type variables).
+   :py:data:`~typing.ClassVar` 类型参数不能包含类型变量: ``ClassVar[T]`` 和 ``ClassVar[list[T]]`` 都是无效的，如果 ``T`` 是一个类型变量（有关类型变量的更多信息，请参见 :ref:`generic-classes`）。
 
-Overriding statically typed methods
+重写静态类型方法(override)
 ***********************************
 
-When overriding a statically typed method, mypy checks that the
-override has a compatible signature:
+在重写静态类型方法时，mypy 会检查重写的方法是否具有兼容的签名:
 
 .. code-block:: python
 
@@ -183,11 +151,11 @@ override has a compatible signature:
            ...
 
    class Derived1(Base):
-       def f(self, x: str) -> None:   # Error: type of 'x' incompatible
+       def f(self, x: str) -> None:   # 错误:'x' 的类型不兼容
            ...
 
    class Derived2(Base):
-       def f(self, x: int, y: int) -> None:  # Error: too many arguments
+       def f(self, x: int, y: int) -> None:  # 错误:参数过多
            ...
 
    class Derived3(Base):
@@ -195,27 +163,18 @@ override has a compatible signature:
            ...
 
    class Derived4(Base):
-       def f(self, x: float) -> None:   # OK: mypy treats int as a subtype of float
+       def f(self, x: float) -> None:   # OK:mypy 将 int 视为 float 的子类型
            ...
 
    class Derived5(Base):
-       def f(self, x: int, y: int = 0) -> None:   # OK: accepts more than the base
-           ...                                    #     class method
+       def f(self, x: int, y: int = 0) -> None:   # OK:接受比基类方法更多的参数
+           ...                                       
 
 .. note::
 
-   You can also vary return types **covariantly** in overriding. For
-   example, you could override the return type ``Iterable[int]`` with a
-   subtype such as ``list[int]``. Similarly, you can vary argument types
-   **contravariantly** -- subclasses can have more general argument types.
+   在重写时，您还可以 **协变(covariantly)** 地重写返回类型。例如，您可以用子类型如 ``list[int]`` 来重写返回类型 ``Iterable[int]`` 。同样，您可以 **逆变(contravariantly)** 重写参数类型 — —子类可以拥有更一般的参数类型。
 
-In order to ensure that your code remains correct when renaming methods,
-it can be helpful to explicitly mark a method as overriding a base
-method. This can be done with the ``@override`` decorator. ``@override``
-can be imported from ``typing`` starting with Python 3.12 or from
-``typing_extensions`` for use with older Python versions. If the base
-method is then renamed while the overriding method is not, mypy will
-show an error:
+为了确保在重命名方法时代码保持正确，显式标记一个方法为重写基类方法是很有帮助的。这可以通过 ``@override`` 装饰器实现。 ``@override`` 可以从 Python 3.12 开始从 ``typing`` 导入，或者从 ``typing_extensions`` 导入以用于较旧的 Python 版本。如果基类方法在重写方法未重命名的情况下被重命名，mypy 将显示错误:
 
 .. code-block:: python
 
@@ -233,23 +192,16 @@ show an error:
            ...
 
        @override
-       def g(self, y: str) -> None:   # Error: no corresponding base method found
+       def g(self, y: str) -> None:   # 错误:未找到对应的基类方法
            ...
 
 .. note::
 
-   Use :ref:`--enable-error-code explicit-override <code-explicit-override>` to require
-   that method overrides use the ``@override`` decorator. Emit an error if it is missing.
+   使用 :ref:`--enable-error-code explicit-override <code-explicit-override>` 来要求方法重写使用 ``@override`` 装饰器。缺少时会产生错误。
 
-You can also override a statically typed method with a dynamically
-typed one. This allows dynamically typed code to override methods
-defined in library classes without worrying about their type
-signatures.
+您还可以使用动态类型的方法重写静态类型的方法。这允许动态类型代码重写库类中定义的方法，而不必担心它们的类型签名。
 
-As always, relying on dynamically typed code can be unsafe. There is no
-runtime enforcement that the method override returns a value that is
-compatible with the original return type, since annotations have no
-effect at runtime:
+如往常一样，依赖动态类型代码可能不安全。因为在运行时没有强制执行重写方法返回的值与原始返回类型兼容，注解在运行时无效:
 
 .. code-block:: python
 
@@ -258,17 +210,13 @@ effect at runtime:
            return x + 1
 
    class Derived(Base):
-       def inc(self, x):   # Override, dynamically typed
-           return 'hello'  # Incompatible with 'Base', but no mypy error
+       def inc(self, x):   # 重写，动态类型
+           return 'hello'  # 与 'Base' 不兼容，但没有 mypy 错误
 
-Abstract base classes and multiple inheritance
+抽象基类和多重继承(Abstract)
 **********************************************
 
-Mypy supports Python :doc:`abstract base classes <python:library/abc>` (ABCs). Abstract classes
-have at least one abstract method or property that must be implemented
-by any *concrete* (non-abstract) subclass. You can define abstract base
-classes using the :py:class:`abc.ABCMeta` metaclass and the :py:func:`@abc.abstractmethod <abc.abstractmethod>`
-function decorator. Example:
+Mypy 支持 Python 的 :doc:`抽象基类 <python:library/abc>` (ABCs)。抽象类至少有一个抽象方法或属性，任何具体（非抽象）子类必须实现这些方法或属性。您可以使用 :py:class:`abc.ABCMeta` 元类和 :py:func:`@abc.abstractmethod <abc.abstractmethod>` 函数装饰器定义抽象基类。示例:
 
 .. code-block:: python
 
@@ -284,23 +232,18 @@ function decorator. Example:
 
    class Cat(Animal):
        def eat(self, food: str) -> None:
-           ...  # Body omitted
+           ...  # 省略实现
 
        @property
        def can_walk(self) -> bool:
            return True
 
-   x = Animal()  # Error: 'Animal' is abstract due to 'eat' and 'can_walk'
+   x = Animal()  # 错误:'Animal' 是抽象的，因为缺少 'eat' 和 'can_walk'
    y = Cat()     # OK
 
-Note that mypy performs checking for unimplemented abstract methods
-even if you omit the :py:class:`~abc.ABCMeta` metaclass. This can be useful if the
-metaclass would cause runtime metaclass conflicts.
+请注意，即使您省略了 :py:class:`~abc.ABCMeta` 元类，mypy 仍会检查未实现的抽象方法。这在元类可能导致运行时元类冲突时特别有用。
 
-Since you can't create instances of ABCs, they are most commonly used in
-type annotations. For example, this method accepts arbitrary iterables
-containing arbitrary animals (instances of concrete ``Animal``
-subclasses):
+由于无法创建 ABC 的实例，因此它们最常用于类型注解。例如，以下方法接受包含任意动物（具体的 `Animal` 子类实例）的任意可迭代对象:
 
 .. code-block:: python
 
@@ -308,12 +251,7 @@ subclasses):
        for animal in animals:
            animal.eat(food)
 
-There is one important peculiarity about how ABCs work in Python --
-whether a particular class is abstract or not is somewhat implicit.
-In the example below, ``Derived`` is treated as an abstract base class
-since ``Derived`` inherits an abstract ``f`` method from ``Base`` and
-doesn't explicitly implement it. The definition of ``Derived``
-generates no errors from mypy, since it's a valid ABC:
+关于 ABC 的工作方式，有一个重要的特性——一个类是否为抽象类在某种程度上是隐式的。在下面的示例中，由于 `Derived` 继承了来自 `Base` 的抽象方法 `f`，并且没有显式实现它，因此 `Derived` 被视为抽象基类。定义 `Derived` 时，mypy 不会产生错误，因为这是一个有效的 ABC:
 
 .. code-block:: python
 
@@ -323,26 +261,21 @@ generates no errors from mypy, since it's a valid ABC:
        @abstractmethod
        def f(self, x: int) -> None: pass
 
-   class Derived(Base):  # No error -- Derived is implicitly abstract
+   class Derived(Base):  # 无错误 - Derived 隐式为抽象类
        def g(self) -> None:
            ...
 
-Attempting to create an instance of ``Derived`` will be rejected,
-however:
+但是，尝试创建 `Derived` 的实例会被拒绝:
 
 .. code-block:: python
 
-   d = Derived()  # Error: 'Derived' is abstract
+   d = Derived()  # 错误:'Derived' 是抽象的
 
 .. note::
 
-   It's a common error to forget to implement an abstract method.
-   As shown above, the class definition will not generate an error
-   in this case, but any attempt to construct an instance will be
-   flagged as an error.
+   忘记实现抽象方法是一个常见错误。如上所示，在这种情况下，类定义不会产生错误，但任何尝试构造实例的行为都会被标记为错误。
 
-Mypy allows you to omit the body for an abstract method, but if you do so,
-it is unsafe to call such method via ``super()``. For example:
+Mypy 允许您省略抽象方法的主体，但如果您这样做，通过 `super()` 调用该方法是不安全的。例如:
 
 .. code-block:: python
 
@@ -355,25 +288,20 @@ it is unsafe to call such method via ``super()``. For example:
            return 0
    class Sub(Base):
        def foo(self) -> int:
-           return super().foo() + 1  # error: Call to abstract method "foo" of "Base"
-                                     # with trivial body via super() is unsafe
+           return super().foo() + 1  # 错误:调用 "Base" 的抽象方法 "foo"
+                                     # 通过 super() 调用带有简单主体的抽象方法是不安全的
        @abstractmethod
        def bar(self) -> int:
-           return super().bar() + 1  # This is OK however.
+           return super().bar() + 1  # 这是可以的。
 
-A class can inherit any number of classes, both abstract and
-concrete. As with normal overrides, a dynamically typed method can
-override or implement a statically typed method defined in any base
-class, including an abstract method defined in an abstract base class.
+一个类可以继承任意数量的类，包括抽象类和具体类。与普通重写一样，动态类型的方法可以重写或实现任何基类中定义的静态类型方法，包括在抽象基类中定义的抽象方法。
 
-You can implement an abstract property using either a normal
-property or an instance variable.
+您可以使用常规属性或实例变量来实现抽象属性。
 
-Slots
-*****
+槽（Slots）
+***************
 
-When a class has explicitly defined :std:term:`__slots__`,
-mypy will check that all attributes assigned to are members of ``__slots__``:
+当一个类显式定义了 :std:term:`__slots__` 时，mypy 会检查所有赋值的属性是否是 ``__slots__`` 的成员：
 
 .. code-block:: python
 
@@ -383,19 +311,15 @@ mypy will check that all attributes assigned to are members of ``__slots__``:
       def __init__(self, name: str, year: int) -> None:
          self.name = name
          self.year = year
-         # Error: Trying to assign name "released" that is not in "__slots__" of type "Album"
+         # 错误：尝试为类型 "Album" 的 "__slots__" 赋值 "released"，但不在 "__slots__" 中
          self.released = True
 
   my_album = Album('Songs about Python', 2021)
 
-Mypy will only check attribute assignments against ``__slots__`` when
-the following conditions hold:
+Mypy 仅在以下条件下检查属性赋值与 ``__slots__`` 的一致性：
 
-1. All base classes (except builtin ones) must have explicit
-   ``__slots__`` defined (this mirrors Python semantics).
+1. 所有基类（除了内置类）必须显式定义 ``__slots__`` （这反映了 Python 的语义）。
 
-2. ``__slots__`` does not include ``__dict__``. If ``__slots__``
-   includes ``__dict__``, arbitrary attributes can be set, similar to
-   when ``__slots__`` is not defined (this mirrors Python semantics).
+2. ``__slots__`` 不包括 ``__dict__``。如果 ``__slots__`` 包含 ``__dict__`` ，则可以设置任意属性，类似于未定义 ``__slots__`` 时的行为（这也反映了 Python 的语义）。
 
-3. All values in ``__slots__`` must be string literals.
+3. ``__slots__`` 中的所有值必须是字符串字面量。

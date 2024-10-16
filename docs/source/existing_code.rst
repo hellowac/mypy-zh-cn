@@ -1,89 +1,59 @@
 .. _existing-code:
 
-Using mypy with an existing codebase
-====================================
+在现有代码库中使用 mypy
+==========================
 
-This section explains how to get started using mypy with an existing,
-significant codebase that has little or no type annotations. If you are
-a beginner, you can skip this section.
+本节说明如何在一个现有的、类型注释较少或没有类型注释的代码库中开始使用 mypy。如果您是初学者，可以跳过本节。
 
-Start small
+从小处着手
 -----------
 
-If your codebase is large, pick a subset of your codebase (say, 5,000 to 50,000
-lines) and get mypy to run successfully only on this subset at first, *before
-adding annotations*. This should be doable in a day or two. The sooner you get
-some form of mypy passing on your codebase, the sooner you benefit.
+如果您的代码库较大，选择其中一个子集（例如，5,000 到 50,000 行），首先让 mypy 成功运行该子集，而*不添加注释*。这在一两天内应该是可以做到的。尽早让 mypy 通过，您就能更早获益。
 
-You'll likely need to fix some mypy errors, either by inserting
-annotations requested by mypy or by adding ``# type: ignore``
-comments to silence errors you don't want to fix now.
+您可能需要修复一些 mypy 错误，或者通过插入 mypy 要求的注释或添加 ``# type: ignore`` 注释来静默您暂时不想修复的错误。
 
-We'll mention some tips for getting mypy passing on your codebase in various
-sections below.
+确保 mypy 一致运行并防止回归
+-----------------------------------
 
-Run mypy consistently and prevent regressions
----------------------------------------------
+确保您代码库中的所有开发人员以相同方式运行 mypy。确保这一点的一种方法是将 mypy 调用的小脚本添加到代码库中，或者将 mypy 调用添加到您用于运行测试的现有工具中，例如 ``tox``。
 
-Make sure all developers on your codebase run mypy the same way.
-One way to ensure this is adding a small script with your mypy
-invocation to your codebase, or adding your mypy invocation to
-existing tools you use to run tests, like ``tox``.
+* 确保每个人都使用相同的选项运行 mypy。将 mypy :ref:`配置文件 <config-file>` 检查到代码库中是最简单的方法。
 
-* Make sure everyone runs mypy with the same options. Checking a mypy
-  :ref:`configuration file <config-file>` into your codebase is the
-  easiest way to do this.
+* 确保每个人检查相同的文件集。有关详细信息，请参见 :ref:`specifying-code-to-be-checked`。
 
-* Make sure everyone type checks the same set of files. See
-  :ref:`specifying-code-to-be-checked` for details.
+* 确保每个人都使用相同版本的 mypy，例如，通过将 mypy 固定在其余开发要求中。
 
-* Make sure everyone runs mypy with the same version of mypy, for instance
-  by pinning mypy with the rest of your dev requirements.
+特别是，您要尽快确保在持续集成（CI）系统中运行 mypy。这将防止新的类型错误被引入到代码库中。
 
-In particular, you'll want to make sure to run mypy as part of your
-Continuous Integration (CI) system as soon as possible. This will
-prevent new type errors from being introduced into your codebase.
-
-A simple CI script could look something like this:
+一个简单的 CI 脚本可能如下所示：
 
 .. code-block:: text
 
     python3 -m pip install mypy==1.8
-    # Run your standardised mypy invocation, e.g.
+    # 运行您的标准化 mypy 调用，例如
     mypy my_project
-    # This could also look like `scripts/run_mypy.sh`, `tox run -e mypy`, `make mypy`, etc
+    # 这也可以是 `scripts/run_mypy.sh`，`tox run -e mypy`，`make mypy` 等等。
 
-Ignoring errors from certain modules
-------------------------------------
+忽略特定模块的错误
+----------------------
 
-By default mypy will follow imports in your code and try to check everything.
-This means even if you only pass in a few files to mypy, it may still process a
-large number of imported files. This could potentially result in lots of errors
-you don't want to deal with at the moment.
+默认情况下，mypy 会跟随您代码中的导入，并尝试检查所有内容。这意味着即使您只传递了几个文件给 mypy，它仍可能处理大量导入的文件。这可能导致您不想立即处理的许多错误。
 
-One way to deal with this is to ignore errors in modules you aren't yet ready to
-type check. The :confval:`ignore_errors` option is useful for this, for instance,
-if you aren't yet ready to deal with errors from ``package_to_fix_later``:
+解决此问题的一种方法是忽略尚未准备好进行类型检查的模块中的错误。:confval:`ignore_errors` 选项对此非常有用，例如，如果您尚未准备好处理 ``package_to_fix_later`` 的错误：
 
 .. code-block:: text
 
    [mypy-package_to_fix_later.*]
    ignore_errors = True
 
-You could even invert this, by setting ``ignore_errors = True`` in your global
-config section and only enabling error reporting with ``ignore_errors = False``
-for the set of modules you are ready to type check.
+您甚至可以反转这一点，在全局配置部分设置 ``ignore_errors = True``，并仅为您准备进行类型检查的模块启用错误报告，即设置 ``ignore_errors = False``。
 
-The per-module configuration that mypy's configuration file allows can be
-extremely useful. Many configuration options can be enabled or disabled
-only for specific modules. In particular, you can also enable or disable
-various error codes on a per-module basis, see :ref:`error-codes`.
+mypy 的配置文件允许的每个模块配置可以极为有用。许多配置选项可以仅为特定模块启用或禁用。特别是，您还可以基于每个模块启用或禁用各种错误代码，参见 :ref:`error-codes`。
 
-Fixing errors related to imports
---------------------------------
+修复与导入相关的错误
+----------------------
 
-A common class of error you will encounter is errors from mypy about modules
-that it can't find, that don't have types, or don't have stub files:
+您可能会遇到的常见错误类型是 mypy 报告的无法找到模块、没有类型或没有存根文件的错误：
 
 .. code-block:: text
 
@@ -91,28 +61,19 @@ that it can't find, that don't have types, or don't have stub files:
     core/model.py:9: error: Cannot find implementation or library stub for module named 'acme'
     ...
 
-Sometimes these can be fixed by installing the relevant packages or
-stub libraries in the environment you're running ``mypy`` in.
+有时，这些可以通过在您运行 ``mypy`` 的环境中安装相关的软件包或存根库来修复。
 
-See :ref:`fix-missing-imports` for a complete reference on these errors
-and the ways in which you can fix them.
+有关这些错误的完整参考以及您可以修复它们的方式，请参见 :ref:`fix-missing-imports`。
 
-You'll likely find that you want to suppress all errors from importing
-a given module that doesn't have types. If you only import that module
-in one or two places, you can use ``# type: ignore`` comments. For example,
-here we ignore an error about a third-party module ``frobnicate`` that
-doesn't have stubs using ``# type: ignore``:
+您可能希望抑制来自某个没有类型的导入模块的所有错误。如果您只在一两个地方导入该模块，可以使用 ``# type: ignore`` 注释。例如，这里我们使用 ``# type: ignore`` 忽略了关于没有存根的第三方模块 ``frobnicate`` 的错误：
 
 .. code-block:: python
 
    import frobnicate  # type: ignore
    ...
-   frobnicate.initialize()  # OK (but not checked)
+   frobnicate.initialize()  # OK (但未检查)
 
-But if you import the module in many places, this becomes unwieldy. In this
-case, we recommend using a :ref:`configuration file <config-file>`. For example,
-to disable errors about importing ``frobnicate`` and ``acme`` everywhere in your
-codebase, use a config like this:
+但如果您在许多地方导入该模块，这种做法会变得繁琐。在这种情况下，我们建议使用 :ref:`配置文件 <config-file>`。例如，要在代码库中的所有地方禁用导入 ``frobnicate`` 和 ``acme`` 的错误，可以使用如下配置：
 
 .. code-block:: text
 
@@ -122,130 +83,93 @@ codebase, use a config like this:
    [mypy-acme.*]
    ignore_missing_imports = True
 
-If you get a large number of errors, you may want to ignore all errors
-about missing imports, for instance by setting
-:option:`--disable-error-code=import-untyped <mypy --ignore-missing-imports>`.
-or setting :confval:`ignore_missing_imports` to true globally.
-This can hide errors later on, so we recommend avoiding this
-if possible.
+如果您遇到大量错误，您可能希望忽略所有关于缺失导入的错误，例如通过设置 :option:`--disable-error-code=import-untyped <mypy --ignore-missing-imports>`，或者全局设置 :confval:`ignore_missing_imports` 为 true。这可能会隐藏后续的错误，因此我们建议尽可能避免这种做法。
 
-Finally, mypy allows fine-grained control over specific import following
-behaviour. It's very easy to silently shoot yourself in the foot when playing
-around with these, so this should be a last resort. For more
-details, look :ref:`here <follow-imports>`.
+最后，mypy 允许对特定导入跟踪行为进行精细控制。在处理这些时，很容易无意中造成问题，因此这应作为最后的手段。有关更多详细信息，请查看 :ref:`here <follow-imports>`。
 
-Prioritise annotating widely imported modules
----------------------------------------------
-
-Most projects have some widely imported modules, such as utilities or
-model classes. It's a good idea to annotate these pretty early on,
-since this allows code using these modules to be type checked more
-effectively.
-
-Mypy is designed to support gradual typing, i.e. letting you add annotations at
-your own pace, so it's okay to leave some of these modules unannotated. The more
-you annotate, the more useful mypy will be, but even a little annotation
-coverage is useful.
-
-Write annotations as you go
----------------------------
-
-Consider adding something like these in your code style
-conventions:
-
-1. Developers should add annotations for any new code.
-2. It's also encouraged to write annotations when you modify existing code.
-
-This way you'll gradually increase annotation coverage in your
-codebase without much effort.
-
-Automate annotation of legacy code
+优先为广泛导入的模块添加注释
 ----------------------------------
 
-There are tools for automatically adding draft annotations based on simple
-static analysis or on type profiles collected at runtime.  Tools include
-:doc:`monkeytype:index`, `autotyping`_ and `PyAnnotate`_.
+大多数项目都有一些广泛导入的模块，例如工具类或模型类。尽早为这些模块添加注释是个好主意，因为这能更有效地进行类型检查。
 
-A simple approach is to collect types from test runs. This may work
-well if your test coverage is good (and if your tests aren't very
-slow).
+Mypy 支持渐进式类型检查，也就是说，您可以按照自己的节奏添加注释，因此可以暂时不为某些模块添加注释。注释越多，mypy 就越有用，但即使是少量的注释覆盖也很有帮助。
 
-Another approach is to enable type collection for a small, random
-fraction of production network requests.  This clearly requires more
-care, as type collection could impact the reliability or the
-performance of your service.
+在编写代码时逐步添加注释
+---------------------------
+
+考虑在您的代码风格规范中加入以下建议：
+
+1. 开发者应为任何新代码添加注释。
+2. 在修改现有代码时，鼓励编写注释。
+
+通过这种方式，您可以在不费太大力气的情况下逐步增加代码库中的注释覆盖率。
+
+自动化旧代码的注释
+------------------
+
+可以使用一些工具基于简单的静态分析或在运行时收集的类型信息自动添加草拟注释。这些工具包括 :doc:`monkeytype:index` 、 `autotyping`_  和 `PyAnnotate`_ 。
+
+一种简单的方法是从测试运行中收集类型信息。如果您的测试覆盖率良好（并且测试速度不太慢），这种方法可能效果很好。
+
+另一种方法是为小比例的生产网络请求启用类型收集。这显然需要更加谨慎，因为类型收集可能会影响服务的可靠性或性能。
 
 .. _getting-to-strict:
 
-Introduce stricter options
+引入更严格的选项
 --------------------------
 
-Mypy is very configurable. Once you get started with static typing, you may want
-to explore the various strictness options mypy provides to catch more bugs. For
-example, you can ask mypy to require annotations for all functions in certain
-modules to avoid accidentally introducing code that won't be type checked using
-:confval:`disallow_untyped_defs`. Refer to :ref:`config-file` for the details.
+Mypy 提供了高度可配置的选项。一旦开始使用静态类型，您可能希望探索 mypy 提供的各种严格性选项，以捕捉更多的错误。例如，您可以要求 mypy 对某些模块中的所有函数进行注释，以避免意外引入未进行类型检查的代码，使用 :confval:`disallow_untyped_defs` 。有关详细信息，请参考 :ref:`config-file`。
 
-An excellent goal to aim for is to have your codebase pass when run against ``mypy --strict``.
-This basically ensures that you will never have a type related error without an explicit
-circumvention somewhere (such as a ``# type: ignore`` comment).
+一个优秀的目标是确保您的代码库在运行 `mypy --strict` 时能够通过。这基本上确保您不会在没有明确规避的情况下遇到类型相关的错误（例如 `# type: ignore` 注释）。
 
-The following config is equivalent to ``--strict`` (as of mypy 1.0):
+以下配置等同于 `--strict` （截至 mypy 1.0）：
 
 .. code-block:: text
 
-   # Start off with these
+   # 首先开启这些选项
    warn_unused_configs = True
    warn_redundant_casts = True
    warn_unused_ignores = True
 
-   # Getting these passing should be easy
+   # 这些应该很容易通过
    strict_equality = True
    strict_concatenate = True
 
-   # Strongly recommend enabling this one as soon as you can
+   # 尽快启用这个选项
    check_untyped_defs = True
 
-   # These shouldn't be too much additional work, but may be tricky to
-   # get passing if you use a lot of untyped libraries
+   # 这些应该不会增加太多额外工作，但如果使用了很多未注释的库，可能会有些棘手
    disallow_subclassing_any = True
    disallow_untyped_decorators = True
    disallow_any_generics = True
 
-   # These next few are various gradations of forcing use of type annotations
+   # 以下选项是强制使用类型注释的不同级别
    disallow_untyped_calls = True
    disallow_incomplete_defs = True
    disallow_untyped_defs = True
 
-   # This one isn't too hard to get passing, but return on investment is lower
+   # 这个不太难通过，但投资回报较低
    no_implicit_reexport = True
 
-   # This one can be tricky to get passing if you use a lot of untyped libraries
+   # 如果使用了很多未注释的库，这个可能会很棘手
    warn_return_any = True
 
-Note that you can also start with ``--strict`` and subtract, for instance:
+
+请注意，您也可以从 `--strict` 开始，并进行减法，例如：
 
 .. code-block:: text
 
    strict = True
    warn_return_any = False
 
-Remember that many of these options can be enabled on a per-module basis. For instance,
-you may want to enable ``disallow_untyped_defs`` for modules which you've completed
-annotations for, in order to prevent new code from being added without annotations.
+记住，许多这些选项可以在模块级别启用。例如，您可能希望对已完成注释的模块启用 `disallow_untyped_defs`，以防止新代码在没有注释的情况下被添加。
 
-And if you want, it doesn't stop at ``--strict``. Mypy has additional checks
-that are not part of ``--strict`` that can be useful. See the complete
-:ref:`command-line` reference and :ref:`error-codes-optional`.
+如果您愿意，也可以超越 `--strict`。Mypy 还有一些不属于 `--strict` 的附加检查，这些检查可能会很有用。请参阅完整的 :ref:`command-line` 参考和 :ref:`error-codes-optional`。
 
-Speed up mypy runs
+加快 mypy 运行速度
 ------------------
 
-You can use :ref:`mypy daemon <mypy_daemon>` to get much faster
-incremental mypy runs. The larger your project is, the more useful
-this will be.  If your project has at least 100,000 lines of code or
-so, you may also want to set up :ref:`remote caching <remote-cache>`
-for further speedups.
+您可以使用 :ref:`mypy daemon <mypy_daemon>` 来实现更快的增量 mypy 运行。您的项目越大，这种效果就越明显。如果您的项目大约有 100,000 行代码或更多，您可能还想设置 :ref:`remote caching <remote-cache>` 以进一步加快速度。
 
 .. _PyAnnotate: https://github.com/dropbox/pyannotate
 .. _autotyping: https://github.com/JelleZijlstra/autotyping

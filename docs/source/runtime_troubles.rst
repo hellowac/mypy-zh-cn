@@ -1,68 +1,54 @@
 .. _runtime_troubles:
 
-Annotation issues at runtime
+运行时的注解问题
 ============================
 
-Idiomatic use of type annotations can sometimes run up against what a given
-version of Python considers legal code. This section describes these scenarios
-and explains how to get your code running again. Generally speaking, we have
-three tools at our disposal:
+惯用的类型注解使用有时会与特定 Python 版本所认为的合法代码相冲突。本节描述这些场景，并解释如何让代码重新运行。一般来说，我们有三种工具可供使用：
 
-* Use of ``from __future__ import annotations`` (:pep:`563`)
-  (this behaviour may eventually be made the default in a future Python version)
-* Use of string literal types or type comments
-* Use of ``typing.TYPE_CHECKING``
+* 使用 ``from __future__ import annotations`` (:pep:`563`)（这种行为可能在未来的 Python 版本中成为默认）。
+* 使用字符串字面量类型或类型注释。
+* 使用 ``typing.TYPE_CHECKING`` 。
 
-We provide a description of these before moving onto discussion of specific
-problems you may encounter.
+在讨论具体问题之前，我们先介绍这些工具的使用。
 
 .. _string-literal-types:
 
-String literal types and type comments
+字符串字面量类型和类型注释(literal)
 --------------------------------------
 
-Mypy lets you add type annotations using the (now deprecated) ``# type:``
-type comment syntax. These were required with Python versions older than 3.6,
-since they didn't support type annotations on variables. Example:
+Mypy 允许使用已弃用的 ``# type:`` 类型注释语法添加类型注解。这在 Python 3.6 之前是必需的，因为早期版本不支持变量的类型注解。例如：
 
 .. code-block:: python
 
-   a = 1  # type: int
+    a = 1  # type: int
 
-   def f(x):  # type: (int) -> int
-       return x + 1
+    def f(x):  # type: (int) -> int
+        return x + 1
 
-   # Alternative type comment syntax for functions with many arguments
-   def send_email(
+    # 函数参数较多时的替代类型注释语法
+    def send_email(
         address,     # type: Union[str, List[str]]
         sender,      # type: str
         cc,          # type: Optional[List[str]]
         subject='',
         body=None    # type: List[str]
-   ):
-       # type: (...) -> bool
+    ):
+    # type: (...) -> bool
 
-Type comments can't cause runtime errors because comments are not evaluated by
-Python.
+类型注释不会引发运行时错误，因为注释不会被 Python 解释执行。
 
-In a similar way, using string literal types sidesteps the problem of
-annotations that would cause runtime errors.
+类似地，使用字符串字面量类型可以避免导致运行时错误的注解问题。
 
-Any type can be entered as a string literal, and you can combine
-string-literal types with non-string-literal types freely:
+任何类型都可以作为字符串字面量输入，并且可以随意将字符串字面量类型与非字符串字面量类型组合：
 
 .. code-block:: python
 
-   def f(a: list['A']) -> None: ...  # OK, prevents NameError since A is defined later
-   def g(n: 'int') -> None: ...      # Also OK, though not useful
+    def f(a: list['A']) -> None: ...  # OK，防止 NameError，因为 A 在后面定义
+    def g(n: 'int') -> None: ...      # 也 OK，虽然没用
 
-   class A: pass
+字符串字面量类型不需要在 ``# type:`` 注释和 :ref:`存根文件 <stub-files>` 中使用。
 
-String literal types are never needed in ``# type:`` comments and :ref:`stub files <stub-files>`.
-
-String literal types must be defined (or imported) later *in the same module*.
-They cannot be used to leave cross-module references unresolved.  (For dealing
-with import cycles, see :ref:`import-cycles`.)
+字符串字面量类型必须在同一模块中稍后定义（或导入）。它们不能用于解决跨模块的未解析引用。（有关处理导入循环，请参见 :ref:`导入循环 <import-cycles>` 的相关内容。）
 
 .. _future-annotations:
 

@@ -3,53 +3,38 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to mypy documentation!
+欢迎来到 mypy 文档！
 ==============================
 
-Mypy is a static type checker for Python.
+Mypy 是一个用于 Python 的静态类型检查器。
 
-Type checkers help ensure that you're using variables and functions in your code
-correctly. With mypy, add type hints (:pep:`484`)
-to your Python programs, and mypy will warn you when you use those types
-incorrectly.
+类型检查器帮助确保您在代码中正确使用变量和函数。通过 mypy，您可以为 Python 程序添加类型提示（:pep:`484`），当您不正确地使用这些类型时，mypy 将发出警告。
 
-Python is a dynamic language, so usually you'll only see errors in your code
-when you attempt to run it. Mypy is a *static* checker, so it finds bugs
-in your programs without even running them!
+Python 是一种动态语言，因此通常只有在尝试运行代码时才能看到错误。Mypy 是一个 *静态* 检查器，因此它能够在不运行程序的情况下发现程序中的错误！
 
-Here is a small example to whet your appetite:
+这里有一个小例子来激发您的兴趣：
 
 .. code-block:: python
 
-   number = input("What is your favourite number?")
-   print("It is", number + 1)  # error: Unsupported operand types for + ("str" and "int")
+   number = input("你最喜欢的数字是什么？")
+   print("它是", number + 1)  # 错误：不支持的操作数类型用于 + ("str" 和 "int")
 
-Adding type hints for mypy does not interfere with the way your program would
-otherwise run. Think of type hints as similar to comments! You can always use
-the Python interpreter to run your code, even if mypy reports errors.
+为 mypy 添加类型提示不会干扰程序的运行方式。可以将类型提示视为类似于注释！即使 mypy 报告错误，您仍然可以使用 Python 解释器运行代码。
 
-Mypy is designed with gradual typing in mind. This means you can add type
-hints to your code base slowly and that you can always fall back to dynamic
-typing when static typing is not convenient.
+Mypy 的设计考虑到了渐进式类型。这意味着您可以逐步为代码库添加类型提示，并且在静态类型不方便时，您始终可以回退到动态类型。
 
-Mypy has a powerful and easy-to-use type system, supporting features such as
-type inference, generics, callable types, tuple types, union types,
-structural subtyping and more. Using mypy will make your programs easier to
-understand, debug, and maintain.
+Mypy 具有强大且易于使用的类型系统，支持类型推断、泛型、可调用类型、元组类型、联合类型、结构性子类型等功能。使用 mypy 将使您的程序更易于理解、调试和维护。
 
 .. note::
 
-   Although mypy is production ready, there may be occasional changes
-   that break backward compatibility. The mypy development team tries to
-   minimize the impact of changes to user code. In case of a major breaking
-   change, mypy's major version will be bumped.
+   尽管 mypy 已经准备好用于生产，但偶尔可能会有更改导致向后兼容性中断。mypy 开发团队会尽量减少对用户代码的影响。如果出现重大向后不兼容的更改，mypy 的主要版本号将被提高。
 
-Contents
+内容
 --------
 
 .. toctree::
    :maxdepth: 2
-   :caption: First steps
+   :caption: 第一步
 
    getting_started
    cheat_sheet_py3
@@ -59,7 +44,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Type system reference
+   :caption: 类型系统参考
 
    builtin_types
    type_inference_and_annotations
@@ -80,7 +65,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuring and running mypy
+   :caption: 配置和运行 mypy
 
    running_mypy
    command_line
@@ -94,7 +79,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Miscellaneous
+   :caption: 其他
 
    common_issues
    supported_python_features
@@ -107,12 +92,12 @@ Contents
 
 .. toctree::
    :hidden:
-   :caption: Project Links
+   :caption: 项目链接
 
    GitHub <https://github.com/python/mypy>
    Website <https://mypy-lang.org/>
 
-Indices and tables
+索引表
 ==================
 
 * :ref:`genindex`
