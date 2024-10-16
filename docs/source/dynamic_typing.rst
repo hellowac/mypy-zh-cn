@@ -1,47 +1,37 @@
 .. _dynamic-typing:
 
 
-Dynamically typed code
+动态类型代码(Dynamically)
 ======================
 
-In :ref:`getting-started-dynamic-vs-static`, we discussed how bodies of functions
-that don't have any explicit type annotations in their function are "dynamically typed"
-and that mypy will not check them. In this section, we'll talk a little bit more
-about what that means and how you can enable dynamic typing on a more fine grained basis.
+在 :ref:`getting-started-dynamic-vs-static` 中，我们讨论了函数体内没有任何显式类型注释的情况被称为“动态类型(dynamically typed)”，并且 mypy 不会对其进行检查。在本节中，我们将更详细地讨论这意味着什么，以及如何在更细粒度的基础上启用动态类型。
 
-In cases where your code is too magical for mypy to understand, you can make a
-variable or parameter dynamically typed by explicitly giving it the type
-``Any``. Mypy will let you do basically anything with a value of type ``Any``,
-including assigning a value of type ``Any`` to a variable of any type (or vice
-versa).
+在您的代码过于复杂以至于 mypy 无法理解的情况下，您可以通过显式地将变量或参数的类型设置为 ``Any`` 来使其动态类型。Mypy 将允许您对类型为 ``Any`` 的值进行基本上任何操作，包括将类型为 ``Any`` 的值赋给任何类型的变量（或反之亦然）。
 
 .. code-block:: python
 
    from typing import Any
 
-   num = 1         # Statically typed (inferred to be int)
-   num = 'x'       # error: Incompatible types in assignment (expression has type "str", variable has type "int")
+   num = 1         # 静态类型（推断为 int）
+   num = 'x'       # 错误：赋值中的不兼容类型（表达式的类型为 "str"，变量的类型为 "int"）
 
-   dyn: Any = 1    # Dynamically typed (type Any)
+   dyn: Any = 1    # 动态类型（类型为 Any）
    dyn = 'x'       # OK
 
-   num = dyn       # No error, mypy will let you assign a value of type Any to any variable
-   num += 1        # Oops, mypy still thinks num is an int
+   num = dyn       # 没有错误，mypy 允许您将类型为 Any 的值赋给任何变量
+   num += 1        # 哦，mypy 仍然认为 num 是 int
 
-You can think of ``Any`` as a way to locally disable type checking.
-See :ref:`silencing-type-errors` for other ways you can shut up
-the type checker.
+您可以将 ``Any`` 视为局部禁用类型检查的一种方式。有关您可以使用的其他关闭类型检查器的方法，请参见 :ref:`silencing-type-errors`。
 
-Operations on Any values
+对 Any 值的操作
 ------------------------
 
-You can do anything using a value with type ``Any``, and the type checker
-will not complain:
+您可以对类型为 ``Any`` 的值执行任何操作，类型检查器不会发出警告：
 
 .. code-block:: python
 
     def f(x: Any) -> int:
-        # All of these are valid!
+        # 所有这些都是有效的！
         x.foobar(1, y=2)
         print(x[3] + 'f')
         if x:
@@ -49,58 +39,47 @@ will not complain:
         open(x).read()
         return x
 
-Values derived from an ``Any`` value also usually have the type ``Any``
-implicitly, as mypy can't infer a more precise result type. For
-example, if you get the attribute of an ``Any`` value or call a
-``Any`` value the result is ``Any``:
+从 ``Any`` 值派生的值通常也隐式地具有 ``Any`` 类型，因为 mypy 无法推断出更精确的结果类型。例如，如果您获取一个 ``Any`` 值的属性或调用 ``Any`` 值，结果就是 ``Any``：
 
 .. code-block:: python
 
     def f(x: Any) -> None:
         y = x.foo()
-        reveal_type(y)  # Revealed type is "Any"
-        z = y.bar("mypy will let you do anything to y")
-        reveal_type(z)  # Revealed type is "Any"
+        reveal_type(y)  # 显示的类型是 "Any"
+        z = y.bar("mypy 会允许你对 y 做任何事")
+        reveal_type(z)  # 显示的类型是 "Any"
 
-``Any`` types may propagate through your program, making type checking
-less effective, unless you are careful.
+``Any`` 类型可能在程序中传播，除非您小心，否则会使类型检查的效果降低。
 
-Function parameters without annotations are also implicitly ``Any``:
+没有注释的函数参数也隐式地为 ``Any``：
 
 .. code-block:: python
 
     def f(x) -> None:
-        reveal_type(x)  # Revealed type is "Any"
+        reveal_type(x)  # 显示的类型是 "Any"
         x.can.do["anything", x]("wants", 2)
 
-You can make mypy warn you about untyped function parameters using the
-:option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>` flag.
+您可以使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>` 标志使 mypy 针对没有类型注释的函数参数发出警告。
 
-Generic types missing type parameters will have those parameters implicitly
-treated as ``Any``:
+缺少类型参数的泛型类型将隐式地将这些参数视为 ``Any``：
 
 .. code-block:: python
 
     def f(x: list) -> None:
-        reveal_type(x)        # Revealed type is "builtins.list[Any]"
-        reveal_type(x[0])     # Revealed type is "Any"
+        reveal_type(x)        # 显示的类型是 "builtins.list[Any]"
+        reveal_type(x[0])     # 显示的类型是 "Any"
         x[0].anything_goes()  # OK
 
-You can make mypy warn you about untyped function parameters using the
-:option:`--disallow-any-generics <mypy --disallow-any-generics>` flag.
+您可以使用 :option:`--disallow-any-generics <mypy --disallow-any-generics>` 标志使 mypy 针对缺少类型参数的泛型类型发出警告。
 
-Finally, another major source of ``Any`` types leaking into your program is from
-third party libraries that mypy does not know about. This is particularly the case
-when using the :option:`--ignore-missing-imports <mypy --ignore-missing-imports>`
-flag. See :ref:`fix-missing-imports` for more information about this.
+最后， ``Any`` 类型泄漏到程序中的另一个主要来源是 mypy 不知道的第三方库。当使用 :option:`--ignore-missing-imports <mypy --ignore-missing-imports>` 标志时，尤其如此。有关此信息，请参见 :ref:`fix-missing-imports` 。
 
-Any vs. object
+Any 与 object
 --------------
 
-The type :py:class:`object` is another type that can have an instance of arbitrary
-type as a value. Unlike ``Any``, :py:class:`object` is an ordinary static type (it
-is similar to ``Object`` in Java), and only operations valid for *all*
-types are accepted for :py:class:`object` values. These are all valid:
+类型 :py:class:`object` 是另一种可以具有任意类型实例作为值的类型。
+与 ``Any`` 不同，:py:class:`object` 是一种普通的静态类型（类似于 Java 中的 ``Object``），并且仅接受对 *所有* 类型有效的操作。
+以下都是有效的操作：
 
 .. code-block:: python
 
@@ -111,24 +90,17 @@ types are accepted for :py:class:`object` values. These are all valid:
         o = 2
         o = 'foo'
 
-These are, however, flagged as errors, since not all objects support these
-operations:
+然而，以下操作会被标记为错误，因为并非所有对象都支持这些操作：
 
 .. code-block:: python
 
     def f(o: object) -> None:
-        o.foo()       # Error!
-        o + 2         # Error!
-        open(o)       # Error!
+        o.foo()       # 错误！
+        o + 2         # 错误！
+        open(o)       # 错误！
         n: int = 1
-        n = o         # Error!
+        n = o         # 错误！
 
+如果您不确定是使用 :py:class:`object` 还是 ``Any``，请使用 :py:class:`object` —— 仅在出现类型检查器警告时才切换到使用 ``Any``。
 
-If you're not sure whether you need to use :py:class:`object` or ``Any``, use
-:py:class:`object` -- only switch to using ``Any`` if you get a type checker
-complaint.
-
-You can use different :ref:`type narrowing <type-narrowing>`
-techniques to narrow :py:class:`object` to a more specific
-type (subtype) such as ``int``. Type narrowing is not needed with
-dynamically typed values (values with type ``Any``).
+您可以使用不同的 :ref:`类型缩小 <type-narrowing>` 技巧将 :py:class:`object` 缩小为更具体的类型（子类型），例如 ``int``。对于动态类型的值（类型为 ``Any`` 的值），不需要进行类型缩小。
