@@ -1,33 +1,29 @@
-# Contributing to Mypy
+# 为 Mypy 贡献
 
-Welcome!  Mypy is a community project that aims to work for a wide
-range of Python users and Python codebases.  If you're trying mypy on
-your Python code, your experience and what you can contribute are
-important to the project's success.
+[English](https://github.com/python/mypy/blob/main/CONTRIBUTING.md)
 
-## Code of Conduct
+欢迎！Mypy 是一个社区项目，旨在为广泛的 Python 用户和代码库服务。如果你在自己的 Python 代码中尝试 mypy，你的经验和贡献对项目的成功至关重要。
 
-Everyone participating in the Mypy community, and in particular in our
-issue tracker, pull requests, and chat, is expected to treat
-other people with respect and more generally to follow the guidelines
-articulated in the [Python Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+## 行为准则
 
-## Getting started with development
+所有参与 Mypy 社区的人，特别是在我们的 issue 追踪器、拉取请求和聊天中，应该尊重他人，并遵循 [Python 社区行为准则](https://www.python.org/psf/codeofconduct/) 中阐明的指导方针。
 
-### Setup
+## 开始开发
 
-#### (1) Fork the mypy repository
+### 设置
 
-Within Github, navigate to <https://github.com/python/mypy> and fork the repository.
+#### (1) Fork mypy 仓库
 
-#### (2) Clone the mypy repository and enter into it
+在 GitHub 上，导航到 <https://github.com/python/mypy> 并 fork 该仓库。
+
+#### (2) 克隆 mypy 仓库并进入
 
 ```bash
 git clone git@github.com:<your_username>/mypy.git
 cd mypy
 ```
 
-#### (3) Create then activate a virtual environment
+#### (3) 创建并激活虚拟环境
 
 ```bash
 python3 -m venv venv
@@ -35,174 +31,128 @@ source venv/bin/activate
 ```
 
 ```bash
-# For Windows use
+# 对于 Windows 使用
 python -m venv venv
 . venv/Scripts/activate
 
-# For more details, see https://docs.python.org/3/library/venv.html#creating-virtual-environments
+# 更多细节，请参见 https://docs.python.org/3/library/venv.html#creating-virtual-environments
 ```
 
-#### (4) Install the test requirements and the project
+#### (4) 安装测试依赖和项目
 
 ```bash
 python -m pip install -r test-requirements.txt
 python -m pip install -e .
-hash -r  # This resets shell PATH cache, not necessary on Windows
+hash -r  # 这将重置 shell 的 PATH 缓存，Windows 上不需要
 ```
 
-> **Note**
-> You'll need Python 3.8 or higher to install all requirements listed in
-> test-requirements.txt
+> **注意**
+> 你需要 Python 3.8 或更高版本才能安装 `test-requirements.txt` 中列出的所有依赖。
 
-### Running tests
+### 运行测试
 
-Running the full test suite can take a while, and usually isn't necessary when
-preparing a PR. Once you file a PR, the full test suite will run on GitHub.
-You'll then be able to see any test failures, and make any necessary changes to
-your PR.
+运行完整的测试套件可能需要一些时间，通常在准备 PR 时并不是必需的。一旦你提交了 PR，完整的测试套件将在 GitHub 上运行。你将能够看到任何测试失败，并对你的 PR 进行必要的更改。
 
-However, if you wish to do so, you can run the full test suite
-like this:
+然而，如果你希望这样做，可以像这样运行完整的测试套件：
 
 ```bash
 python3 runtests.py
 ```
 
-Some useful commands for running specific tests include:
+一些用于运行特定测试的有用命令包括：
 
 ```bash
-# Use mypy to check mypy's own code
+# 使用 mypy 检查 mypy 自身的代码
 python3 runtests.py self
-# or equivalently:
+# 或者等效命令：
 python3 -m mypy --config-file mypy_self_check.ini -p mypy
 
-# Run a single test from the test suite
+# 从测试套件中运行单个测试
 pytest -n0 -k 'test_name'
 
-# Run all test cases in the "test-data/unit/check-dataclasses.test" file
+# 运行 "test-data/unit/check-dataclasses.test" 文件中的所有测试用例
 pytest mypy/test/testcheck.py::TypeCheckSuite::check-dataclasses.test
 
-# Run the formatters and linters
+# 运行格式化工具和代码检查工具
 python runtests.py lint
 ```
 
-For an in-depth guide on running and writing tests,
-see [the README in the test-data directory](test-data/unit/README.md).
+有关运行和编写测试的详细指南，请参见 [test-data 目录中的 README](test-data/unit/README.md)。
 
-#### Using `tox`
+#### 使用 `tox`
 
-You can also use [`tox`](https://tox.wiki/en/latest/) to run tests and other commands.
-`tox` handles setting up test environments for you.
+你也可以使用 [`tox`](https://tox.wiki/en/latest/) 来运行测试和其他命令。`tox` 会为你处理测试环境的设置。
 
 ```bash
-# Run tests
+# 运行测试
 tox run -e py
 
-# Run tests using some specific Python version
+# 使用特定的 Python 版本运行测试
 tox run -e py311
 
-# Run a specific command
+# 运行特定命令
 tox run -e lint
 
-# Run a single test from the test suite
+# 从测试套件中运行单个测试
 tox run -e py -- -n0 -k 'test_name'
 
-# Run all test cases in the "test-data/unit/check-dataclasses.test" file using
-# Python 3.11 specifically
+# 使用 Python 3.11 运行 "test-data/unit/check-dataclasses.test" 文件中的所有测试用例
 tox run -e py311 -- mypy/test/testcheck.py::TypeCheckSuite::check-dataclasses.test
 
-# Set up a development environment with all the project libraries and run a command
+# 设置一个包含所有项目库的开发环境并运行命令
 tox -e dev -- mypy --verbose test_case.py
-tox -e dev --override testenv:dev.allowlist_externals+=env -- env  # inspect the environment
+tox -e dev --override testenv:dev.allowlist_externals+=env -- env  # 检查环境
 ```
 
-If you don't already have `tox` installed, you can use a virtual environment as
-described above to install `tox` via `pip` (e.g., ``python3 -m pip install tox``).
+如果你还没有安装 `tox`，可以使用上面描述的虚拟环境通过 `pip` 安装 `tox`（例如，``python3 -m pip install tox``）。
 
-## First time contributors
+## 第一次贡献者
 
-If you're looking for things to help with, browse our [issue tracker](https://github.com/python/mypy/issues)!
+如果你想寻找可以帮助的任务，请浏览我们的 [问题追踪器](https://github.com/python/mypy/issues)！
 
-In particular, look for:
+特别关注：
 
-- [good first issues](https://github.com/python/mypy/labels/good-first-issue)
-- [good second issues](https://github.com/python/mypy/labels/good-second-issue)
-- [documentation issues](https://github.com/python/mypy/labels/documentation)
+- [适合新手的问题](https://github.com/python/mypy/labels/good-first-issue)
+- [适合进一步贡献的问题](https://github.com/python/mypy/labels/good-second-issue)
+- [文档问题](https://github.com/python/mypy/labels/documentation)
 
-You do not need to ask for permission to work on any of these issues.
-Just fix the issue yourself, [try to add a unit test](#running-tests) and
-[open a pull request](#submitting-changes).
+你无需请求许可即可处理这些问题。只需自行解决问题， [尝试添加单元测试](#running-tests) 并 [提交拉取请求](#submitting-changes)。
 
-To get help fixing a specific issue, it's often best to comment on the issue
-itself. You're much more likely to get help if you provide details about what
-you've tried and where you've looked (maintainers tend to help those who help
-themselves). [gitter](https://gitter.im/python/typing) can also be a good place
-to ask for help.
+如果需要帮助修复特定问题，通常最好在问题本身上留言。如果你提供了你尝试过的内容和查找的方向，获得帮助的可能性会更大（维护者通常会帮助那些自助的人）。 [Gitter](https://gitter.im/python/typing) 也是一个寻求帮助的好地方。
 
-Interactive debuggers like `pdb` and `ipdb` are really useful for getting
-started with the mypy codebase. This is a
-[useful tutorial](https://realpython.com/python-debugging-pdb/).
+像 `pdb` 和 `ipdb` 这样的交互式调试器对于入门 mypy 代码库非常有用。这是一个 [有用的教程](https://realpython.com/python-debugging-pdb/)。
 
-It's also extremely easy to get started contributing to our sister project
-[typeshed](https://github.com/python/typeshed/issues) that provides type stubs
-for libraries. This is a great way to become familiar with type syntax.
+同时，为我们的姐妹项目 [typeshed](https://github.com/python/typeshed/issues) 贡献也非常简单，该项目为库提供类型存根。这是熟悉类型语法的好方法。
 
-## Submitting changes
+## 提交更改
 
-Even more excellent than a good bug report is a fix for a bug, or the
-implementation of a much-needed new feature. We'd love to have
-your contributions.
+比起好的错误报告，更优秀的是一个错误的修复或一个急需新功能的实现。我们非常欢迎你的贡献。
 
-We use the usual GitHub pull-request flow, which may be familiar to
-you if you've contributed to other projects on GitHub.  For the mechanics,
-see [our git and GitHub workflow help page](https://github.com/python/mypy/wiki/Using-Git-And-GitHub),
-or [GitHub's own documentation](https://help.github.com/articles/using-pull-requests/).
+我们使用常规的 GitHub 拉取请求流程，如果你曾在 GitHub 上为其他项目贡献过，可能会对它有所熟悉。有关具体操作，请参阅 [我们的 Git 和 GitHub 工作流程帮助页面](https://github.com/python/mypy/wiki/Using-Git-And-GitHub)，或 [GitHub 自己的文档](https://help.github.com/articles/using-pull-requests/)。
 
-Anyone interested in Mypy may review your code.  One of the Mypy core
-developers will merge your pull request when they think it's ready.
+任何对 Mypy 感兴趣的人都可以审查你的代码。当 Mypy 的核心开发人员认为你的拉取请求准备就绪时，他们将合并它。
 
-If your change will be a significant amount of work
-to write, we highly recommend starting by opening an issue laying out
-what you want to do.  That lets a conversation happen early in case
-other contributors disagree with what you'd like to do or have ideas
-that will help you do it.
+如果你的更改需要大量的工作，我们强烈建议你先打开一个问题，阐明你想要做的事情。这可以提前进行讨论，以防其他贡献者不同意你的想法或有帮助的建议。
 
-The best pull requests are focused, clearly describe what they're for
-and why they're correct, and contain tests for whatever changes they
-make to the code's behavior.  As a bonus these are easiest for someone
-to review, which helps your pull request get merged quickly!  Standard
-advice about good pull requests for open-source projects applies; we
-have [our own writeup](https://github.com/python/mypy/wiki/Good-Pull-Request)
-of this advice.
+最好的拉取请求是集中且清晰的，明确说明其目的和正确性，并包含对代码行为变化的测试。作为额外奖励，这些拉取请求也最容易让他人审查，从而帮助你快速合并！有关开源项目的优质拉取请求的标准建议适用；我们有 [自己的一篇说明](https://github.com/python/mypy/wiki/Good-Pull-Request) 供参考。
 
-Also, do not squash your commits after you have submitted a pull request, as this
-erases context during review. We will squash commits when the pull request is merged.
+此外，在提交拉取请求后，请不要合并你的提交，因为这会在审查过程中抹去上下文。我们将在拉取请求合并时合并提交。
 
-You may also find other pages in the
-[Mypy developer guide](https://github.com/python/mypy/wiki/Developer-Guides)
-helpful in developing your change.
+你可能还会发现 [Mypy 开发者指南](https://github.com/python/mypy/wiki/Developer-Guides) 中的其他页面对开发你的更改很有帮助。
 
-## Core developer guidelines
+## 核心开发者指南
 
-Core developers should follow these rules when processing pull requests:
+核心开发者在处理拉取请求时应遵循以下规则：
 
-- Always wait for tests to pass before merging PRs.
-- Use "[Squash and merge](https://github.com/blog/2141-squash-your-commits)"
-  to merge PRs.
-- Delete branches for merged PRs (by core devs pushing to the main repo).
-- Edit the final commit message before merging to conform to the following
-  style (we wish to have a clean `git log` output):
-  - When merging a multi-commit PR make sure that the commit message doesn't
-    contain the local history from the committer and the review history from
-    the PR. Edit the message to only describe the end state of the PR.
-  - Make sure there is a *single* newline at the end of the commit message.
-    This way there is a single empty line between commits in `git log`
-    output.
-  - Split lines as needed so that the maximum line length of the commit
-    message is under 80 characters, including the subject line.
-  - Capitalize the subject and each paragraph.
-  - Make sure that the subject of the commit message has no trailing dot.
-  - Use the imperative mood in the subject line (e.g. "Fix typo in README").
-  - If the PR fixes an issue, make sure something like "Fixes #xxx." occurs
-    in the body of the message (not in the subject).
-  - Use Markdown for formatting.
+- 合并 PR 之前，请始终等待测试通过。
+- 使用 “[Squash and merge](https://github.com/blog/2141-squash-your-commits)” 来合并 PR。
+- 删除已合并 PR 的分支（由核心开发者推送到主仓库）。
+- 在合并前编辑最终提交信息，以符合以下风格（我们希望保持干净的 `git log` 输出）：
+  - 合并多提交的 PR 时，确保提交信息不包含提交者的本地历史和 PR 的审查历史。编辑信息，仅描述 PR 的最终状态。
+  - 确保提交信息末尾有一个 *单一* 换行符。这样在 `git log` 输出中，提交之间将有一个空行。
+  - 根据需要拆分行，使提交信息的最大行长度不超过 80 个字符，包括主题行。
+  - 主题和每段的首字母大写。
+  - 确保提交信息的主题没有尾随的句点。
+  - 在主题行中使用祈使语气（例如：“修复 README 中的拼写错误”）。
+  - 如果 PR 修复了某个问题，请确保在信息主体中包含类似 “Fixes #xxx.” 的内容（而不是在主题中）。
+  - 使用 Markdown 格式进行排版。
