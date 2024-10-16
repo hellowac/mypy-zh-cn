@@ -1,49 +1,44 @@
-Mypy Documentation
+Mypy 文档
 ==================
 
-What's this?
+这是什么？
 ------------
 
-This directory contains the source code for Mypy documentation (under `source/`)
-and build scripts. The documentation uses Sphinx and reStructuredText. We use
-`furo` as the documentation theme.
+该目录包含 Mypy 文档的源代码（在 `source/` 下）和构建脚本。文档使用 Sphinx 和 reStructuredText，我们使用 `furo` 作为文档主题。
 
-Building the documentation
+构建文档
 --------------------------
 
-Install Sphinx and other dependencies (i.e. theme) needed for the documentation.
-From the `docs` directory, use `pip`:
+安装 Sphinx 和文档所需的其他依赖项（即主题）。从 `docs` 目录使用 `pip`：
 
 ```
 pip install -r requirements-docs.txt
 ```
 
-Build the documentation like this:
+像这样构建文档：
 
 ```
 make html
 ```
 
-The built documentation will be placed in the `docs/build` directory. Open
-`docs/build/index.html` to view the documentation.
+构建的文档将放在 `docs/build` 目录中。打开 `docs/build/index.html` 查看文档。
 
-Helpful documentation build commands
+有用的文档构建命令
 ------------------------------------
 
-Clean the documentation build:
+清理文档构建：
 
 ```
 make clean
 ```
 
-Test and check the links found in the documentation:
+测试并检查文档中的链接：
 
 ```
 make linkcheck
 ```
 
-Documentation on Read The Docs
+Read The Docs 上的文档
 ------------------------------
 
-The mypy documentation is hosted on Read The Docs, and the latest version
-can be found at https://mypy.readthedocs.io/en/latest.
+Mypy 文档托管在 Read The Docs 上，最新版本可在 https://mypy.readthedocs.io/en/latest 找到。

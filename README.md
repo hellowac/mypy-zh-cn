@@ -105,7 +105,7 @@ python3 PROGRAM
 dmypy run -- PROGRAM
 ```
 
-[类型检查]: https://mypy.readthedocs.io/en/latest/getting_started.html#function-signatures-and-dynamic-vs-static-typing  
+[类型检查]: https://mypy.readthedocs.io/en/latest/getting_started.html#function-signatures-and-dynamic-vs-static-typing
 [守护进程模式]: https://mypy.readthedocs.io/en/stable/mypy_daemon.html
 
 [statically typed parts]: https://mypy.readthedocs.io/en/latest/getting_started.html#function-signatures-and-dynamic-vs-static-typing
