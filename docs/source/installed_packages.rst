@@ -1,111 +1,57 @@
 .. _installed-packages:
 
-Using installed packages
-========================
+使用已安装的包(Using installed packages)
+================================================
 
-Packages installed with pip can declare that they support type
-checking. For example, the `aiohttp
-<https://docs.aiohttp.org/en/stable/>`_ package has built-in support
-for type checking.
+通过 pip 安装的包可以声明它们支持类型检查。例如， `aiohttp <https://docs.aiohttp.org/en/stable/>`_ 包内置支持类型检查。
 
-Packages can also provide stubs for a library. For example,
-``types-requests`` is a stub-only package that provides stubs for the
-`requests <https://requests.readthedocs.io/en/master/>`_ package.
-Stub packages are usually published from `typeshed
-<https://github.com/python/typeshed>`_, a shared repository for Python
-library stubs, and have a name of form ``types-<library>``. Note that
-many stub packages are not maintained by the original maintainers of
-the package.
+包也可以为库提供存根。例如， ``types-requests`` 是一个仅提供存根的包，它为 `requests <https://requests.readthedocs.io/en/master/>`_ 包提供存根。存根包通常从 `typeshed <https://github.com/python/typeshed>`_ 发布，这是一个共享的 Python 库存根仓库，存根包的命名格式通常为 ``types-<library>``。注意，许多存根包并非由原包的维护者维护。
 
-The sections below explain how mypy can use these packages, and how
-you can create such packages.
+以下部分解释了 mypy 如何使用这些包，以及如何创建此类包。
 
 .. note::
 
-   :pep:`561` specifies how a package can declare that it supports
-   type checking.
+   :pep:`561` 规定了一个包如何声明它支持类型检查。
 
 .. note::
 
-   New versions of stub packages often use type system features not
-   supported by older, and even fairly recent mypy versions. If you
-   pin to an older version of mypy (using ``requirements.txt``, for
-   example), it is recommended that you also pin the versions of all
-   your stub package dependencies.
+   新版本的存根包通常使用不被较旧甚至最近版本的 mypy 支持的类型系统功能。如果你将 mypy 固定为较旧版本（例如使用 ``requirements.txt``），建议你也将所有存根包依赖项的版本固定。
 
 .. note::
 
-   Starting in mypy 0.900, most third-party package stubs must be
-   installed explicitly. This decouples mypy and stub versioning,
-   allowing stubs to updated without updating mypy. This also allows
-   stubs not originally included with mypy to be installed. Earlier
-   mypy versions included a fixed set of stubs for third-party
-   packages.
+   从 mypy 0.900 开始，大多数第三方包存根必须显式安装。这将 mypy 与存根版本进行解耦，使得存根可以独立更新而不需要更新 mypy。这也允许安装最初未包含在 mypy 中的存根。早期版本的 mypy 包含了一组固定的第三方包存根。
 
-Using installed packages with mypy (PEP 561)
-********************************************
+在 mypy 中使用已安装的包(PEP 561)
+****************************************
 
-Typically mypy will automatically find and use installed packages that
-support type checking or provide stubs. This requires that you install
-the packages in the Python environment that you use to run mypy.  As
-many packages don't support type checking yet, you may also have to
-install a separate stub package, usually named
-``types-<library>``. (See :ref:`fix-missing-imports` for how to deal
-with libraries that don't support type checking and are also missing
-stubs.)
+通常，mypy 会自动找到并使用支持类型检查或提供存根的已安装包。这要求你在运行 mypy 的 Python 环境中安装这些包。由于许多包尚不支持类型检查，你可能还需要安装一个单独的存根包，通常命名为 ``types-<library>``。 （有关如何处理不支持类型检查且缺少存根的库，请参阅 :ref:`fix-missing-imports`）。
 
-If you have installed typed packages in another Python installation or
-environment, mypy won't automatically find them. One option is to
-install another copy of those packages in the environment in which you
-installed mypy. Alternatively, you can use the
-:option:`--python-executable <mypy --python-executable>` flag to point
-to the Python executable for another environment, and mypy will find
-packages installed for that Python executable.
+如果你在另一个 Python 安装或环境中安装了已键入的包，mypy 不会自动找到它们。一个选项是将这些包的副本安装在你安装了 mypy 的环境中。或者，你可以使用 :option:`--python-executable <mypy --python-executable>` 选项指向另一个环境的 Python 可执行文件，mypy 将找到为该 Python 可执行文件安装的包。
 
-Note that mypy does not support some more advanced import features,
-such as zip imports and custom import hooks.
+请注意，mypy 不支持一些更高级的导入功能，如 zip 导入和自定义导入钩子。
 
-If you don't want to use installed packages that provide type
-information at all, use the :option:`--no-site-packages <mypy
---no-site-packages>` flag to disable searching for installed packages.
+如果你不想使用任何提供类型信息的已安装包，可以使用 :option:`--no-site-packages <mypy --no-site-packages>` 选项禁用搜索已安装包。
 
-Note that stub-only packages cannot be used with ``MYPYPATH``. If you
-want mypy to find the package, it must be installed. For a package
-``foo``, the name of the stub-only package (``foo-stubs``) is not a
-legal package name, so mypy will not find it, unless it is installed
-(see :pep:`PEP 561: Stub-only Packages <561#stub-only-packages>` for
-more information).
+注意，仅存根包不能与 ``MYPYPATH`` 一起使用。如果你希望 mypy 找到该包，则必须安装它。对于包 ``foo``，仅存根包的名称（``foo-stubs``）不是合法的包名称，因此 mypy 不会找到它，除非它已被安装（有关更多信息，请参阅 :pep:`PEP 561: Stub-only Packages <561#stub-only-packages>`）。
 
-Creating PEP 561 compatible packages
-************************************
+创建符合 PEP 561 的包(Creating PEP 561 compatible packages)
+************************************************************************
 
 .. note::
 
-  You can generally ignore this section unless you maintain a package on
-  PyPI, or want to publish type information for an existing PyPI
-  package.
+  除非你维护一个在 PyPI 上的包，或者想为现有的 PyPI 包发布类型信息，否则你通常可以忽略此部分。
 
-:pep:`561` describes three main ways to distribute type
-information:
+:pep:`561` 描述了分发类型信息的三种主要方式：
 
-1. A package has inline type annotations in the Python implementation.
+1. 包在 Python 实现中包含内联类型注解。
 
-2. A package ships :ref:`stub files <stub-files>` with type
-   information alongside the Python implementation.
+2. 包随 Python 实现一起提供带有类型信息的 :ref:`存根文件 <stub-files>`。
 
-3. A package ships type information for another package separately as
-   stub files (also known as a "stub-only package").
+3. 包将类型信息作为存根文件单独分发给另一个包（也称为“仅存根包”）。
 
-If you want to create a stub-only package for an existing library, the
-simplest way is to contribute stubs to the `typeshed
-<https://github.com/python/typeshed>`_ repository, and a stub package
-will automatically be uploaded to PyPI.
+如果你想为现有的库创建仅存根包，最简单的方法是向 `typeshed <https://github.com/python/typeshed>`_ 仓库贡献存根文件，存根包将自动上传到 PyPI。
 
-If you would like to publish a library package to a package repository
-yourself (e.g. on PyPI) for either internal or external use in type
-checking, packages that supply type information via type comments or
-annotations in the code should put a ``py.typed`` file in their
-package directory. For example, here is a typical directory structure:
+如果你想将库包发布到包仓库（例如 PyPI）用于内部或外部类型检查，提供类型信息的包应在代码中的类型注释或类型标注旁边放置一个 ``py.typed`` 文件在包目录中。例如，下面是一个典型的目录结构：
 
 .. code-block:: text
 
@@ -115,7 +61,7 @@ package directory. For example, here is a typical directory structure:
         lib.py
         py.typed
 
-The ``setup.py`` file could look like this:
+``setup.py`` 文件可以是这样的：
 
 .. code-block:: python
 
@@ -129,8 +75,7 @@ The ``setup.py`` file could look like this:
         packages=["package_a"]
     )
 
-Some packages have a mix of stub files and runtime files. These packages also
-require a ``py.typed`` file. An example can be seen below:
+有些包包含存根文件和运行时文件的混合。这些包也需要一个 ``py.typed`` 文件。下面是一个示例：
 
 .. code-block:: text
 
@@ -141,7 +86,7 @@ require a ``py.typed`` file. An example can be seen below:
         lib.pyi
         py.typed
 
-The ``setup.py`` file might look like this:
+``setup.py`` 文件可能是这样的：
 
 .. code-block:: python
 
@@ -155,14 +100,9 @@ The ``setup.py`` file might look like this:
         packages=["package_b"]
     )
 
-In this example, both ``lib.py`` and the ``lib.pyi`` stub file exist. At
-runtime, the Python interpreter will use ``lib.py``, but mypy will use
-``lib.pyi`` instead.
+在这个示例中，``lib.py`` 和 ``lib.pyi`` 存根文件都存在。运行时，Python 解释器将使用 ``lib.py``，但 mypy 会使用 ``lib.pyi``。
 
-If the package is stub-only (not imported at runtime), the package should have
-a prefix of the runtime package name and a suffix of ``-stubs``.
-A ``py.typed`` file is not needed for stub-only packages. For example, if we
-had stubs for ``package_c``, we might do the following:
+如果包是仅存根包（运行时不导入），该包的前缀应为运行时包名，后缀为 ``-stubs`` 。仅存根包不需要 ``py.typed`` 文件。例如，如果我们有 ``package_c`` 的存根，我们可以这样做：
 
 .. code-block:: text
 
@@ -171,7 +111,7 @@ had stubs for ``package_c``, we might do the following:
         __init__.pyi
         lib.pyi
 
-The ``setup.py`` might look like this:
+``setup.py`` 可能是这样的：
 
 .. code-block:: python
 
@@ -185,10 +125,7 @@ The ``setup.py`` might look like this:
         packages=["package_c-stubs"]
     )
 
-The instructions above are enough to ensure that the built wheels
-contain the appropriate files. However, to ensure inclusion inside the
-``sdist`` (``.tar.gz`` archive), you may also need to modify the
-inclusion rules in your ``MANIFEST.in``:
+上述指令足以确保生成的 wheels 包含适当的文件。然而，为了确保包含在 ``sdist``（``.tar.gz`` 压缩包）中，你还可能需要修改 ``MANIFEST.in`` 中的包含规则：
 
 .. code-block:: text
 

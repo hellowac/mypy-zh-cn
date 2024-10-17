@@ -1,17 +1,14 @@
-Additional features
--------------------
+附加功能(Additional features)
+--------------------------------------
 
-This section discusses various features that did not fit in naturally in one
-of the previous sections.
+本节讨论了各种未能自然融入前面任一部分的功能。
 
 .. _dataclasses_support:
 
-Dataclasses
-***********
+数据类(Dataclasses)
+**********************
 
-The :py:mod:`dataclasses` module allows defining and customizing simple
-boilerplate-free classes. They can be defined using the
-:py:func:`@dataclasses.dataclass <python:dataclasses.dataclass>` decorator:
+:py:mod:`dataclasses` 模块允许定义和自定义简单的无样板类。它们可以使用 :py:func:`@dataclasses.dataclass <python:dataclasses.dataclass>` 装饰器来定义：
 
 .. code-block:: python
 
@@ -22,11 +19,10 @@ boilerplate-free classes. They can be defined using the
         name: str
         plugins: list[str] = field(default_factory=list)
 
-    test = Application("Testing...")  # OK
-    bad = Application("Testing...", "with plugin")  # Error: list[str] expected
+    test = Application("Testing...")  # 正确
+    bad = Application("Testing...", "with plugin")  # 错误: 期望 list[str]
 
-Mypy will detect special methods (such as :py:meth:`__lt__ <object.__lt__>`) depending on the flags used to
-define dataclasses. For example:
+Mypy 将根据用于定义数据类的标志检测特殊方法（如 :py:meth:`__lt__ <object.__lt__>`）。例如：
 
 .. code-block:: python
 
@@ -42,11 +38,10 @@ define dataclasses. For example:
         x: int
         y: int
 
-    OrderedPoint(1, 2) < OrderedPoint(3, 4)  # OK
-    UnorderedPoint(1, 2) < UnorderedPoint(3, 4)  # Error: Unsupported operand types
+    OrderedPoint(1, 2) < OrderedPoint(3, 4)  # 正确
+    UnorderedPoint(1, 2) < UnorderedPoint(3, 4)  # 错误: 不支持的操作数类型
 
-Dataclasses can be generic and can be used in any other way a normal
-class can be used (Python 3.12 syntax):
+数据类可以是泛型的，并且可以像普通类一样以任何其他方式使用（Python 3.12 语法）：
 
 .. code-block:: python
 
@@ -60,20 +55,16 @@ class can be used (Python 3.12 syntax):
     def unbox[T](bd: BoxedData[T]) -> T:
         ...
 
-    val = unbox(BoxedData(42, "<important>"))  # OK, inferred type is int
+    val = unbox(BoxedData(42, "<important>"))  # 正确，推断类型为 int
 
-For more information see :doc:`official docs <python:library/dataclasses>`
-and :pep:`557`.
+有关更多信息，请参见 :doc:`官方文档 <python:library/dataclasses>` 和 :pep:`557`。
 
-Caveats/Known Issues
-====================
+注意事项/已知问题(Caveats/Known Issues)
+========================================
 
-Some functions in the :py:mod:`dataclasses` module, such as :py:func:`~dataclasses.asdict`,
-have imprecise (too permissive) types. This will be fixed in future releases.
+:py:mod:`dataclasses` 模块中的某些函数，如 :py:func:`~dataclasses.asdict`，具有不精确（过于宽松）的类型。这将在未来的版本中修复。
 
-Mypy does not yet recognize aliases of :py:func:`dataclasses.dataclass <dataclasses.dataclass>`, and will
-probably never recognize dynamically computed decorators. The following example
-does **not** work:
+Mypy 尚未识别 :py:func:`dataclasses.dataclass <dataclasses.dataclass>` 的别名，并且可能永远不会识别动态计算的装饰器。以下示例**不**有效：
 
 .. code-block:: python
 
@@ -86,17 +77,14 @@ does **not** work:
     @dataclass_alias
     class AliasDecorated:
       """
-      Mypy doesn't recognize this as a dataclass because it is decorated by an
-      alias of `dataclass` rather than by `dataclass` itself.
+      Mypy 不会将其识别为数据类，因为它是由 `dataclass` 的别名装饰的，而不是由 `dataclass` 本身装饰的。
       """
       attribute: int
 
-    AliasDecorated(attribute=1) # error: Unexpected keyword argument
+    AliasDecorated(attribute=1)  # 错误: 意外的关键字参数
 
 
-To have Mypy recognize a wrapper of :py:func:`dataclasses.dataclass <dataclasses.dataclass>`
-as a dataclass decorator, consider using the :py:func:`~typing.dataclass_transform`
-decorator (example uses Python 3.12 syntax):
+要使 Mypy 识别 :py:func:`dataclasses.dataclass <dataclasses.dataclass>` 的包装器作为数据类装饰器，可以考虑使用 :py:func:`~typing.dataclass_transform` 装饰器（示例使用 Python 3.12 语法）：
 
 .. code-block:: python
 
@@ -109,29 +97,25 @@ decorator (example uses Python 3.12 syntax):
         return dataclass(cls)
 
 
-Data Class Transforms
-*********************
+数据类转换(Data Class Transforms)
+******************************************
 
-Mypy supports the :py:func:`~typing.dataclass_transform` decorator as described in
-`PEP 681 <https://www.python.org/dev/peps/pep-0681/#the-dataclass-transform-decorator>`_.
+Mypy 支持 :py:func:`~typing.dataclass_transform` 装饰器，如在 `PEP 681 <https://www.python.org/dev/peps/pep-0681/#the-dataclass-transform-decorator>`_ 中所述。
 
 .. note::
 
-    Pragmatically, mypy will assume such classes have the internal attribute :code:`__dataclass_fields__`
-    (even though they might lack it in runtime) and will assume functions such as :py:func:`dataclasses.is_dataclass`
-    and :py:func:`dataclasses.fields` treat them as if they were dataclasses
-    (even though they may fail at runtime).
+    从实用的角度来看，mypy 将假设此类具有内部属性 :code:`__dataclass_fields__`
+    （即使它们在运行时可能缺失），并且将假设像 :py:func:`dataclasses.is_dataclass`
+    和 :py:func:`dataclasses.fields` 这样的函数会将它们视为数据类
+    （即使它们在运行时可能会失败）。
 
 .. _attrs_package:
 
-The attrs package
-*****************
+attrs 包(The attrs package)
+**********************************
 
-:doc:`attrs <attrs:index>` is a package that lets you define
-classes without writing boilerplate code. Mypy can detect uses of the
-package and will generate the necessary method definitions for decorated
-classes using the type annotations it finds.
-Type annotations can be added as follows:
+:doc:`attrs <attrs:index>` 是一个让你定义类而无需编写样板代码的包。Mypy 可以检测该包的使用，并将使用它找到的类型注释为装饰类生成必要的方法定义。
+类型注释可以如下添加：
 
 .. code-block:: python
 
@@ -143,7 +127,7 @@ Type annotations can be added as follows:
         two: int = 7
         three: int = attrs.field(8)
 
-If you're using ``auto_attribs=False`` you must use ``attrs.field``:
+如果你使用 ``auto_attribs=False``，你必须使用 ``attrs.field``：
 
 .. code-block:: python
 
@@ -151,14 +135,12 @@ If you're using ``auto_attribs=False`` you must use ``attrs.field``:
 
     @attrs.define
     class A:
-        one: int = attrs.field()          # Variable annotation (Python 3.6+)
-        two = attrs.field()  # type: int  # Type comment
-        three = attrs.field(type=int)     # type= argument
+        one: int = attrs.field()          # 变量注释 (Python 3.6+)
+        two = attrs.field()  # type: int  # 类型注释
+        three = attrs.field(type=int)     # type= 参数
 
-Typeshed has a couple of "white lie" annotations to make type checking
-easier. :py:func:`attrs.field` and :py:class:`attrs.Factory` actually return objects, but the
-annotation says these return the types that they expect to be assigned to.
-That enables this to work:
+Typeshed 有一些“白色谎言”注释以简化类型检查。:py:func:`attrs.field` 和 :py:class:`attrs.Factory` 实际上返回对象，但注释表示这些返回它们期望被分配的类型。
+这使得以下代码可以工作：
 
 .. code-block:: python
 
@@ -168,17 +150,15 @@ That enables this to work:
     class A:
         one: int = attrs.field(8)
         two: dict[str, str] = attrs.Factory(dict)
-        bad: str = attrs.field(16)   # Error: can't assign int to str
+        bad: str = attrs.field(16)   # 错误: 不能将 int 分配给 str
 
-Caveats/Known Issues
-====================
+注意事项/已知问题(Caveats/Known Issues)
+========================================
 
-* The detection of attr classes and attributes works by function name only.
-  This means that if you have your own helper functions that, for example,
-  ``return attrs.field()`` mypy will not see them.
+* attrs 类和属性的检测仅通过函数名称工作。这意味着如果你有自己的帮助函数，例如 ``return attrs.field()``，mypy 将无法识别它们。
 
-* All boolean arguments that mypy cares about must be literal ``True`` or ``False``.
-  e.g the following will not work:
+* 所有 mypy 关心的布尔参数必须是字面量 ``True`` 或 ``False``。
+  例如，以下代码将无法工作：
 
   .. code-block:: python
 
@@ -188,191 +168,112 @@ Caveats/Known Issues
       class A:
           ...
 
-* Currently, ``converter`` only supports named functions.  If mypy finds something else it
-  will complain about not understanding the argument and the type annotation in
-  :py:meth:`__init__ <object.__init__>` will be replaced by ``Any``.
+* 目前，``converter`` 仅支持命名函数。如果 mypy 找到其他内容，它将抱怨不理解该参数，且 :py:meth:`__init__ <object.__init__>` 中的类型注释将被替换为 ``Any``。
 
-* :ref:`Validator decorators <attrs:examples-validators>`
-  and `default decorators <https://www.attrs.org/en/stable/examples.html#defaults>`_
-  are not type-checked against the attribute they are setting/validating.
+* :ref:`验证器装饰器 <attrs:examples-validators>` 和 `默认装饰器 <https://www.attrs.org/en/stable/examples.html#defaults>`_
+  不会针对它们设置/验证的属性进行类型检查。
 
-* Method definitions added by mypy currently overwrite any existing method
-  definitions.
+* mypy 添加的方法定义当前会覆盖任何现有的方法定义。
 
 .. _remote-cache:
 
-Using a remote cache to speed up mypy runs
-******************************************
+使用远程缓存加速 mypy 运行(Using a remote cache to speed up mypy runs)
+************************************************************************************
 
-Mypy performs type checking *incrementally*, reusing results from
-previous runs to speed up successive runs. If you are type checking a
-large codebase, mypy can still be sometimes slower than desirable. For
-example, if you create a new branch based on a much more recent commit
-than the target of the previous mypy run, mypy may have to
-process almost every file, as a large fraction of source files may
-have changed. This can also happen after you've rebased a local
-branch.
+Mypy 以 *增量* 方式执行类型检查，重用先前运行的结果以加速后续运行。如果你在大型代码库中进行类型检查，mypy 有时仍然会比预期的慢。例如，如果你在基于比上次 mypy 运行目标更近的提交创建新分支，mypy 可能不得不处理几乎每个文件，因为大量源文件可能已更改。此情况也可能在你重新基于本地分支之后发生。
 
-Mypy supports using a *remote cache* to improve performance in cases
-such as the above.  In a large codebase, remote caching can sometimes
-speed up mypy runs by a factor of 10, or more.
+Mypy 支持使用 *远程缓存* 来提高上述情况的性能。在大型代码库中，远程缓存有时可以将 mypy 运行速度提高 10 倍或更多。
 
-Mypy doesn't include all components needed to set
-this up -- generally you will have to perform some simple integration
-with your Continuous Integration (CI) or build system to configure
-mypy to use a remote cache. This discussion assumes you have a CI
-system set up for the mypy build you want to speed up, and that you
-are using a central git repository. Generalizing to different
-environments should not be difficult.
+Mypy 不包括设置此配置所需的所有组件——通常，你必须与 CI（持续集成）或构建系统进行一些简单集成，以配置 mypy 使用远程缓存。本讨论假设你已为要加速的 mypy 构建设置了 CI 系统，并且你正在使用中央 git 存储库。将其概括到不同环境中应该不难。
 
-Here are the main components needed:
+这里是所需的主要组件：
 
-* A shared repository for storing mypy cache files for all landed commits.
+* 用于存储所有已提交的 mypy 缓存文件的共享存储库。
 
-* CI build that uploads mypy incremental cache files to the shared repository for
-  each commit for which the CI build runs.
+* CI 构建在每个 CI 构建运行的提交上将 mypy 增量缓存文件上传到共享存储库。
 
-* A wrapper script around mypy that developers use to run mypy with remote
-  caching enabled.
+* 开发人员使用的 mypy 的包装脚本，用于启用远程缓存的 mypy 运行。
 
-Below we discuss each of these components in some detail.
+下面我们将详细讨论每个组件。
 
-Shared repository for cache files
-=================================
+缓存文件的共享存储库(Shared repository for cache files)
+==================================================================
 
-You need a repository that allows you to upload mypy cache files from
-your CI build and make the cache files available for download based on
-a commit id.  A simple approach would be to produce an archive of the
-``.mypy_cache`` directory (which contains the mypy cache data) as a
-downloadable *build artifact* from your CI build (depending on the
-capabilities of your CI system).  Alternatively, you could upload the
-data to a web server or to S3, for example.
+你需要一个允许你从 CI 构建上传 mypy 缓存文件的存储库，并根据提交 ID 提供缓存文件下载。一个简单的方法是将 ``.mypy_cache`` 目录（包含 mypy 缓存数据）制作成可下载的 *构建工件*，并从你的 CI 构建中提供（具体取决于你的 CI 系统的能力）。或者，你也可以将数据上传到 web 服务器或 S3 等位置。
 
-Continuous Integration build
-============================
+持续集成构建(Continuous Integration build)
+========================================================
 
-The CI build would run a regular mypy build and create an archive containing
-the ``.mypy_cache`` directory produced by the build. Finally, it will produce
-the cache as a build artifact or upload it to a repository where it is
-accessible by the mypy wrapper script.
+CI 构建将运行常规的 mypy 构建，并创建一个包含构建生成的 ``.mypy_cache`` 目录的归档文件。最后，它将把缓存作为构建工件生成，或将其上传到一个 mypy 包装脚本可以访问的存储库。
 
-Your CI script might work like this:
+你的 CI 脚本可能像这样工作：
 
-* Run mypy normally. This will generate cache data under the
-  ``.mypy_cache`` directory.
+* 正常运行 mypy。这将生成 ``.mypy_cache`` 目录下的缓存数据。
 
-* Create a tarball from the ``.mypy_cache`` directory.
+* 从 ``.mypy_cache`` 目录创建一个 tarball。
 
-* Determine the current git master branch commit id (say, using
-  ``git rev-parse HEAD``).
+* 确定当前 git 主分支的提交 ID（例如，使用 ``git rev-parse HEAD``）。
 
-* Upload the tarball to the shared repository with a name derived from the
-  commit id.
+* 将 tarball 以从提交 ID 派生的名称上传到共享存储库。
 
-Mypy wrapper script
-===================
+Mypy 包装脚本(Mypy wrapper script)
+===============================================
 
-The wrapper script is used by developers to run mypy locally during
-development instead of invoking mypy directly.  The wrapper first
-populates the local ``.mypy_cache`` directory from the shared
-repository and then runs a normal incremental build.
+包装脚本由开发人员在开发期间用来本地运行 mypy，而不是直接调用 mypy。包装脚本首先从共享存储库填充本地的 ``.mypy_cache`` 目录，然后运行常规的增量构建。
 
-The wrapper script needs some logic to determine the most recent
-central repository commit (by convention, the ``origin/master`` branch
-for git) the local development branch is based on. In a typical git
-setup you can do it like this:
+包装脚本需要一些逻辑来确定本地开发分支所基于的最新中央存储库提交（按约定，git 的 ``origin/master`` 分支）。在典型的 git 设置中，你可以这样做：
 
 .. code::
 
     git merge-base HEAD origin/master
 
-The next step is to download the cache data (contents of the
-``.mypy_cache`` directory) from the shared repository based on the
-commit id of the merge base produced by the git command above. The
-script will decompress the data so that mypy will start with a fresh
-``.mypy_cache``. Finally, the script runs mypy normally. And that's all!
+下一步是根据上述 git 命令生成的合并基础的提交 ID 从共享存储库下载缓存数据（``.mypy_cache`` 目录的内容）。该脚本将解压缩数据，以便 mypy 从一个全新的 ``.mypy_cache`` 开始。最后，脚本正常运行 mypy。这就是全部！
 
-Caching with mypy daemon
-========================
+使用 mypy 守护进程进行缓存(Caching with mypy daemon)
+====================================================
 
-You can also use remote caching with the :ref:`mypy daemon <mypy_daemon>`.
-The remote cache will significantly speed up the first ``dmypy check``
-run after starting or restarting the daemon.
+你还可以使用 :ref:`mypy 守护进程 <mypy_daemon>` 来进行远程缓存。远程缓存将显著加速启动或重启守护进程后第一次运行的 ``dmypy check``。
 
-The mypy daemon requires extra fine-grained dependency data in
-the cache files which aren't included by default. To use caching with
-the mypy daemon, use the :option:`--cache-fine-grained <mypy --cache-fine-grained>` option in your CI
-build::
+mypy 守护进程在缓存文件中需要额外的细粒度依赖数据，而这些数据默认并不包含。要在 CI 构建中使用缓存与 mypy 守护进程一起工作，请在你的 CI 构建中使用 :option:`--cache-fine-grained <mypy --cache-fine-grained>` 选项::
 
     $ mypy --cache-fine-grained <args...>
 
-This flag adds extra information for the daemon to the cache. In
-order to use this extra information, you will also need to use the
-``--use-fine-grained-cache`` option with ``dmypy start`` or
-``dmypy restart``. Example::
+此标志将额外信息添加到守护进程的缓存中。为了使用这些额外信息，你还需要在 ``dmypy start`` 或 ``dmypy restart`` 时使用 ``--use-fine-grained-cache`` 选项。示例::
 
     $ dmypy start -- --use-fine-grained-cache <options...>
 
-Now your first ``dmypy check`` run should be much faster, as it can use
-cache information to avoid processing the whole program.
+现在你的第一次 ``dmypy check`` 运行应该会快得多，因为它可以使用缓存信息来避免处理整个程序。
 
-Refinements
-===========
+改进措施(Refinements)
+======================
 
-There are several optional refinements that may improve things further,
-at least if your codebase is hundreds of thousands of lines or more:
+有几个可选的改进措施，可能会进一步改善性能，至少在你的代码库有数十万行或更多时：
 
-* If the wrapper script determines that the merge base hasn't changed
-  from a previous run, there's no need to download the cache data and
-  it's better to instead reuse the existing local cache data.
+* 如果包装脚本确定合并基础自上一次运行以来没有更改，则无需下载缓存数据，最好重用现有的本地缓存数据。
 
-* If you use the mypy daemon, you may want to restart the daemon each time
-  after the merge base or local branch has changed to avoid processing a
-  potentially large number of changes in an incremental build, as this can
-  be much slower than downloading cache data and restarting the daemon.
+* 如果你使用 mypy 守护进程，你可能希望在每次合并基础或本地分支更改后重启守护进程，以避免在增量构建中处理大量更改，因为这可能比下载缓存数据和重启守护进程要慢得多。
 
-* If the current local branch is based on a very recent master commit,
-  the remote cache data may not yet be available for that commit, as
-  there will necessarily be some latency to build the cache files. It
-  may be a good idea to look for cache data for, say, the 5 latest
-  master commits and use the most recent data that is available.
+* 如果当前本地分支基于非常新的主提交，远程缓存数据可能尚未为该提交可用，因为构建缓存文件必然会有一些延迟。查看最新的 5 个主提交的缓存数据并使用可用的最新数据可能是个好主意。
 
-* If the remote cache is not accessible for some reason (say, from a public
-  network), the script can still fall back to a normal incremental build.
+* 如果由于某种原因（例如，来自公共网络）远程缓存无法访问，脚本仍然可以回退到常规的增量构建。
 
-* You can have multiple local cache directories for different local branches
-  using the :option:`--cache-dir <mypy --cache-dir>` option. If the user switches to an existing
-  branch where downloaded cache data is already available, you can continue
-  to use the existing cache data instead of redownloading the data.
+* 你可以使用 :option:`--cache-dir <mypy --cache-dir>` 选项为不同的本地分支设置多个本地缓存目录。如果用户切换到一个已经存在的分支，并且已下载的缓存数据已经可用，你可以继续使用现有的缓存数据，而不是重新下载数据。
 
-* You can set up your CI build to use a remote cache to speed up the
-  CI build. This would be particularly useful if each CI build starts
-  from a fresh state without access to cache files from previous
-  builds. It's still recommended to run a full, non-incremental
-  mypy build to create the cache data, as repeatedly updating cache
-  data incrementally could result in drift over a long time period (due
-  to a mypy caching issue, perhaps).
+* 你可以设置 CI 构建以使用远程缓存来加速 CI 构建。如果每个 CI 构建从没有访问到以前构建的缓存文件的新状态开始，这将特别有用。仍然建议运行完整的非增量 mypy 构建来创建缓存数据，因为反复增量更新缓存数据可能会导致长时间内的漂移（可能是由于 mypy 缓存问题）。
 
 .. _extended_callable:
 
-Extended Callable types
-***********************
+扩展可调用类型(Extended Callable types)
+**********************************************
 
 .. note::
 
-   This feature is deprecated.  You can use
-   :ref:`callback protocols <callback_protocols>` as a replacement.
+   此功能已被弃用。你可以使用
+   :ref:`回调协议 <callback_protocols>` 作为替代。
 
-As an experimental mypy extension, you can specify :py:class:`~collections.abc.Callable` types
-that support keyword arguments, optional arguments, and more.  When
-you specify the arguments of a :py:class:`~collections.abc.Callable`, you can choose to supply just
-the type of a nameless positional argument, or an "argument specifier"
-representing a more complicated form of argument.  This allows one to
-more closely emulate the full range of possibilities given by the
-``def`` statement in Python.
+作为一个实验性的 mypy 扩展，你可以指定支持关键字参数、可选参数等的 :py:class:`~collections.abc.Callable` 类型。当你指定 :py:class:`~collections.abc.Callable` 的参数时，可以选择仅提供一个无名位置参数的类型，或者提供一个表示更复杂参数形式的“参数说明符”。这使得能够更接近模拟 Python 中 ``def`` 语句提供的全部可能性。
 
-As an example, here's a complicated function definition and the
-corresponding :py:class:`~collections.abc.Callable`:
+作为示例，以下是一个复杂的函数定义及其对应的 :py:class:`~collections.abc.Callable`：
 
 .. code-block:: python
 
@@ -380,7 +281,7 @@ corresponding :py:class:`~collections.abc.Callable`:
    from mypy_extensions import (Arg, DefaultArg, NamedArg,
                                 DefaultNamedArg, VarArg, KwArg)
 
-   def func(__a: int,  # This convention is for nameless arguments
+   def func(__a: int,  # 这种约定用于无名参数
             b: int,
             c: int = 0,
             *args: int,
@@ -389,7 +290,7 @@ corresponding :py:class:`~collections.abc.Callable`:
             **kwargs: int) -> int:
        ...
 
-   F = Callable[[int,  # Or Arg(int)
+   F = Callable[[int,  # 或 Arg(int)
                  Arg(int, 'b'),
                  DefaultArg(int, 'c'),
                  VarArg(int),
@@ -400,74 +301,65 @@ corresponding :py:class:`~collections.abc.Callable`:
 
    f: F = func
 
-Argument specifiers are special function calls that can specify the
-following aspects of an argument:
+参数说明符是特殊的函数调用，可以指定参数的以下方面：
 
-- its type (the only thing that the basic format supports)
+- 其类型（基本格式支持的唯一内容）
 
-- its name (if it has one)
+- 其名称（如果有的话）
 
-- whether it may be omitted
+- 是否可以省略
 
-- whether it may or must be passed using a keyword
+- 是否可以或必须使用关键字传递
 
-- whether it is a ``*args`` argument (representing the remaining
-  positional arguments)
+- 是否为 ``*args`` 参数（表示其余的位置参数）
 
-- whether it is a ``**kwargs`` argument (representing the remaining
-  keyword arguments)
+- 是否为 ``**kwargs`` 参数（表示其余的关键字参数）
 
-The following functions are available in ``mypy_extensions`` for this
-purpose:
+以下函数在 ``mypy_extensions`` 中可用于此目的：
 
 .. code-block:: python
 
    def Arg(type=Any, name=None):
-       # A normal, mandatory, positional argument.
-       # If the name is specified it may be passed as a keyword.
+       # 一个普通的、强制性的、位置参数。
+       # 如果指定了名称，可以作为关键字传递。
 
    def DefaultArg(type=Any, name=None):
-       # An optional positional argument (i.e. with a default value).
-       # If the name is specified it may be passed as a keyword.
+       # 一个可选的位置参数（即具有默认值）。
+       # 如果指定了名称，可以作为关键字传递。
 
    def NamedArg(type=Any, name=None):
-       # A mandatory keyword-only argument.
+       # 一个强制性的仅关键字参数。
 
    def DefaultNamedArg(type=Any, name=None):
-       # An optional keyword-only argument (i.e. with a default value).
+       # 一个可选的仅关键字参数（即具有默认值）。
 
    def VarArg(type=Any):
-       # A *args-style variadic positional argument.
-       # A single VarArg() specifier represents all remaining
-       # positional arguments.
+       # 一个 *args 风格的变长位置参数。
+       # 单个 VarArg() 说明符表示所有其余的位置参数。
 
    def KwArg(type=Any):
-       # A **kwargs-style variadic keyword argument.
-       # A single KwArg() specifier represents all remaining
-       # keyword arguments.
+       # 一个 **kwargs 风格的变长关键字参数。
+       # 单个 KwArg() 说明符表示所有其余的关键字参数。
 
-In all cases, the ``type`` argument defaults to ``Any``, and if the
-``name`` argument is omitted the argument has no name (the name is
-required for ``NamedArg`` and ``DefaultNamedArg``).  A basic
-:py:class:`~collections.abc.Callable` such as
+在所有情况下，``type`` 参数默认为 ``Any``，如果省略 ``name`` 参数，则该参数没有名称（``NamedArg`` 和 ``DefaultNamedArg`` 需要名称）。一个基本的 :py:class:`~collections.abc.Callable` 如下所示：
 
 .. code-block:: python
 
    MyFunc = Callable[[int, str, int], float]
 
-is equivalent to the following:
+等价于：
 
 .. code-block:: python
 
    MyFunc = Callable[[Arg(int), Arg(str), Arg(int)], float]
 
-A :py:class:`~collections.abc.Callable` with unspecified argument types, such as
+一个参数类型未指定的 :py:class:`~collections.abc.Callable` 如下所示：
 
 .. code-block:: python
 
    MyOtherFunc = Callable[..., int]
 
-is (roughly) equivalent to
+大致等价于：
 
 .. code-block:: python
 
@@ -475,9 +367,4 @@ is (roughly) equivalent to
 
 .. note::
 
-   Each of the functions above currently just returns its ``type``
-   argument at runtime, so the information contained in the argument
-   specifiers is not available at runtime.  This limitation is
-   necessary for backwards compatibility with the existing
-   ``typing.py`` module as present in the Python 3.5+ standard library
-   and distributed via PyPI.
+   上述每个函数在运行时仅返回其 ``type`` 参数，因此参数说明符中包含的信息在运行时不可用。此限制对于与现有的 ``typing.py`` 模块（Python 3.5+ 标准库中存在并通过 PyPI 分发）保持向后兼容是必要的。

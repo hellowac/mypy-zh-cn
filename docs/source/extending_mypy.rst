@@ -1,24 +1,18 @@
 .. _extending-mypy:
 
-Extending and integrating mypy
-==============================
+扩展和集成 mypy(Extending and integrating mypy)
+============================================================
 
 .. _integrating-mypy:
 
-Integrating mypy into another Python application
-************************************************
+将 mypy 集成到另一个 Python 应用中(Integrating mypy into another Python application)
+************************************************************************************************
 
-It is possible to integrate mypy into another Python 3 application by
-importing ``mypy.api`` and calling the ``run`` function with a parameter of type ``list[str]``, containing
-what normally would have been the command line arguments to mypy.
+可以通过导入 ``mypy.api`` 并调用 ``run`` 函数将 mypy 集成到另一个 Python 3 应用中。该函数接受一个 ``list[str]`` 类型的参数，其中包含通常传递给 mypy 的命令行参数。
 
-Function ``run`` returns a ``tuple[str, str, int]``, namely
-``(<normal_report>, <error_report>, <exit_status>)``, in which ``<normal_report>``
-is what mypy normally writes to :py:data:`sys.stdout`, ``<error_report>`` is what mypy
-normally writes to :py:data:`sys.stderr` and ``exit_status`` is the exit status mypy normally
-returns to the operating system.
+函数 ``run`` 返回一个 ``tuple[str, str, int]``，即 ``(<normal_report>, <error_report>, <exit_status>)``，其中 ``<normal_report>`` 是 mypy 通常写入 :py:data:`sys.stdout` 的内容，``<error_report>`` 是 mypy 通常写入 :py:data:`sys.stderr` 的内容，``exit_status`` 是 mypy 通常返回给操作系统的退出状态。
 
-A trivial example of using the api is the following
+使用该 API 的一个简单示例如下：
 
 .. code-block:: python
 
@@ -40,68 +34,44 @@ A trivial example of using the api is the following
 
 .. _extending-mypy-using-plugins:
 
-Extending mypy using plugins
-****************************
+使用插件扩展 mypy(Extending mypy using plugins)
+********************************************************
 
-Python is a highly dynamic language and has extensive metaprogramming
-capabilities. Many popular libraries use these to create APIs that may
-be more flexible and/or natural for humans, but are hard to express using
-static types. Extending the :pep:`484` type system to accommodate all existing
-dynamic patterns is impractical and often just impossible.
+Python 是一种高度动态的语言，具有广泛的元编程能力。许多流行的库利用这些能力创建更加灵活和/或自然的 API，但使用静态类型很难表达这些 API。将 :pep:`484` 类型系统扩展以适应所有现有的动态模式既不切实际，有时甚至是不可能的。
 
-Mypy supports a plugin system that lets you customize the way mypy type checks
-code. This can be useful if you want to extend mypy so it can type check code
-that uses a library that is difficult to express using just :pep:`484` types.
+Mypy 支持一个插件系统，使你能够自定义 mypy 的类型检查方式。如果你希望扩展 mypy 以检查使用了难以通过 :pep:`484` 类型表达的库的代码，这会非常有用。
 
-The plugin system is focused on improving mypy's understanding
-of *semantics* of third party frameworks. There is currently no way to define
-new first class kinds of types.
+插件系统的重点是提高 mypy 对第三方框架 *语义(semantics)* 的理解。目前还没有办法定义新的第一类类型。
 
 .. note::
 
-   The plugin system is experimental and prone to change. If you want to write
-   a mypy plugin, we recommend you start by contacting the mypy core developers
-   on `gitter <https://gitter.im/python/typing>`_. In particular, there are
-   no guarantees about backwards compatibility.
+   插件系统是实验性的，易于变化。如果你想编写 mypy 插件，建议你先通过 `gitter <https://gitter.im/python/typing>`_ 联系 mypy 核心开发人员。特别是，不保证向后兼容性。
 
-   Backwards incompatible changes may be made without a deprecation period,
-   but we will announce them in
-   `the plugin API changes announcement issue <https://github.com/python/mypy/issues/6617>`_.
+   向后不兼容的更改可能会在没有弃用期的情况下进行，但我们会在 `插件 API 更改公告问题 <https://github.com/python/mypy/issues/6617>`_ 中宣布这些更改。
 
-Configuring mypy to use plugins
-*******************************
+配置 mypy 使用插件(Configuring mypy to use plugins)
+**************************************************************
 
-Plugins are Python files that can be specified in a mypy
-:ref:`config file <config-file>` using the :confval:`plugins` option and one of the two formats: relative or
-absolute path to the plugin file, or a module name (if the plugin
-is installed using ``pip install`` in the same virtual environment where mypy
-is running). The two formats can be mixed, for example:
+插件是 Python 文件，可以通过 mypy 的 :confval:`plugins` 选项在 :ref:`配置文件 <config-file>` 中指定，支持两种格式：插件文件的相对或绝对路径，或者模块名称（如果插件是通过 ``pip install`` 安装在与 mypy 运行相同的虚拟环境中）。这两种格式可以混合使用，例如：
 
 .. code-block:: ini
 
     [mypy]
     plugins = /one/plugin.py, other.plugin
 
-Mypy will try to import the plugins and will look for an entry point function
-named ``plugin``. If the plugin entry point function has a different name, it
-can be specified after colon:
+Mypy 将尝试导入这些插件，并寻找一个名为 ``plugin`` 的入口函数。如果插件的入口函数有不同的名称，可以在其后通过冒号指定：
 
 .. code-block:: ini
 
     [mypy]
     plugins = custom_plugin:custom_entry_point
 
-In the following sections we describe the basics of the plugin system with
-some examples. For more technical details, please read the docstrings in
-`mypy/plugin.py <https://github.com/python/mypy/blob/master/mypy/plugin.py>`_
-in mypy source code. Also you can find good examples in the bundled plugins
-located in `mypy/plugins <https://github.com/python/mypy/tree/master/mypy/plugins>`_.
+在接下来的章节中，我们会介绍插件系统的基础知识并附带一些示例。有关技术细节，请参阅 mypy 源代码中的 `mypy/plugin.py <https://github.com/python/mypy/blob/master/mypy/plugin.py>`_ 中的文档字符串。你还可以在捆绑的插件中找到一些好的示例，这些插件位于 `mypy/plugins <https://github.com/python/mypy/tree/master/mypy/plugins>`_。
 
-High-level overview
-*******************
+高级概览(High-level overview)
+**************************************
 
-Every entry point function should accept a single string argument
-that is a full mypy version and return a subclass of ``mypy.plugin.Plugin``:
+每个入口函数都应该接受一个字符串参数，该参数是完整的 mypy 版本号，并返回 ``mypy.plugin.Plugin`` 的子类：
 
 .. code-block:: python
 
@@ -109,40 +79,27 @@ that is a full mypy version and return a subclass of ``mypy.plugin.Plugin``:
 
    class CustomPlugin(Plugin):
        def get_type_analyze_hook(self, fullname: str):
-           # see explanation below
+           # 请参阅下面的解释
            ...
 
    def plugin(version: str):
-       # ignore version argument if the plugin works with all mypy versions.
+       # 如果插件适用于所有 mypy 版本，可以忽略版本参数。
        return CustomPlugin
 
-During different phases of analyzing the code (first in semantic analysis,
-and then in type checking) mypy calls plugin methods such as
-``get_type_analyze_hook()`` on user plugins. This particular method, for example,
-can return a callback that mypy will use to analyze unbound types with the given
-full name. See the full plugin hook method list :ref:`below <plugin_hooks>`.
+在代码分析的不同阶段（首先是语义分析，然后是类型检查），mypy 会在用户插件上调用诸如 ``get_type_analyze_hook()`` 的方法。例如，这个方法可以返回一个回调，mypy 会使用它来分析具有给定全名的未绑定类型。请参阅 :ref:`下方 <plugin_hooks>` 的完整插件钩子方法列表。
 
-Mypy maintains a list of plugins it gets from the config file plus the default
-(built-in) plugin that is always enabled. Mypy calls a method once for each
-plugin in the list until one of the methods returns a non-``None`` value.
-This callback will be then used to customize the corresponding aspect of
-analyzing/checking the current abstract syntax tree node.
+Mypy 维护一个从配置文件获取的插件列表，加上始终启用的默认（内置）插件。对于列表中的每个插件，mypy 会调用一次方法，直到某个方法返回非 ``None`` 值为止。然后这个回调将用于自定义分析/检查当前抽象语法树节点的相应方面。
 
-The callback returned by the ``get_xxx`` method will be given a detailed
-current context and an API to create new nodes, new types, emit error messages,
-etc., and the result will be used for further processing.
+``get_xxx`` 方法返回的回调将获得当前详细的上下文以及用于创建新节点、新类型、发出错误消息等的 API，结果将用于进一步处理。
 
-Plugin developers should ensure that their plugins work well in incremental and
-daemon modes. In particular, plugins should not hold global state due to caching
-of plugin hook results.
+插件开发者应确保其插件在增量和守护进程模式下能够良好运行。特别是，插件不应由于缓存插件钩子的结果而持有全局状态。
 
 .. _plugin_hooks:
 
-Current list of plugin hooks
-****************************
+当前的插件钩子列表(Current list of plugin hooks)
+********************************************************
 
-**get_type_analyze_hook()** customizes behaviour of the type analyzer.
-For example, :pep:`484` doesn't support defining variadic generic types:
+**get_type_analyze_hook()** 用于自定义类型分析器的行为。例如，:pep:`484` 不支持定义变长泛型类型：
 
 .. code-block:: python
 
@@ -151,22 +108,15 @@ For example, :pep:`484` doesn't support defining variadic generic types:
    a: Vector[int, int]
    b: Vector[int, int, int]
 
-When analyzing this code, mypy will call ``get_type_analyze_hook("lib.Vector")``,
-so the plugin can return some valid type for each variable.
+在分析这段代码时，mypy 会调用 ``get_type_analyze_hook("lib.Vector")``，因此插件可以为每个变量返回某个有效类型。
 
-**get_function_hook()** is used to adjust the return type of a function call.
-This hook will be also called for instantiation of classes.
-This is a good choice if the return type is too complex
-to be expressed by regular python typing.
+**get_function_hook()** 用于调整函数调用的返回类型。这个钩子也会在类实例化时调用。如果返回类型过于复杂，无法通过常规的 Python 类型系统表达，这是一个不错的选择。
 
-**get_function_signature_hook()** is used to adjust the signature of a function.
+**get_function_signature_hook()** 用于调整函数的签名。
 
-**get_method_hook()** is the same as ``get_function_hook()`` but for methods
-instead of module level functions.
+**get_method_hook()** 与 ``get_function_hook()`` 类似，但用于方法，而不是模块级别的函数。
 
-**get_method_signature_hook()** is used to adjust the signature of a method.
-This includes special Python methods except :py:meth:`~object.__init__` and :py:meth:`~object.__new__`.
-For example in this code:
+**get_method_signature_hook()** 用于调整方法的签名。这包括除 :py:meth:`~object.__init__` 和 :py:meth:`~object.__new__` 之外的特殊 Python 方法。例如，在以下代码中：
 
 .. code-block:: python
 
@@ -175,40 +125,29 @@ For example in this code:
    x: Array[c_int]
    x[0] = 42
 
-mypy will call ``get_method_signature_hook("ctypes.Array.__setitem__")``
-so that the plugin can mimic the :py:mod:`ctypes` auto-convert behavior.
+mypy 会调用 ``get_method_signature_hook("ctypes.Array.__setitem__")``，这样插件可以模仿 :py:mod:`ctypes` 的自动转换行为。
 
-**get_attribute_hook()** overrides instance member field lookups and property
-access (not method calls). This hook is only called for
-fields which already exist on the class. *Exception:* if :py:meth:`__getattr__ <object.__getattr__>` or
-:py:meth:`__getattribute__ <object.__getattribute__>` is a method on the class, the hook is called for all
-fields which do not refer to methods.
+**get_attribute_hook()** 用于重写实例成员字段查找和属性访问（不包括方法调用）。该钩子只针对类中已经存在的字段调用。*例外情况：* 如果类上有 :py:meth:`__getattr__ <object.__getattr__>` 或 :py:meth:`__getattribute__ <object.__getattribute__>` 方法，该钩子将为所有不涉及方法的字段调用。
 
-**get_class_attribute_hook()** is similar to above, but for attributes on classes rather than instances.
-Unlike above, this does not have special casing for :py:meth:`__getattr__ <object.__getattr__>` or
-:py:meth:`__getattribute__ <object.__getattribute__>`.
+**get_class_attribute_hook()** 类似于上面的钩子，但用于类上的属性而不是实例属性。与上面的不同，这不针对 :py:meth:`__getattr__ <object.__getattr__>` 或 :py:meth:`__getattribute__ <object.__getattribute__>` 进行特殊处理。
 
-**get_class_decorator_hook()** can be used to update class definition for
-given class decorators. For example, you can add some attributes to the class
-to match runtime behaviour:
+**get_class_decorator_hook()** 可用于更新具有类装饰器的类定义。例如，你可以为类添加一些属性，以匹配运行时行为：
 
 .. code-block:: python
 
    from dataclasses import dataclass
 
-   @dataclass  # built-in plugin adds `__init__` method here
+   @dataclass  # 内置插件在这里添加 `__init__` 方法
    class User:
        name: str
 
-   user = User(name='example')  # mypy can understand this using a plugin
+   user = User(name='example')  # mypy 可以通过插件理解这一点
 
-**get_metaclass_hook()** is similar to above, but for metaclasses.
+**get_metaclass_hook()** 类似于上面的钩子，但用于元类。
 
-**get_base_class_hook()** is similar to above, but for base classes.
+**get_base_class_hook()** 类似于上面的钩子，但用于基类。
 
-**get_dynamic_class_hook()** can be used to allow dynamic class definitions
-in mypy. This plugin hook is called for every assignment to a simple name
-where right hand side is a function call:
+**get_dynamic_class_hook()** 可用于允许 mypy 中的动态类定义。每次为一个简单名称赋值且右侧是函数调用时，都会调用该插件钩子：
 
 .. code-block:: python
 
@@ -216,33 +155,17 @@ where right hand side is a function call:
 
    X = dynamic_class('X', [])
 
-For such definition, mypy will call ``get_dynamic_class_hook("lib.dynamic_class")``.
-The plugin should create the corresponding ``mypy.nodes.TypeInfo`` object, and
-place it into a relevant symbol table. (Instances of this class represent
-classes in mypy and hold essential information such as qualified name,
-method resolution order, etc.)
+对于这样的定义，mypy 会调用 ``get_dynamic_class_hook("lib.dynamic_class")``。插件应创建相应的 ``mypy.nodes.TypeInfo`` 对象，并将其放入相关的符号表中。（这个类的实例表示 mypy 中的类，并持有诸如限定名称、方法解析顺序等重要信息。）
 
-**get_customize_class_mro_hook()** can be used to modify class MRO (for example
-insert some entries there) before the class body is analyzed.
+**get_customize_class_mro_hook()** 可用于在类主体分析之前修改类的 MRO（例如在其中插入一些条目）。
 
-**get_additional_deps()** can be used to add new dependencies for a
-module. It is called before semantic analysis. For example, this can
-be used if a library has dependencies that are dynamically loaded
-based on configuration information.
+**get_additional_deps()** 可用于为模块添加新的依赖项。它会在语义分析之前调用。例如，如果一个库有根据配置信息动态加载的依赖项，可以使用此钩子。
 
-**report_config_data()** can be used if the plugin has some sort of
-per-module configuration that can affect typechecking. In that case,
-when the configuration for a module changes, we want to invalidate
-mypy's cache for that module so that it can be rechecked. This hook
-should be used to report to mypy any relevant configuration data,
-so that mypy knows to recheck the module if the configuration changes.
-The hooks should return data encodable as JSON.
+**report_config_data()** 可用于当插件有某种每模块的配置影响类型检查时。当模块的配置发生变化时，我们希望使 mypy 的缓存失效，从而重新检查模块。此钩子应报告给 mypy 任何相关的配置信息，以便当配置更改时，mypy 知道要重新检查模块。钩子应返回可编码为 JSON 的数据。
 
-Useful tools
-************
+实用工具(Useful tools)
+************************
 
-Mypy ships ``mypy.plugins.proper_plugin`` plugin which can be useful
-for plugin authors, since it finds missing ``get_proper_type()`` calls,
-which is a pretty common mistake.
+Mypy 附带了 ``mypy.plugins.proper_plugin`` 插件，对于插件作者非常有用，因为它可以找到遗漏的 ``get_proper_type()`` 调用，这是一个常见错误。
 
-It is recommended to enable it is a part of your plugin's CI.
+建议将其作为插件 CI 的一部分启用。

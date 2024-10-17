@@ -2,53 +2,38 @@
 
 .. program:: stubtest
 
-Automatic stub testing (stubtest)
-=================================
+自动化存根测试(Automatic stub testing)(stubtest)
+====================================================
 
-Stub files are files containing type annotations. See
-`PEP 484 <https://www.python.org/dev/peps/pep-0484/#stub-files>`_
-for more motivation and details.
+存根文件包含类型注解。有关更多动机和细节，请参阅
+`PEP 484 <https://www.python.org/dev/peps/pep-0484/#stub-files>`_。
 
-A common problem with stub files is that they tend to diverge from the
-actual implementation. Mypy includes the ``stubtest`` tool that can
-automatically check for discrepancies between the stubs and the
-implementation at runtime.
+存根文件的一个常见问题是，它们往往会与实际实现产生差异。Mypy 包含了 ``stubtest`` 工具，可以自动检查存根与实际运行时实现之间的差异。
 
-What stubtest does and does not do
-**********************************
+stubtest 的功能与限制(What stubtest does and does not do)
+*********************************************************************
 
-Stubtest will import your code and introspect your code objects at runtime, for
-example, by using the capabilities of the :py:mod:`inspect` module. Stubtest
-will then analyse the stub files, and compare the two, pointing out things that
-differ between stubs and the implementation at runtime.
+Stubtest 会导入您的代码，并在运行时检查代码对象，例如，使用 :py:mod:`inspect` 模块的功能。然后，stubtest 会分析存根文件，并将二者进行对比，指出存根与运行时实现之间的不同之处。
 
-It's important to be aware of the limitations of this comparison. Stubtest will
-not make any attempt to statically analyse your actual code and relies only on
-dynamic runtime introspection (in particular, this approach means stubtest works
-well with extension modules). However, this means that stubtest has limited
-visibility; for instance, it cannot tell if a return type of a function is
-accurately typed in the stubs.
+需要注意的是，这种比较方式有一定的局限性。Stubtest 不会尝试对您的实际代码进行静态分析，而是仅依赖于动态的运行时检查（特别是，这种方式使得 stubtest 在处理扩展模块时表现良好）。然而，这也意味着 stubtest 的可见性有限；例如，它无法判断函数的返回类型是否在存根中正确标注。
 
-For clarity, here are some additional things stubtest can't do:
+为了更清楚地说明，以下是 stubtest 无法做到的几点：
 
-* Type check your code -- use ``mypy`` instead
-* Generate stubs -- use ``stubgen`` or ``pyright --createstub`` instead
-* Generate stubs based on running your application or test suite -- use ``monkeytype`` instead
-* Apply stubs to code to produce inline types -- use ``retype`` or ``libcst`` instead
+* 类型检查您的代码 —— 请使用 ``mypy`` 代替
+* 生成存根 —— 请使用 ``stubgen`` 或 ``pyright --createstub`` 代替
+* 基于运行您的应用程序或测试套件生成存根 —— 请使用 ``monkeytype`` 代替
+* 将存根应用到代码中以生成内联类型 —— 请使用 ``retype`` 或 ``libcst`` 代替
 
-In summary, stubtest works very well for ensuring basic consistency between
-stubs and implementation or to check for stub completeness. It's used to
-test Python's official collection of library stubs,
-`typeshed <https://github.com/python/typeshed>`_.
+总而言之，stubtest 非常适合用于确保存根与实现之间的基本一致性，或检查存根的完整性。它被用于测试 Python 官方库存根集合，`typeshed <https://github.com/python/typeshed>`_。
 
 .. warning::
 
-    stubtest will import and execute Python code from the packages it checks.
+    stubtest 会导入并执行它检查的包中的 Python 代码。
 
-Example
-*******
+示例(Example)
+***************
 
-Here's a quick example of what stubtest can do:
+下面是一个 stubtest 功能的简短示例：
 
 .. code-block:: shell
 
@@ -79,84 +64,65 @@ Here's a quick example of what stubtest can do:
     'hello, stubtest'
 
 
-Usage
-*****
+使用方法(Usage)
+****************
 
-Running stubtest can be as simple as ``stubtest module_to_check``.
-Run :option:`stubtest --help` for a quick summary of options.
+运行 stubtest 可以像 ``stubtest module_to_check`` 一样简单。运行 :option:`stubtest --help` 查看选项的快速摘要。
 
-Stubtest must be able to import the code to be checked, so make sure that mypy
-is installed in the same environment as the library to be tested. In some
-cases, setting ``PYTHONPATH`` can help stubtest find the code to import.
+Stubtest 必须能够导入要检查的代码，因此请确保 mypy 已安装在与要测试的库相同的环境中。在某些情况下，设置 ``PYTHONPATH`` 可以帮助 stubtest 找到要导入的代码。
 
-Similarly, stubtest must be able to find the stubs to be checked. Stubtest
-respects the ``MYPYPATH`` environment variable -- consider using this if you
-receive a complaint along the lines of "failed to find stubs".
+同样，stubtest 必须能够找到要检查的存根文件。Stubtest 会遵循 ``MYPYPATH`` 环境变量——如果你收到类似“找不到存根”的报错，考虑使用此变量。
 
-Note that stubtest requires mypy to be able to analyse stubs. If mypy is unable
-to analyse stubs, you may get an error on the lines of "not checking stubs due
-to mypy build errors". In this case, you will need to mitigate those errors
-before stubtest will run. Despite potential overlap in errors here, stubtest is
-not intended as a substitute for running mypy directly.
+请注意，stubtest 需要 mypy 能够分析存根文件。如果 mypy 无法分析存根，可能会出现“由于 mypy 构建错误而无法检查存根”的错误。在这种情况下，你需要先解决这些错误，然后 stubtest 才能运行。尽管这里可能会有一些错误重叠，但 stubtest 并不是运行 mypy 的替代方案。
 
-If you wish to ignore some of stubtest's complaints, stubtest supports a
-pretty handy allowlist system.
+如果你希望忽略 stubtest 的某些警告，stubtest 提供了一个非常方便的允许列表（allowlist）系统。
 
-The rest of this section documents the command line interface of stubtest.
+本节余下部分记录了 stubtest 的命令行接口。
 
 .. option:: --concise
 
-    Makes stubtest's output more concise, one line per error
+    使 stubtest 的输出更简洁，每个错误只占一行。
 
 .. option:: --ignore-missing-stub
 
-    Ignore errors for stub missing things that are present at runtime
+    忽略存根缺少运行时存在的内容的错误。
 
 .. option:: --ignore-positional-only
 
-    Ignore errors for whether an argument should or shouldn't be positional-only
+    忽略关于参数是否应该是仅限位置参数的错误。
 
 .. option:: --allowlist FILE
 
-    Use file as an allowlist. Can be passed multiple times to combine multiple
-    allowlists. Allowlists can be created with --generate-allowlist. Allowlists
-    support regular expressions.
+    使用文件作为允许列表。可以多次传递以组合多个允许列表。允许列表可以使用 --generate-allowlist 创建，并支持正则表达式。
 
-    The presence of an entry in the allowlist means stubtest will not generate
-    any errors for the corresponding definition.
+    允许列表中存在的条目意味着 stubtest 不会为相应的定义生成任何错误。
 
 .. option:: --generate-allowlist
 
-    Print an allowlist (to stdout) to be used with --allowlist
+    打印允许列表（到标准输出），以配合 --allowlist 使用。
 
-    When introducing stubtest to an existing project, this is an easy way to
-    silence all existing errors.
+    在现有项目中引入 stubtest 时，这是静默所有现有错误的简单方法。
 
 .. option:: --ignore-unused-allowlist
 
-    Ignore unused allowlist entries
+    忽略未使用的允许列表条目。
 
-    Without this option enabled, the default is for stubtest to complain if an
-    allowlist entry is not necessary for stubtest to pass successfully.
+    如果未启用此选项，默认情况下 stubtest 会在允许列表条目不再需要时发出警告。
 
-    Note if an allowlist entry is a regex that matches the empty string,
-    stubtest will never consider it unused. For example, to get
-    `--ignore-unused-allowlist` behaviour for a single allowlist entry like
-    ``foo.bar`` you could add an allowlist entry ``(foo\.bar)?``.
-    This can be useful when an error only occurs on a specific platform.
+    请注意，如果允许列表条目是一个匹配空字符串的正则表达式，stubtest 永远不会认为它是未使用的。例如，为了对单个允许列表条目 ``foo.bar`` 获得 `--ignore-unused-allowlist` 的行为，你可以添加一个允许列表条目 ``(foo\.bar)?``。当错误仅发生在特定平台上时，这可能会很有用。
 
 .. option:: --mypy-config-file FILE
 
-    Use specified mypy config file to determine mypy plugins and mypy path
+    使用指定的 mypy 配置文件来确定 mypy 插件和 mypy 路径。
 
 .. option:: --custom-typeshed-dir DIR
 
-    Use the custom typeshed in DIR
+    使用 DIR 中的自定义 typeshed。
 
 .. option:: --check-typeshed
 
-    Check all stdlib modules in typeshed
+    检查 typeshed 中的所有标准库模块。
 
 .. option:: --help
 
-    Show a help message :-)
+    显示帮助信息 :-)

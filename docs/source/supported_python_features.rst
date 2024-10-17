@@ -1,20 +1,11 @@
-Supported Python features
-=========================
+支持的 Python 特性(Supported Python features)
+==================================================
 
-A list of unsupported Python features is maintained in the mypy wiki:
+在 mypy wiki 中维护了一份不支持的 Python 特性列表：
 
-- `Unsupported Python features <https://github.com/python/mypy/wiki/Unsupported-Python-Features>`_
+- `不支持的 Python 特性 <https://github.com/python/mypy/wiki/Unsupported-Python-Features>`_
 
-Runtime definition of methods and functions
-*******************************************
+方法和函数的运行时定义(Runtime definition of methods and functions)
+**************************************************************************************
 
-By default, mypy will complain if you add a function to a class
-or module outside its definition -- but only if this is visible to the
-type checker. This only affects static checking, as mypy performs no
-additional type checking at runtime. You can easily work around
-this. For example, you can use dynamically typed code or values with
-``Any`` types, or you can use :py:func:`setattr` or other introspection
-features. However, you need to be careful if you decide to do this. If
-used indiscriminately, you may have difficulty using static typing
-effectively, since the type checker cannot see functions defined at
-runtime.
+默认情况下，如果你在类或模块的定义之外添加一个函数，mypy 会发出警告——但仅当这对类型检查器可见时。这仅影响静态检查，因为 mypy 在运行时不会执行额外的类型检查。你可以轻松地绕过这个限制。例如，你可以使用动态类型代码或 `Any` 类型的值，或者可以使用 :py:func:`setattr` 或其他反射特性。然而，如果你决定这样做，需要谨慎行事。如果不加区别地使用，可能会在有效使用静态类型时遇到困难，因为类型检查器无法看到运行时定义的函数。

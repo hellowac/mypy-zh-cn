@@ -1,173 +1,128 @@
 .. _common_issues:
 
-Common issues and solutions
-===========================
 
-This section has examples of cases when you need to update your code
-to use static typing, and ideas for working around issues if mypy
-doesn't work as expected. Statically typed code is often identical to
-normal Python code (except for type annotations), but sometimes you need
-to do things slightly differently.
+常见问题及解决方案(Common issues and solutions)
+======================================================
+
+本节展示了在使用静态类型时需要更新代码的情况，并提供了解决 mypy 不按预期工作的常见问题的思路。静态类型的代码通常与普通的 Python 代码相同（除了类型注解），但有时你需要稍微做些不同的处理。
 
 .. _annotations_needed:
 
-No errors reported for obviously wrong code
--------------------------------------------
+明显错误的代码未报告错误(No errors reported for obviously wrong code)
+--------------------------------------------------------------------------------------
 
-There are several common reasons why obviously wrong code is not
-flagged as an error.
+有几种常见原因会导致明显错误的代码未被标记为错误。
 
-**The function containing the error is not annotated.**
+**包含错误的函数没有添加注解。**
 
-Functions that
-do not have any annotations (neither for any argument nor for the
-return type) are not type-checked, and even the most blatant type
-errors (e.g. ``2 + 'a'``) pass silently.  The solution is to add
-annotations. Where that isn't possible, functions without annotations
-can be checked using :option:`--check-untyped-defs <mypy --check-untyped-defs>`.
+没有任何注解的函数（既没有参数注解，也没有返回类型注解）不会进行类型检查，甚至最明显的类型错误（例如 ``2 + 'a'``）也会静默通过。解决方案是添加注解。如果无法添加注解，可以使用 :option:`--check-untyped-defs <mypy --check-untyped-defs>` 来检查没有注解的函数。
 
-Example:
+示例：
 
 .. code-block:: python
 
     def foo(a):
-        return '(' + a.split() + ')'  # No error!
+        return '(' + a.split() + ')'  # 无错误！
 
-This gives no error even though ``a.split()`` is "obviously" a list
-(the author probably meant ``a.strip()``).  The error is reported
-once you add annotations:
+即使 ``a.split()`` 是一个“显然”的列表（作者可能本意是 ``a.strip()``），但这里不会报错。一旦你添加了注解，错误就会被报告：
 
 .. code-block:: python
 
     def foo(a: str) -> str:
         return '(' + a.split() + ')'
-    # error: Unsupported operand types for + ("str" and "list[str]")
+    # 错误：不支持的操作数类型 + ("str" 和 "list[str]")
 
-If you don't know what types to add, you can use ``Any``, but beware:
+如果你不确定该添加什么类型，可以使用 ``Any``，但要小心：
 
-**One of the values involved has type 'Any'.**
+**参与运算的某个值的类型是 'Any'。**
 
-Extending the above
-example, if we were to leave out the annotation for ``a``, we'd get
-no error:
+扩展以上示例，如果我们忽略了 ``a`` 的注解，仍不会报错：
 
 .. code-block:: python
 
     def foo(a) -> str:
-        return '(' + a.split() + ')'  # No error!
+        return '(' + a.split() + ')'  # 无错误！
 
-The reason is that if the type of ``a`` is unknown, the type of
-``a.split()`` is also unknown, so it is inferred as having type
-``Any``, and it is no error to add a string to an ``Any``.
+原因是如果 ``a`` 的类型未知，那么 ``a.split()`` 的类型也未知，因此被推断为 ``Any`` 类型，将字符串与 ``Any`` 相加不会报错。
 
-If you're having trouble debugging such situations,
-:ref:`reveal_type() <reveal-type>` might come in handy.
+如果你在调试这类情况时遇到问题，:ref:`reveal_type() <reveal-type>` 可能会派上用场。
 
-Note that sometimes library stubs with imprecise type information
-can be a source of ``Any`` values.
+请注意，有时库存根文件中不精确的类型信息也可能是 ``Any`` 值的来源。
 
-:py:meth:`__init__ <object.__init__>` **method has no annotated
-arguments and no return type annotation.**
+:py:meth:`__init__ <object.__init__>` **方法没有带注解的参数，也没有返回类型注解。**
 
-This is basically a combination of the two cases above, in that ``__init__``
-without annotations can cause ``Any`` types leak into instance variables:
+这基本上是上述两种情况的组合，没有注解的 ``__init__`` 方法可能会导致 ``Any`` 类型泄露到实例变量中：
 
 .. code-block:: python
 
     class Bad:
         def __init__(self):
             self.value = "asdf"
-            1 + "asdf"  # No error!
+            1 + "asdf"  # 无错误！
 
     bad = Bad()
-    bad.value + 1           # No error!
-    reveal_type(bad)        # Revealed type is "__main__.Bad"
-    reveal_type(bad.value)  # Revealed type is "Any"
+    bad.value + 1           # 无错误！
+    reveal_type(bad)        # 显示类型为 "__main__.Bad"
+    reveal_type(bad.value)  # 显示类型为 "Any"
 
     class Good:
-        def __init__(self) -> None:  # Explicitly return None
+        def __init__(self) -> None:  # 明确地返回 None
             self.value = value
 
 
-**Some imports may be silently ignored**.
+**某些导入可能会被静默忽略**。
 
-A common source of unexpected ``Any`` values is the
-:option:`--ignore-missing-imports <mypy --ignore-missing-imports>` flag.
+导致意外 ``Any`` 值的一个常见原因是 :option:`--ignore-missing-imports <mypy --ignore-missing-imports>` 选项。
 
-When you use :option:`--ignore-missing-imports <mypy --ignore-missing-imports>`,
-any imported module that cannot be found is silently replaced with ``Any``.
+当你使用 :option:`--ignore-missing-imports <mypy --ignore-missing-imports>` 时，任何找不到的导入模块会被静默替换为 ``Any``。
 
-To help debug this, simply leave out
-:option:`--ignore-missing-imports <mypy --ignore-missing-imports>`.
-As mentioned in :ref:`fix-missing-imports`, setting ``ignore_missing_imports=True``
-on a per-module basis will make bad surprises less likely and is highly encouraged.
+为了帮助调试，建议不要使用 :option:`--ignore-missing-imports <mypy --ignore-missing-imports>`。正如 :ref:`fix-missing-imports` 中提到的那样，针对每个模块设置 ``ignore_missing_imports=True`` 可以减少意外，强烈建议这样做。
 
-Use of the :option:`--follow-imports=skip <mypy --follow-imports>` flags can also
-cause problems. Use of these flags is strongly discouraged and only required in
-relatively niche situations. See :ref:`follow-imports` for more information.
+使用 :option:`--follow-imports=skip <mypy --follow-imports>` 选项也可能会导致问题。强烈不建议使用这些选项，除非在相对特殊的情况下。详见 :ref:`follow-imports` 获取更多信息。
 
-**mypy considers some of your code unreachable**.
+**mypy 认为你的一些代码无法到达**。
 
-See :ref:`unreachable` for more information.
+详见 :ref:`unreachable` 获取更多信息。
 
-**A function annotated as returning a non-optional type returns 'None'
-and mypy doesn't complain**.
+**标注为返回非可选类型的函数实际上返回了 'None'，mypy 也没有报错**。
 
 .. code-block:: python
 
     def foo() -> str:
-        return None  # No error!
+        return None  # 无错误！
 
-You may have disabled strict optional checking (see
-:ref:`--no-strict-optional <no_strict_optional>` for more).
+你可能禁用了严格的可选类型检查（详见 :ref:`--no-strict-optional <no_strict_optional>`）。
 
 .. _silencing_checker:
 
-Spurious errors and locally silencing the checker
--------------------------------------------------
+冗余错误与局部静默检查器(Spurious errors and locally silencing the checker)
+--------------------------------------------------------------------------------------------------
 
-You can use a ``# type: ignore`` comment to silence the type checker
-on a particular line. For example, let's say our code is using
-the C extension module ``frobnicate``, and there's no stub available.
-Mypy will complain about this, as it has no information about the
-module:
+你可以使用 ``# type: ignore`` 注释来在特定行上静默类型检查器。例如，假设我们的代码使用了 C 扩展模块 ``frobnicate``, 而没有可用的存根。Mypy 将对此抱怨，因为它没有关于该模块的信息：
 
 .. code-block:: python
 
-    import frobnicate  # Error: No module "frobnicate"
+    import frobnicate  # 错误：没有模块 "frobnicate"
     frobnicate.start()
 
-You can add a ``# type: ignore`` comment to tell mypy to ignore this
-error:
+你可以添加 ``# type: ignore`` 注释来告诉 mypy 忽略此错误：
 
 .. code-block:: python
 
     import frobnicate  # type: ignore
-    frobnicate.start()  # Okay!
+    frobnicate.start()  # 没问题！
 
-The second line is now fine, since the ignore comment causes the name
-``frobnicate`` to get an implicit ``Any`` type.
-
-.. note::
-
-    You can use the form ``# type: ignore[<code>]`` to only ignore
-    specific errors on the line. This way you are less likely to
-    silence unexpected errors that are not safe to ignore, and this
-    will also document what the purpose of the comment is.  See
-    :ref:`error-codes` for more information.
+现在第二行是可以的，因为忽略注释使得名称 ``frobnicate`` 获得了隐式 ``Any`` 类型。
 
 .. note::
 
-    The ``# type: ignore`` comment will only assign the implicit ``Any``
-    type if mypy cannot find information about that particular module. So,
-    if we did have a stub available for ``frobnicate`` then mypy would
-    ignore the ``# type: ignore`` comment and typecheck the stub as usual.
+    你可以使用形式 ``# type: ignore[<code>]`` 仅忽略行上的特定错误。这样你就不太可能静默那些不可安全忽略的意外错误，同时这也会记录注释的目的。有关更多信息，请参见 :ref:`error-codes`。
 
-Another option is to explicitly annotate values with type ``Any`` --
-mypy will let you perform arbitrary operations on ``Any``
-values. Sometimes there is no more precise type you can use for a
-particular value, especially if you use dynamic Python features
-such as :py:meth:`__getattr__ <object.__getattr__>`:
+.. note::
+
+    只有在 mypy 无法找到关于特定模块的信息时，``# type: ignore`` 注释才会将隐式 ``Any`` 类型分配给该名称。因此，如果我们确实有 ``frobnicate`` 的存根可用，那么 mypy 将忽略 ``# type: ignore`` 注释，并像往常一样对存根进行类型检查。
+
+另一种选择是显式将值标注为类型 ``Any`` -- mypy 允许你对 ``Any`` 值执行任意操作。有时对于特定值没有更精确的类型可以使用，尤其是当你使用动态 Python 特性时，例如 :py:meth:`__getattr__ <object.__getattr__>`：
 
 .. code-block:: python
 
@@ -176,163 +131,131 @@ such as :py:meth:`__getattr__ <object.__getattr__>`:
        def __getattr__(self, a: str) -> Any:
            return getattr(self._wrapped, a)
 
-Finally, you can create a stub file (``.pyi``) for a file that
-generates spurious errors. Mypy will only look at the stub file
-and ignore the implementation, since stub files take precedence
-over ``.py`` files.
+最后，你可以为生成冗余错误的文件创建一个存根文件（``.pyi``）。Mypy 只会查看存根文件并忽略实现，因为存根文件优先于 ``.py`` 文件。
 
-Ignoring a whole file
----------------------
+忽略整个文件(Ignoring a whole file)
+------------------------------------------
 
-* To only ignore errors, use a top-level ``# mypy: ignore-errors`` comment instead.
-* To only ignore errors with a specific error code, use a top-level
-  ``# mypy: disable-error-code="..."`` comment. Example: ``# mypy: disable-error-code="truthy-bool, ignore-without-code"``
-* To replace the contents of a module with ``Any``, use a per-module ``follow_imports = skip``.
-  See :ref:`Following imports <follow-imports>` for details.
+* 若要仅忽略错误，请使用顶级 ``# mypy: ignore-errors`` 注释。
+* 若要仅忽略具有特定错误代码的错误，请使用顶级 ``# mypy: disable-error-code="..."`` 注释。例如：``# mypy: disable-error-code="truthy-bool, ignore-without-code"``。
+* 若要用 ``Any`` 替换模块的内容，请使用每个模块的 ``follow_imports = skip``。有关详细信息，请参见 :ref:`Following imports <follow-imports>`。
 
-Note that a ``# type: ignore`` comment at the top of a module (before any statements,
-including imports or docstrings) has the effect of ignoring the entire contents of the module.
-This behaviour can be surprising and result in
-"Module ... has no attribute ... [attr-defined]" errors.
+请注意，在模块顶部（在任何语句之前，包括导入或文档字符串之前）添加 ``# type: ignore`` 注释会导致忽略模块的整个内容。这种行为可能令人惊讶，并导致 "Module ... has no attribute ... [attr-defined]" 错误。
 
-Issues with code at runtime
----------------------------
+运行时代码问题(Issues with code at runtime)
+------------------------------------------------------
 
-Idiomatic use of type annotations can sometimes run up against what a given
-version of Python considers legal code. These can result in some of the
-following errors when trying to run your code:
+惯用的类型注释使用有时可能与某个特定版本的 Python 所认为的合法代码发生冲突。在尝试运行代码时，这可能导致以下一些错误：
 
-* ``ImportError`` from circular imports
-* ``NameError: name "X" is not defined`` from forward references
-* ``TypeError: 'type' object is not subscriptable`` from types that are not generic at runtime
-* ``ImportError`` or ``ModuleNotFoundError`` from use of stub definitions not available at runtime
-* ``TypeError: unsupported operand type(s) for |: 'type' and 'type'`` from use of new syntax
+* ``ImportError`` 由于循环导入
+* ``NameError: name "X" is not defined`` 由于前向引用
+* ``TypeError: 'type' object is not subscriptable`` 由于在运行时非泛型类型
+* ``ImportError`` 或 ``ModuleNotFoundError`` 由于使用在运行时不可用的存根定义
+* ``TypeError: unsupported operand type(s) for |: 'type' and 'type'`` 由于使用新语法
 
-For dealing with these, see :ref:`runtime_troubles`.
+有关解决这些问题的信息，请参见 :ref:`runtime_troubles`。
 
-Mypy runs are slow
-------------------
+Mypy 运行速度慢(Mypy runs are slow)
+------------------------------------
 
-If your mypy runs feel slow, you should probably use the :ref:`mypy
-daemon <mypy_daemon>`, which can speed up incremental mypy runtimes by
-a factor of 10 or more. :ref:`Remote caching <remote-cache>` can
-make cold mypy runs several times faster.
+如果你的 mypy 运行感觉很慢，你可能应该使用 :ref:`mypy daemon <mypy_daemon>`，这可以将增量 mypy 运行的速度提高 10 倍或更多。 :ref:`Remote caching <remote-cache>` 可以使冷启动 mypy 运行速度快几倍。
 
-Types of empty collections
---------------------------
+空集合的类型(Types of empty collections)
+----------------------------------------------------
 
-You often need to specify the type when you assign an empty list or
-dict to a new variable, as mentioned earlier:
+当你将一个空列表或字典赋值给一个新变量时，通常需要指定类型，如前面提到的：
 
 .. code-block:: python
 
    a: list[int] = []
 
-Without the annotation mypy can't always figure out the
-precise type of ``a``.
+没有注释的话，mypy 并不总能确定 ``a`` 的确切类型。
 
-You can use a simple empty list literal in a dynamically typed function (as the
-type of ``a`` would be implicitly ``Any`` and need not be inferred), if type
-of the variable has been declared or inferred before, or if you perform a simple
-modification operation in the same scope (such as ``append`` for a list):
+在动态类型函数中，你可以使用简单的空列表字面量（因为 ``a`` 的类型将隐式为 ``Any``，并不需要推断），如果该变量的类型在之前已经声明或推断，或者你在同一作用域中执行简单的修改操作（例如列表的 ``append``）：
 
 .. code-block:: python
 
-   a = []  # Okay because followed by append, inferred type list[int]
+   a = []  # 可以，因为后面有 append，推断类型为 list[int]
    for i in range(n):
        a.append(i * i)
 
-However, in more complex cases an explicit type annotation can be
-required (mypy will tell you this). Often the annotation can
-make your code easier to understand, so it doesn't only help mypy but
-everybody who is reading the code!
+然而，在更复杂的情况下，可能需要显式的类型注释（mypy 会告诉你这一点）。通常，注释可以使代码更易于理解，因此它不仅帮助 mypy，也帮助每个阅读代码的人！
 
-Redefinitions with incompatible types
--------------------------------------
+不兼容类型的重新定义(Redefinitions with incompatible types)
+--------------------------------------------------------------------------
 
-Each name within a function only has a single 'declared' type. You can
-reuse for loop indices etc., but if you want to use a variable with
-multiple types within a single function, you may need to instead use
-multiple variables (or maybe declare the variable with an ``Any`` type).
+函数中的每个名称只有一个“声明”的类型。你可以重用循环索引等，但如果想在单个函数中使用具有多种类型的变量，可能需要使用多个变量（或者可能声明该变量为 ``Any`` 类型）。
 
 .. code-block:: python
 
    def f() -> None:
        n = 1
        ...
-       n = 'x'  # error: Incompatible types in assignment (expression has type "str", variable has type "int")
+       n = 'x'  # 错误：赋值中的不兼容类型（表达式类型为 "str"，变量类型为 "int"）
 
 .. note::
 
-   Using the :option:`--allow-redefinition <mypy --allow-redefinition>`
-   flag can suppress this error in several cases.
+   使用 :option:`--allow-redefinition <mypy --allow-redefinition>` 标志可以在某些情况下抑制此错误。
 
-Note that you can redefine a variable with a more *precise* or a more
-concrete type. For example, you can redefine a sequence (which does
-not support ``sort()``) as a list and sort it in-place:
+请注意，你可以用更 *精确* 或更具体的类型重新定义变量。例如，你可以将一个不支持 ``sort()`` 的序列重新定义为列表并就地排序：
 
 .. code-block:: python
 
     def f(x: Sequence[int]) -> None:
-        # Type of x is Sequence[int] here; we don't know the concrete type.
+        # 这里 x 的类型为 Sequence[int]；我们不知道具体类型。
         x = list(x)
-        # Type of x is list[int] here.
-        x.sort()  # Okay!
+        # 这里 x 的类型为 list[int]。
+        x.sort()  # 没问题！
 
-See :ref:`type-narrowing` for more information.
+有关更多信息，请参见 :ref:`type-narrowing`。
 
 .. _variance:
 
-Invariance vs covariance
-------------------------
+不变性与协变性(Invariance vs covariance)
+------------------------------------------------
 
-Most mutable generic collections are invariant, and mypy considers all
-user-defined generic classes invariant by default
-(see :ref:`variance-of-generics` for motivation). This could lead to some
-unexpected errors when combined with type inference. For example:
+大多数可变的泛型集合是不可变的，mypy 默认将所有用户定义的泛型类视为不可变的（有关动机，请参见 :ref:`variance-of-generics`）。这可能会在与类型推断结合时导致一些意外的错误。例如：
 
 .. code-block:: python
 
    class A: ...
    class B(A): ...
 
-   lst = [A(), A()]  # Inferred type is list[A]
-   new_lst = [B(), B()]  # inferred type is list[B]
-   lst = new_lst  # mypy will complain about this, because List is invariant
+   lst = [A(), A()]  # 推断类型为 list[A]
+   new_lst = [B(), B()]  # 推断类型为 list[B]
+   lst = new_lst  # mypy 会对此发出警告，因为 List 是不可变的
 
-Possible strategies in such situations are:
+在这种情况下可能的策略包括：
 
-* Use an explicit type annotation:
+* 使用显式类型注释：
 
   .. code-block:: python
 
      new_lst: list[A] = [B(), B()]
-     lst = new_lst  # OK
+     lst = new_lst  # 没问题
 
-* Make a copy of the right hand side:
+* 对右侧进行复制：
 
   .. code-block:: python
 
-     lst = list(new_lst) # Also OK
+     lst = list(new_lst) # 也没问题
 
-* Use immutable collections as annotations whenever possible:
+* 尽可能使用不可变集合作为注释：
 
   .. code-block:: python
 
      def f_bad(x: list[A]) -> A:
          return x[0]
-     f_bad(new_lst) # Fails
+     f_bad(new_lst) # 失败
 
      def f_good(x: Sequence[A]) -> A:
          return x[0]
-     f_good(new_lst) # OK
+     f_good(new_lst) # 没问题
 
-Declaring a supertype as variable type
---------------------------------------
+将超类型声明为变量类型(Declaring a supertype as variable type)
+----------------------------------------------------------------------------
 
-Sometimes the inferred type is a subtype (subclass) of the desired
-type. The type inference uses the first assignment to infer the type
-of a name:
+有时，推断的类型是所需类型的子类型（子类）。类型推断使用第一次赋值来推断名称的类型：
 
 .. code-block:: python
 
@@ -340,26 +263,20 @@ of a name:
    class Circle(Shape): ...
    class Triangle(Shape): ...
 
-   shape = Circle()    # mypy infers the type of shape to be Circle
-   shape = Triangle()  # error: Incompatible types in assignment (expression has type "Triangle", variable has type "Circle")
+   shape = Circle()    # mypy 推断 shape 的类型为 Circle
+   shape = Triangle()  # 错误：赋值中的不兼容类型（表达式类型为 "Triangle"，变量类型为 "Circle"）
 
-You can just give an explicit type for the variable in cases such the
-above example:
+在上述例子中，你可以为变量提供显式类型：
 
 .. code-block:: python
 
-   shape: Shape = Circle()  # The variable s can be any Shape, not just Circle
-   shape = Triangle()       # OK
+   shape: Shape = Circle()  # 变量 shape 可以是任何 Shape，而不仅仅是 Circle
+   shape = Triangle()       # 没问题
 
-Complex type tests
-------------------
+复杂的类型测试(Complex type tests)
+------------------------------------
 
-Mypy can usually infer the types correctly when using :py:func:`isinstance <isinstance>`,
-:py:func:`issubclass <issubclass>`,
-or ``type(obj) is some_class`` type tests,
-and even :ref:`user-defined type guards <type-guards>`,
-but for other kinds of checks you may need to add an
-explicit type cast:
+当使用 :py:func:`isinstance <isinstance>`、:py:func:`issubclass <issubclass>` 或 ``type(obj) is some_class`` 类型测试时，mypy 通常可以正确推断类型，甚至对于 :ref:`用户定义的类型保护 <type-guards>`，但对于其他类型的检查，你可能需要添加显式的类型转换：
 
 .. code-block:: python
 
@@ -371,11 +288,10 @@ explicit type cast:
       if index < 0:
           raise ValueError('No str found')
 
-      found = a[index]  # Has type "object", despite the fact that we know it is "str"
-      return cast(str, found)  # We need an explicit cast to make mypy happy
+      found = a[index]  # 类型为 "object"，尽管我们知道它是 "str"
+      return cast(str, found)  # 需要显式转换以使 mypy 满意
 
-Alternatively, you can use an ``assert`` statement together with some
-of the supported type inference techniques:
+或者，你可以结合一些支持的类型推断技术使用 ``assert`` 语句：
 
 .. code-block:: python
 
@@ -384,67 +300,50 @@ of the supported type inference techniques:
       if index < 0:
           raise ValueError('No str found')
 
-      found = a[index]  # Has type "object", despite the fact that we know it is "str"
-      assert isinstance(found, str)  # Now, "found" will be narrowed to "str"
-      return found  # No need for the explicit "cast()" anymore
+      found = a[index]  # 类型为 "object"，尽管我们知道它是 "str"
+      assert isinstance(found, str)  # 现在，“found”的类型将缩小为 "str"
+      return found  # 不再需要显式的 "cast()"
 
 .. note::
 
-    Note that the :py:class:`object` type used in the above example is similar
-    to ``Object`` in Java: it only supports operations defined for *all*
-    objects, such as equality and :py:func:`isinstance`. The type ``Any``,
-    in contrast, supports all operations, even if they may fail at
-    runtime. The cast above would have been unnecessary if the type of
-    ``o`` was ``Any``.
+    注意，上述示例中使用的 :py:class:`object` 类型类似于 Java 中的 ``Object`` ：它只支持为 *所有* 对象定义的操作，例如相等性和 :py:func:`isinstance`。相反，类型 ``Any`` 支持所有操作，即使它们可能在运行时失败。如果 ``o`` 的类型是 ``Any``，则上述类型转换就不必要了。
 
 .. note::
 
-   You can read more about type narrowing techniques :ref:`here <type-narrowing>`.
+   你可以在 :ref:`这里 <type-narrowing>` 阅读更多关于类型缩小技术的内容。
 
-Type inference in Mypy is designed to work well in common cases, to be
-predictable and to let the type checker give useful error
-messages. More powerful type inference strategies often have complex
-and difficult-to-predict failure modes and could result in very
-confusing error messages. The tradeoff is that you as a programmer
-sometimes have to give the type checker a little help.
+Mypy 中的类型推断旨在在常见情况下表现良好，具有可预测性，并让类型检查器提供有用的错误消息。更强大的类型推断策略往往具有复杂且难以预测的失败模式，可能导致非常混淆的错误消息。权衡之下，作为程序员的你有时需要为类型检查器提供一些帮助。
 
 .. _version_and_platform_checks:
 
-Python version and system platform checks
------------------------------------------
+Python 版本和系统平台检查(Python version and system platform checks)
+---------------------------------------------------------------------------
 
-Mypy supports the ability to perform Python version checks and platform
-checks (e.g. Windows vs Posix), ignoring code paths that won't be run on
-the targeted Python version or platform. This allows you to more effectively
-typecheck code that supports multiple versions of Python or multiple operating
-systems.
+Mypy 支持执行 Python 版本检查和平台检查（例如，Windows 与 Posix），忽略在目标 Python 版本或平台上不会运行的代码路径。这使你能够更有效地对支持多个版本的 Python 或多个操作系统的代码进行类型检查。
 
-More specifically, mypy will understand the use of :py:data:`sys.version_info` and
-:py:data:`sys.platform` checks within ``if/elif/else`` statements. For example:
+更具体地说，mypy 将理解在 ``if/elif/else`` 语句中使用 :py:data:`sys.version_info` 和 :py:data:`sys.platform` 检查。例如：
 
 .. code-block:: python
 
    import sys
 
-   # Distinguishing between different versions of Python:
+   # 区分不同版本的 Python：
    if sys.version_info >= (3, 8):
-       # Python 3.8+ specific definitions and imports
+       # Python 3.8+ 特定的定义和导入
    else:
-       # Other definitions and imports
+       # 其他定义和导入
 
-   # Distinguishing between different operating systems:
+   # 区分不同的操作系统：
    if sys.platform.startswith("linux"):
-       # Linux-specific code
+       # Linux 特定代码
    elif sys.platform == "darwin":
-       # Mac-specific code
+       # Mac 特定代码
    elif sys.platform == "win32":
-       # Windows-specific code
+       # Windows 特定代码
    else:
-       # Other systems
+       # 其他系统
 
-As a special case, you can also use one of these checks in a top-level
-(unindented) ``assert``; this makes mypy skip the rest of the file.
-Example:
+作为特例，你还可以在顶层（未缩进的） ``assert`` 中使用其中一个检查；这会使 mypy 跳过文件的其余部分。示例：
 
 .. code-block:: python
 
@@ -452,48 +351,36 @@ Example:
 
    assert sys.platform != 'win32'
 
-   # The rest of this file doesn't apply to Windows.
+   # 此文件的其余部分不适用于 Windows。
 
-Some other expressions exhibit similar behavior; in particular,
-:py:data:`~typing.TYPE_CHECKING`, variables named ``MYPY``, and any variable
-whose name is passed to :option:`--always-true <mypy --always-true>` or :option:`--always-false <mypy --always-false>`.
-(However, ``True`` and ``False`` are not treated specially!)
+其他一些表达式也表现出类似的行为；特别是，:py:data:`~typing.TYPE_CHECKING`、命名为 ``MYPY`` 的变量，以及任何传递给 :option:`--always-true <mypy --always-true>` 或 :option:`--always-false <mypy --always-false>` 的变量名。
+（不过，``True`` 和 ``False`` 并未被特殊处理！）
 
 .. note::
 
-   Mypy currently does not support more complex checks, and does not assign
-   any special meaning when assigning a :py:data:`sys.version_info` or :py:data:`sys.platform`
-   check to a variable. This may change in future versions of mypy.
+   Mypy 当前不支持更复杂的检查，也不为将 :py:data:`sys.version_info` 或 :py:data:`sys.platform` 检查赋予变量任何特殊含义。未来版本的 mypy 可能会有所更改。
 
-By default, mypy will use your current version of Python and your current
-operating system as default values for :py:data:`sys.version_info` and
-:py:data:`sys.platform`.
+默认情况下，mypy 将使用你当前的 Python 版本和当前的操作系统作为 :py:data:`sys.version_info` 和 :py:data:`sys.platform` 的默认值。
 
-To target a different Python version, use the :option:`--python-version X.Y <mypy --python-version>` flag.
-For example, to verify your code typechecks if were run using Python 3.8, pass
-in :option:`--python-version 3.8 <mypy --python-version>` from the command line. Note that you do not need
-to have Python 3.8 installed to perform this check.
+要针对不同的 Python 版本，请使用 :option:`--python-version X.Y <mypy --python-version>` 标志。
+例如，要验证你的代码在使用 Python 3.8 时是否能通过类型检查，可以从命令行传入 :option:`--python-version 3.8 <mypy --python-version>`。请注意，你并不需要安装 Python 3.8 来执行此检查。
 
-To target a different operating system, use the :option:`--platform PLATFORM <mypy --platform>` flag.
-For example, to verify your code typechecks if it were run in Windows, pass
-in :option:`--platform win32 <mypy --platform>`. See the documentation for :py:data:`sys.platform`
-for examples of valid platform parameters.
+要针对不同的操作系统，请使用 :option:`--platform PLATFORM <mypy --platform>` 标志。
+例如，要验证你的代码在 Windows 中是否能通过类型检查，可以传入 :option:`--platform win32 <mypy --platform>`。有关有效平台参数的示例，请参见 :py:data:`sys.platform` 的文档。
 
 .. _reveal-type:
 
-Displaying the type of an expression
-------------------------------------
 
-You can use ``reveal_type(expr)`` to ask mypy to display the inferred
-static type of an expression. This can be useful when you don't quite
-understand how mypy handles a particular piece of code. Example:
+显示表达式的类型(Displaying the type of an expression)
+------------------------------------------------------------
+
+你可以使用 ``reveal_type(expr)`` 请求 mypy 显示表达式的推断静态类型。当你不太理解 mypy 如何处理特定代码时，这可能会很有用。示例：
 
 .. code-block:: python
 
    reveal_type((1, 'hello'))  # Revealed type is "tuple[builtins.int, builtins.str]"
 
-You can also use ``reveal_locals()`` at any line in a file
-to see the types of all local variables at once. Example:
+你还可以在文件中的任何行使用 ``reveal_locals()`` 以一次查看所有局部变量的类型。示例：
 
 .. code-block:: python
 
@@ -505,20 +392,15 @@ to see the types of all local variables at once. Example:
    #     b: builtins.str
 .. note::
 
-   ``reveal_type`` and ``reveal_locals`` are only understood by mypy and
-   don't exist in Python. If you try to run your program, you'll have to
-   remove any ``reveal_type`` and ``reveal_locals`` calls before you can
-   run your code. Both are always available and you don't need to import
-   them.
+   ``reveal_type`` 和 ``reveal_locals`` 仅被 mypy 理解，
+   在 Python 中不存在。如果你尝试运行你的程序，你需要在运行代码之前
+   移除所有 ``reveal_type`` 和 ``reveal_locals`` 的调用。两者总是可用，
+   你无需导入它们。
 
-.. _silencing-linters:
+静默代码检查工具(Silencing linters)
+----------------------------------------------
 
-Silencing linters
------------------
-
-In some cases, linters will complain about unused imports or code. In
-these cases, you can silence them with a comment after type comments, or on
-the same line as the import:
+在某些情况下，代码检查工具会抱怨未使用的导入或代码。在这些情况下，你可以在类型注释后添加注释，或者与导入语句在同一行上静默它们：
 
 .. code-block:: python
 
@@ -526,19 +408,17 @@ the same line as the import:
    from typing import List  # noqa
    a = None  # type: List[int]
 
-
-To silence the linter on the same line as a type comment
-put the linter comment *after* the type comment:
+要在与类型注释相同的行上静默代码检查工具，请将检查注释放在类型注释*之后*：
 
 .. code-block:: python
 
     a = some_complex_thing()  # type: ignore  # noqa
 
-Covariant subtyping of mutable protocol members is rejected
------------------------------------------------------------
+可变协议成员的协变子类型被拒绝(Covariant subtyping of mutable protocol members is rejected)
+---------------------------------------------------------------------------------------------------------
 
-Mypy rejects this because this is potentially unsafe.
-Consider this example:
+Mypy 拒绝这种情况，因为这可能不安全。
+考虑以下示例：
 
 .. code-block:: python
 
@@ -553,12 +433,10 @@ Consider this example:
    class C:
        x = 42
    c = C()
-   fun(c)  # This is not safe
-   c.x << 5  # Since this will fail!
+   fun(c)  # 这不是安全的
+   c.x << 5  # 因为这会失败！
 
-To work around this problem consider whether "mutating" is actually part
-of a protocol. If not, then one can use a :py:class:`@property <property>` in
-the protocol definition:
+要解决这个问题，请考虑 “突变(mutating)” 是否实际上是协议的一部分。如果不是，则可以在协议定义中使用 :py:class:`@property <property>`：
 
 .. code-block:: python
 
@@ -576,12 +454,10 @@ the protocol definition:
        x = 42
    fun(C())  # OK
 
-Dealing with conflicting names
-------------------------------
+处理冲突的名称(Dealing with conflicting names)
+------------------------------------------------------------
 
-Suppose you have a class with a method whose name is the same as an
-imported (or built-in) type, and you want to use the type in another
-method signature.  E.g.:
+假设你有一个类，其方法名与导入的（或内置的）类型相同，而你希望在另一个方法签名中使用该类型。例如：
 
 .. code-block:: python
 
@@ -591,9 +467,7 @@ method signature.  E.g.:
        def register(self, path: bytes):  # error: Invalid type "mod.Message.bytes"
            ...
 
-The third line elicits an error because mypy sees the argument type
-``bytes`` as a reference to the method by that name.  Other than
-renaming the method, a workaround is to use an alias:
+第三行引发错误，因为 mypy 将参数类型 ``bytes`` 视为对该名称方法的引用。除了重命名方法之外，另一种解决方法是使用别名：
 
 .. code-block:: python
 
@@ -604,12 +478,10 @@ renaming the method, a workaround is to use an alias:
        def register(self, path: bytes_):
            ...
 
-Using a development mypy build
-------------------------------
+使用开发版 mypy(Using a development mypy build)
+---------------------------------------------------
 
-You can install the latest development version of mypy from source. Clone the
-`mypy repository on GitHub <https://github.com/python/mypy>`_, and then run
-``pip install`` locally:
+你可以从源代码安装最新的开发版本 mypy。克隆 `mypy GitHub 仓库 <https://github.com/python/mypy>`_，然后本地运行 ``pip install``：
 
 .. code-block:: text
 
@@ -617,47 +489,40 @@ You can install the latest development version of mypy from source. Clone the
     cd mypy
     python3 -m pip install --upgrade .
 
-To install a development version of mypy that is mypyc-compiled, see the
-instructions at the `mypyc wheels repo <https://github.com/mypyc/mypy_mypyc-wheels>`_.
+要安装一个经过 mypyc 编译的开发版本 mypy，请参见 `mypyc wheels 仓库 <https://github.com/mypyc/mypy_mypyc-wheels>`_ 的说明。
 
-Variables vs type aliases
--------------------------
+变量与类型别名(Variables vs type aliases)
+----------------------------------------------
 
-Mypy has both *type aliases* and variables with types like ``type[...]``. These are
-subtly different, and it's important to understand how they differ to avoid pitfalls.
+Mypy 具有 *类型别名(type aliases)* 和带有类型如 ``type[...]`` 的变量。这两者之间有细微的不同，理解它们的差异非常重要，以避免陷阱。
 
-1. A variable with type ``type[...]`` is defined using an assignment with an
-   explicit type annotation:
+1. 带有类型 ``type[...]`` 的变量使用显式类型注释的赋值来定义：
 
    .. code-block:: python
 
      class A: ...
      tp: type[A] = A
 
-2. You can define a type alias using an assignment without an explicit type annotation
-   at the top level of a module:
+2. 你可以使用没有显式类型注释的赋值在模块的顶层定义类型别名：
 
    .. code-block:: python
 
      class A: ...
      Alias = A
 
-   You can also use ``TypeAlias`` (:pep:`613`) to define an *explicit type alias*:
+   你还可以使用 ``TypeAlias`` (:pep:`613`) 来定义 *显式类型别名*：
 
    .. code-block:: python
 
-     from typing import TypeAlias  # "from typing_extensions" in Python 3.9 and earlier
+     from typing import TypeAlias  # 在 Python 3.9 及更早版本中使用 "from typing_extensions"
 
      class A: ...
      Alias: TypeAlias = A
 
-   You should always use ``TypeAlias`` to define a type alias in a class body or
-   inside a function.
+   在类体或函数内部定义类型别名时，你应该始终使用 ``TypeAlias``。
 
-The main difference is that the target of an alias is precisely known statically, and this
-means that they can be used in type annotations and other *type contexts*. Type aliases
-can't be defined conditionally (unless using
-:ref:`supported Python version and platform checks <version_and_platform_checks>`):
+主要区别在于，别名的目标在静态上是精确已知的，这意味着它们可以用于类型注释和其他 *类型上下文*。类型别名不能有条件地定义（除非使用
+:ref:`受支持的 Python 版本和平台检查 <version_and_platform_checks>`）：
 
    .. code-block:: python
 
@@ -671,33 +536,23 @@ can't be defined conditionally (unless using
          # explicit "Type[...]" annotation
          Alias = B
 
-     tp: type[object]  # "tp" is a variable with a type object value
+     tp: type[object]  # "tp" 是一个带有类型对象值的变量
      if random() > 0.5:
          tp = A
      else:
-         tp = B  # This is OK
+         tp = B  # 这可以
 
      def fun1(x: Alias) -> None: ...  # OK
      def fun2(x: tp) -> None: ...  # Error: "tp" is not valid as a type
 
-Incompatible overrides
-----------------------
+不兼容的重写(Incompatible overrides)
+--------------------------------------------
 
-It's unsafe to override a method with a more specific argument type,
-as it violates the `Liskov substitution principle
-<https://stackoverflow.com/questions/56860/what-is-an-example-of-the-liskov-substitution-principle>`_.
-For return types, it's unsafe to override a method with a more general
-return type.
+使用更具体的参数类型重写方法是不安全的，因为这违反了 `Liskov 替代原则 <https://stackoverflow.com/questions/56860/what-is-an-example-of-the-liskov-substitution-principle>`_ 。对于返回类型，使用更一般的返回类型重写方法也是不安全的。
 
-Other incompatible signature changes in method overrides, such as
-adding an extra required parameter, or removing an optional parameter,
-will also generate errors. The signature of a method in a subclass
-should accept all valid calls to the base class method. Mypy
-treats a subclass as a subtype of the base class. An instance of a
-subclass is valid everywhere where an instance of the base class is
-valid.
+方法重写中的其他不兼容签名更改，例如添加额外的必需参数或移除可选参数，也会生成错误。子类中方法的签名应接受对基类方法的所有有效调用。Mypy 将子类视为基类的子类型。子类的实例在基类的实例有效的所有地方都是有效的。
 
-This example demonstrates both safe and unsafe overrides:
+以下示例演示了安全和不安全的重写：
 
 .. code-block:: python
 
@@ -708,28 +563,26 @@ This example demonstrates both safe and unsafe overrides:
             ...
 
     class GeneralizedArgument(A):
-        # A more general argument type is okay
+        # 更一般的参数类型是可以的
         def test(self, t: Iterable[int]) -> Sequence[str]:  # OK
             ...
 
     class NarrowerArgument(A):
-        # A more specific argument type isn't accepted
+        # 更具体的参数类型不被接受
         def test(self, t: list[int]) -> Sequence[str]:  # Error
             ...
 
     class NarrowerReturn(A):
-        # A more specific return type is fine
+        # 更具体的返回类型是可以的
         def test(self, t: Sequence[int]) -> List[str]:  # OK
             ...
 
     class GeneralizedReturn(A):
-        # A more general return type is an error
+        # 更一般的返回类型是错误
         def test(self, t: Sequence[int]) -> Iterable[str]:  # Error
             ...
 
-You can use ``# type: ignore[override]`` to silence the error. Add it
-to the line that generates the error, if you decide that type safety is
-not necessary:
+你可以使用 ``# type: ignore[override]`` 来消除错误。如果你认为类型安全不是必要的，请将其添加到生成错误的行：
 
 .. code-block:: python
 
@@ -739,12 +592,10 @@ not necessary:
 
 .. _unreachable:
 
-Unreachable code
-----------------
+不可达代码(Unreachable code)
+--------------------------------
 
-Mypy may consider some code as *unreachable*, even if it might not be
-immediately obvious why.  It's important to note that mypy will *not*
-type check such code. Consider this example:
+Mypy 可能会将某些代码视为 *不可达*，即使这可能并不明显。重要的是要注意，mypy 将 *不* 检查此类代码。考虑以下示例：
 
 .. code-block:: python
 
@@ -754,11 +605,9 @@ type check such code. Consider this example:
     def bar() -> None:
         foo: Foo = Foo()
         return
-        x: int = 'abc'  # Unreachable -- no error
+        x: int = 'abc'  # 不可达 -- 无错误
 
-It's easy to see that any statement after ``return`` is unreachable,
-and hence mypy will not complain about the mis-typed code below
-it. For a more subtle example, consider this code:
+很容易看出，任何在 ``return`` 之后的语句都是不可达的，因此 mypy 不会对下面的错误类型代码进行警告。对于一个更微妙的示例，请考虑以下代码：
 
 .. code-block:: python
 
@@ -768,17 +617,11 @@ it. For a more subtle example, consider this code:
     def bar() -> None:
         foo: Foo = Foo()
         assert foo.bar is None
-        x: int = 'abc'  # Unreachable -- no error
+        x: int = 'abc'  # 不可达 -- 无错误
 
-Again, mypy will not report any errors. The type of ``foo.bar`` is
-``str``, and mypy reasons that it can never be ``None``.  Hence the
-``assert`` statement will always fail and the statement below will
-never be executed.  (Note that in Python, ``None`` is not an empty
-reference but an object of type ``None``.)
+同样，mypy 不会报告任何错误。``foo.bar`` 的类型是 ``str``，mypy 推断它永远不会是 ``None``。因此 ``assert`` 语句将始终失败，下面的语句将永远不会被执行。（注意，在 Python 中，``None`` 不是一个空引用，而是类型为 ``None`` 的对象。）
 
-In this example mypy will go on to check the last line and report an
-error, since mypy thinks that the condition could be either True or
-False:
+在这个例子中，mypy 将继续检查最后一行并报告错误，因为 mypy 认为条件可能为 True 或 False：
 
 .. code-block:: python
 
@@ -789,33 +632,28 @@ False:
         foo: Foo = Foo()
         if not foo.bar:
             return
-        x: int = 'abc'  # Reachable -- error
+        x: int = 'abc'  # 可达 -- 错误
 
-If you use the :option:`--warn-unreachable <mypy --warn-unreachable>` flag, mypy will generate
-an error about each unreachable code block.
+如果使用 :option:`--warn-unreachable <mypy --warn-unreachable>` 标志，mypy 将对每个不可达代码块生成错误。
 
-Narrowing and inner functions
------------------------------
+缩小范围和内部函数(Narrowing and inner functions)
+----------------------------------------------------------
 
-Because closures in Python are late-binding (https://docs.python-guide.org/writing/gotchas/#late-binding-closures),
-mypy will not narrow the type of a captured variable in an inner function.
-This is best understood via an example:
+由于 Python 中的闭包是延迟绑定的(https://docs.python-guide.org/writing/gotchas/#late-binding-closures), mypy 不会在内部函数中缩小被捕获变量的类型。这最好通过一个示例来理解：
 
 .. code-block:: python
 
     def foo(x: int | None) -> Callable[[], int]:
         if x is None:
             x = 5
-        print(x + 1)  # mypy correctly deduces x must be an int here
+        print(x + 1)  # mypy 正确推断出此处 x 必须是 int
         def inner() -> int:
-            return x + 1  # but (correctly) complains about this line
+            return x + 1  # 但（正确地）对这一行提出了警告
 
-        x = None  # because x could later be assigned None
+        x = None  # 因为 x 可能会在后面被赋值为 None
         return inner
 
     inner = foo(5)
-    inner()  # this will raise an error when called
+    inner()  # 调用时会引发错误
 
-To get this code to type check, you could assign ``y = x`` after ``x`` has been
-narrowed, and use ``y`` in the inner function, or add an assert in the inner
-function.
+要使这段代码通过类型检查，你可以在 `x` 被缩小后赋值 `y = x`，并在内部函数中使用 `y`，或者在内部函数中添加一个断言。

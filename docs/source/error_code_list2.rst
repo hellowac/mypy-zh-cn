@@ -1,80 +1,68 @@
 .. _error-codes-optional:
 
-Error codes for optional checks
-===============================
+可选检查的错误代码(Error codes for optional checks)
+==============================================================
 
-This section documents various errors codes that mypy generates only
-if you enable certain options. See :ref:`error-codes` for general
-documentation about error codes and their configuration.
-:ref:`error-code-list` documents error codes that are enabled by default.
+本节记录了 mypy 仅在启用某些选项时生成的各种错误代码。有关错误代码及其配置的一般文档，请参阅 :ref:`error-codes` 。 :ref:`error-code-list` 记录了默认启用的错误代码。
 
 .. note::
 
-   The examples in this section use :ref:`inline configuration
-   <inline-config>` to specify mypy options. You can also set the same
-   options by using a :ref:`configuration file <config-file>` or
-   :ref:`command-line options <command-line>`.
+   本节中的示例使用 :ref:`inline configuration <inline-config>` 指定 mypy 选项。您还可以通过使用 :ref:`configuration file <config-file>` 或 :ref:`command-line options <command-line>` 设置相同的选项。
 
 .. _code-type-arg:
 
-Check that type arguments exist [type-arg]
+检查类型参数是否存在 [type-arg]
 ------------------------------------------
 
-If you use :option:`--disallow-any-generics <mypy --disallow-any-generics>`, mypy requires that each generic
-type has values for each type argument. For example, the types ``list`` or
-``dict`` would be rejected. You should instead use types like ``list[int]`` or
-``dict[str, int]``. Any omitted generic type arguments get implicit ``Any``
-values. The type ``list`` is equivalent to ``list[Any]``, and so on.
+如果您使用 :option:`--disallow-any-generics <mypy --disallow-any-generics>`，mypy 要求每个泛型类型为每个类型参数提供值。例如，类型 ``list`` 或 ``dict`` 将被拒绝。您应该使用像 ``list[int]`` 或 ``dict[str, int]`` 这样的类型。任何省略的泛型类型参数都会获得隐式的 ``Any`` 值。类型 ``list`` 相当于 ``list[Any]``，等等。
 
-Example:
+示例：
 
 .. code-block:: python
 
     # mypy: disallow-any-generics
 
-    # Error: Missing type parameters for generic type "list"  [type-arg]
+    # 错误: 泛型类型 "list" 缺少类型参数  [type-arg]
     def remove_dups(items: list) -> list:
         ...
 
 .. _code-no-untyped-def:
 
-Check that every function has an annotation [no-untyped-def]
+检查每个函数是否有注释 [no-untyped-def]
 ------------------------------------------------------------
 
-If you use :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`, mypy requires that all functions
-have annotations (either a Python 3 annotation or a type comment).
+如果您使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`，mypy 要求所有函数都有注释（可以是 Python 3 注释或类型注释）。
 
-Example:
+示例：
 
 .. code-block:: python
 
     # mypy: disallow-untyped-defs
 
-    def inc(x):  # Error: Function is missing a type annotation  [no-untyped-def]
+    def inc(x):  # 错误: 函数缺少类型注释  [no-untyped-def]
         return x + 1
 
     def inc_ok(x: int) -> int:  # OK
         return x + 1
 
     class Counter:
-         # Error: Function is missing a type annotation  [no-untyped-def]
+         # 错误: 函数缺少类型注释  [no-untyped-def]
          def __init__(self):
              self.value = 0
 
     class CounterOk:
-         # OK: An explicit "-> None" is needed if "__init__" takes no arguments
+         # OK: 如果 "__init__" 不接受任何参数，则需要显式的 "-> None"
          def __init__(self) -> None:
              self.value = 0
 
 .. _code-redundant-cast:
 
-Check that cast is not redundant [redundant-cast]
+检查类型转换是否冗余 [redundant-cast]
 -------------------------------------------------
 
-If you use :option:`--warn-redundant-casts <mypy --warn-redundant-casts>`, mypy will generate an error if the source
-type of a cast is the same as the target type.
+如果您使用 :option:`--warn-redundant-casts <mypy --warn-redundant-casts>`，当类型转换的源类型与目标类型相同时，mypy 将生成错误。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -85,21 +73,17 @@ Example:
     Count = int
 
     def example(x: Count) -> int:
-        # Error: Redundant cast to "int"  [redundant-cast]
+        # 错误: 转换为 "int" 的操作是冗余的  [redundant-cast]
         return cast(int, x)
 
 .. _code-redundant-self:
 
-Check that methods do not have redundant Self annotations [redundant-self]
+检查方法是否具有冗余的 Self 注解 [redundant-self]
 --------------------------------------------------------------------------
 
-If a method uses the ``Self`` type in the return type or the type of a
-non-self argument, there is no need to annotate the ``self`` argument
-explicitly. Such annotations are allowed by :pep:`673` but are
-redundant. If you enable this error code, mypy will generate an error if
-there is a redundant ``Self`` type.
+如果方法在返回类型或非 self 参数的类型中使用了 ``Self`` 类型，则不需要显式注解 ``self`` 参数。这种注解在 :pep:`673` 中是允许的，但属于冗余。如果启用此错误代码，mypy 将生成错误，如果存在冗余的 ``Self`` 类型。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -108,35 +92,29 @@ Example:
    from typing import Self
 
    class C:
-       # Error: Redundant "Self" annotation for the first method argument
+       # 错误: 第一个方法参数的 "Self" 注解冗余
        def copy(self: Self) -> Self:
            return type(self)()
 
 .. _code-comparison-overlap:
 
-Check that comparisons are overlapping [comparison-overlap]
+检查比较是否重叠 [comparison-overlap]
 -----------------------------------------------------------
 
-If you use :option:`--strict-equality <mypy --strict-equality>`, mypy will generate an error if it
-thinks that a comparison operation is always true or false. These are
-often bugs. Sometimes mypy is too picky and the comparison can
-actually be useful. Instead of disabling strict equality checking
-everywhere, you can use ``# type: ignore[comparison-overlap]`` to
-ignore the issue on a particular line only.
+如果您使用 :option:`--strict-equality <mypy --strict-equality>`，mypy 将生成错误，如果它认为比较操作总是为真或为假。这些通常是错误。有时 mypy 可能过于严格，比较实际上是有用的。您可以仅在特定行上使用 ``# type: ignore[comparison-overlap]`` 来忽略该问题，而不是在所有地方禁用严格相等检查。
 
-Example:
+示例：
 
 .. code-block:: python
 
     # mypy: strict-equality
 
     def is_magic(x: bytes) -> bool:
-        # Error: Non-overlapping equality check (left operand type: "bytes",
-        #        right operand type: "str")  [comparison-overlap]
+        # 错误: 非重叠的相等检查（左操作数类型: "bytes",
+        #        右操作数类型: "str"）  [comparison-overlap]
         return x == 'magic'
 
-We can fix the error by changing the string literal to a bytes
-literal:
+我们可以通过将字符串字面量更改为字节字面量来修复错误：
 
 .. code-block:: python
 
@@ -147,20 +125,19 @@ literal:
 
 .. _code-no-untyped-call:
 
-Check that no untyped functions are called [no-untyped-call]
+检查未注解的函数未被调用 [no-untyped-call]
 ------------------------------------------------------------
 
-If you use :option:`--disallow-untyped-calls <mypy --disallow-untyped-calls>`, mypy generates an error when you
-call an unannotated function in an annotated function.
+如果您使用 :option:`--disallow-untyped-calls <mypy --disallow-untyped-calls>`，mypy 在您在注解函数中调用未注解的函数时生成错误。
 
-Example:
+示例：
 
 .. code-block:: python
 
     # mypy: disallow-untyped-calls
 
     def do_it() -> None:
-        # Error: Call to untyped function "bad" in typed context  [no-untyped-call]
+        # 错误: 在类型上下文中调用未注解的函数 "bad"  [no-untyped-call]
         bad()
 
     def bad():
@@ -168,14 +145,12 @@ Example:
 
 .. _code-no-any-return:
 
-Check that function does not return Any value [no-any-return]
+检查函数不返回 Any 值 [no-any-return]
 -------------------------------------------------------------
 
-If you use :option:`--warn-return-any <mypy --warn-return-any>`, mypy generates an error if you return a
-value with an ``Any`` type in a function that is annotated to return a
-non-``Any`` value.
+如果您使用 :option:`--warn-return-any <mypy --warn-return-any>`，mypy 将生成错误，如果您在注解为返回非 ``Any`` 值的函数中返回 ``Any`` 类型的值。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -185,20 +160,17 @@ Example:
          return s.split(',')
 
     def first_field(x: str) -> str:
-        # Error: Returning Any from function declared to return "str"  [no-any-return]
+        # 错误: 从声明为返回 "str" 的函数返回 Any  [no-any-return]
         return fields(x)[0]
 
 .. _code-no-any-unimported:
 
-Check that types have no Any components due to missing imports [no-any-unimported]
+检查由于缺少导入而没有 Any 组件的类型 [no-any-unimported]
 ----------------------------------------------------------------------------------
 
-If you use :option:`--disallow-any-unimported <mypy --disallow-any-unimported>`, mypy generates an error if a component of
-a type becomes ``Any`` because mypy couldn't resolve an import. These "stealth"
-``Any`` types can be surprising and accidentally cause imprecise type checking.
+如果您使用 :option:`--disallow-any-unimported <mypy --disallow-any-unimported>`，mypy 如果类型的某个组件变为 ``Any``，因为 mypy 无法解析导入，将生成错误。这些“隐形”的 ``Any`` 类型可能会令人惊讶，并意外导致不精确的类型检查。
 
-In this example, we assume that mypy can't find the module ``animals``, which means
-that ``Cat`` falls back to ``Any`` in a type annotation:
+在此示例中，我们假设 mypy 无法找到模块 ``animals``，这意味着 ``Cat`` 在类型注释中回退为 ``Any``：
 
 .. code-block:: python
 
@@ -206,56 +178,48 @@ that ``Cat`` falls back to ``Any`` in a type annotation:
 
     from animals import Cat  # type: ignore
 
-    # Error: Argument 1 to "feed" becomes "Any" due to an unfollowed import  [no-any-unimported]
+    # 错误: "feed" 的参数 1 由于未跟随的导入而变为 "Any"  [no-any-unimported]
     def feed(cat: Cat) -> None:
         ...
 
 .. _code-unreachable:
 
-Check that statement or expression is unreachable [unreachable]
+检查语句或表达式是否不可达 [unreachable]
 ---------------------------------------------------------------
 
-If you use :option:`--warn-unreachable <mypy --warn-unreachable>`, mypy generates an error if it
-thinks that a statement or expression will never be executed. In most cases, this is due to
-incorrect control flow or conditional checks that are accidentally always true or false.
+如果您使用 :option:`--warn-unreachable <mypy --warn-unreachable>`，mypy 如果它认为某个语句或表达式将永远不会被执行，则会生成错误。在大多数情况下，这通常是由于不正确的控制流或条件检查意外总是为真或为假。
 
 .. code-block:: python
 
     # mypy: warn-unreachable
 
     def example(x: int) -> None:
-        # Error: Right operand of "or" is never evaluated  [unreachable]
+        # 错误: "or" 的右操作数永远不会被评估  [unreachable]
         assert isinstance(x, int) or x == 'unused'
 
         return
-        # Error: Statement is unreachable  [unreachable]
+        # 错误: 语句不可达  [unreachable]
         print('unreachable')
 
 .. _code-deprecated:
 
-Check that imported or used feature is deprecated [deprecated]
+检查导入或使用的特性是否已弃用 [deprecated]
 --------------------------------------------------------------
 
-By default, mypy generates a note if your code imports a deprecated feature explicitly with a
-``from mod import depr`` statement or uses a deprecated feature imported otherwise or defined
-locally.  Features are considered deprecated when decorated with ``warnings.deprecated``, as
-specified in `PEP 702 <https://peps.python.org/pep-0702>`_.  You can silence single notes via
-``# type: ignore[deprecated]`` or turn off this check completely via ``--disable-error-code=deprecated``.
-Use the :option:`--report-deprecated-as-error <mypy --report-deprecated-as-error>` option for
-more strictness, which turns all such notes into errors.
+默认情况下，如果您的代码通过 ``from mod import depr`` 语句显式导入了已弃用的特性，或以其他方式使用了已弃用的特性或在本地定义了已弃用的特性，mypy 会生成一个通知。当特性被 ``warnings.deprecated`` 装饰时，视为已弃用，如 `PEP 702 <https://peps.python.org/pep-0702>`_ 中所述。您可以通过 ``# type: ignore[deprecated]`` 来静默单个通知，或通过 ``--disable-error-code=deprecated`` 完全关闭此检查。使用 :option:`--report-deprecated-as-error <mypy --report-deprecated-as-error>` 选项以获得更严格的检查，将所有此类通知转换为错误。
 
 .. note::
 
-    The ``warnings`` module provides the ``@deprecated`` decorator since Python 3.13.
-    To use it with older Python versions, import it from ``typing_extensions`` instead.
+    ``warnings`` 模块自 Python 3.13 起提供 ``@deprecated`` 装饰器。
+    若要在旧版本的 Python 中使用，请从 ``typing_extensions`` 导入它。
 
-Examples:
+示例：
 
 .. code-block:: python
 
     # mypy: report-deprecated-as-error
 
-    # Error: abc.abstractproperty is deprecated: Deprecated, use 'property' with 'abstractmethod' instead
+    # 错误: abc.abstractproperty 已弃用：已弃用，请使用 'property' 和 'abstractmethod' 替代
     from abc import abstractproperty
 
     from typing_extensions import deprecated
@@ -264,45 +228,40 @@ Examples:
     def old_function() -> None:
         print("I am old")
 
-    # Error: __main__.old_function is deprecated: use new_function
+    # 错误: __main__.old_function 已弃用：使用 new_function
     old_function()
     old_function()  # type: ignore[deprecated]
 
 
 .. _code-redundant-expr:
 
-Check that expression is redundant [redundant-expr]
+检查表达式是否冗余 [redundant-expr]
 ---------------------------------------------------
 
-If you use :option:`--enable-error-code redundant-expr <mypy --enable-error-code>`,
-mypy generates an error if it thinks that an expression is redundant.
+如果您使用 :option:`--enable-error-code redundant-expr <mypy --enable-error-code>`，mypy 将生成错误，如果它认为某个表达式是冗余的。
 
 .. code-block:: python
 
     # mypy: enable-error-code="redundant-expr"
 
     def example(x: int) -> None:
-        # Error: Left operand of "and" is always true  [redundant-expr]
+        # 错误: "and" 的左操作数总是为真  [redundant-expr]
         if isinstance(x, int) and x > 0:
             pass
 
-        # Error: If condition is always true  [redundant-expr]
+        # 错误: 如果条件总是为真  [redundant-expr]
         1 if isinstance(x, int) else 0
 
-        # Error: If condition in comprehension is always true  [redundant-expr]
+        # 错误: 生成式中的条件总是为真  [redundant-expr]
         [i for i in range(x) if isinstance(i, int)]
 
 
 .. _code-possibly-undefined:
 
-Warn about variables that are defined only in some execution paths [possibly-undefined]
+警告有关仅在某些执行路径中定义的变量 [possibly-undefined]
 ---------------------------------------------------------------------------------------
 
-If you use :option:`--enable-error-code possibly-undefined <mypy --enable-error-code>`,
-mypy generates an error if it cannot verify that a variable will be defined in
-all execution paths. This includes situations when a variable definition
-appears in a loop, in a conditional branch, in an except handler, etc. For
-example:
+如果您使用 :option:`--enable-error-code possibly-undefined <mypy --enable-error-code>`，mypy 将生成错误，如果它无法验证变量在所有执行路径中都会被定义。这包括变量定义出现在循环中、条件分支中、异常处理器中等情况。例如：
 
 .. code-block:: python
 
@@ -313,25 +272,21 @@ example:
     def test(values: Iterable[int], flag: bool) -> None:
         if flag:
             a = 1
-        z = a + 1  # Error: Name "a" may be undefined [possibly-undefined]
+        z = a + 1  # 错误: 名称 "a" 可能未定义 [possibly-undefined]
 
         for v in values:
             b = v
-        z = b + 1  # Error: Name "b" may be undefined [possibly-undefined]
+        z = b + 1  # 错误: 名称 "b" 可能未定义 [possibly-undefined]
 
 .. _code-truthy-bool:
 
-Check that expression is not implicitly true in boolean context [truthy-bool]
+检查表达式在布尔上下文中不隐式为真 [truthy-bool]
 -----------------------------------------------------------------------------
 
-Warn when the type of an expression in a boolean context does not
-implement ``__bool__`` or ``__len__``. Unless one of these is
-implemented by a subtype, the expression will always be considered
-true, and there may be a bug in the condition.
+当布尔上下文中的表达式类型未实现 ``__bool__`` 或 ``__len__`` 时发出警告。除非这些中的一个由子类型实现，否则表达式将始终被视为真，并且条件中可能存在错误。
 
-As an exception, the ``object`` type is allowed in a boolean context.
-Using an iterable value in a boolean context has a separate error code
-(see below).
+作为例外，``object`` 类型在布尔上下文中是允许的。
+在布尔上下文中使用可迭代值有单独的错误代码（见下文）。
 
 .. code-block:: python
 
@@ -340,48 +295,39 @@ Using an iterable value in a boolean context has a separate error code
     class Foo:
         pass
     foo = Foo()
-    # Error: "foo" has type "Foo" which does not implement __bool__ or __len__ so it could always be true in boolean context
+    # 错误: "foo" 的类型为 "Foo"，未实现 __bool__ 或 __len__，因此在布尔上下文中可能始终为真
     if foo:
          ...
 
 .. _code-truthy-iterable:
 
-Check that iterable is not implicitly true in boolean context [truthy-iterable]
+检查可迭代对象在布尔上下文中不隐式为真 [truthy-iterable]
 -------------------------------------------------------------------------------
 
-Generate an error if a value of type ``Iterable`` is used as a boolean
-condition, since ``Iterable`` does not implement ``__len__`` or ``__bool__``.
+如果类型为 ``Iterable`` 的值用作布尔条件，则生成错误，因为 ``Iterable`` 并未实现 ``__len__`` 或 ``__bool__``。
 
-Example:
+示例：
 
 .. code-block:: python
 
     from collections.abc import Iterable
 
     def transform(items: Iterable[int]) -> list[int]:
-        # Error: "items" has type "Iterable[int]" which can always be true in boolean context. Consider using "Collection[int]" instead.  [truthy-iterable]
+        # 错误: "items" 的类型为 "Iterable[int]"，在布尔上下文中可能始终为真。考虑使用 "Collection[int]" 替代。  [truthy-iterable]
         if not items:
             return [42]
         return [x + 1 for x in items]
 
-If ``transform`` is called with a ``Generator`` argument, such as
-``int(x) for x in []``, this function would not return ``[42]`` unlike
-what might be intended. Of course, it's possible that ``transform`` is
-only called with ``list`` or other container objects, and the ``if not
-items`` check is actually valid. If that is the case, it is
-recommended to annotate ``items`` as ``Collection[int]`` instead of
-``Iterable[int]``.
+如果 ``transform`` 被调用时传入 ``Generator`` 参数，例如 ``int(x) for x in []``，则该函数将不会返回 ``[42]``，与预期可能不同。当然，``transform`` 可能仅在 ``list`` 或其他容器对象上调用，并且 ``if not items`` 检查实际上是有效的。如果是这种情况，建议将 ``items`` 注解为 ``Collection[int]`` 而不是 ``Iterable[int]``。
 
 .. _code-ignore-without-code:
 
-Check that ``# type: ignore`` include an error code [ignore-without-code]
+检查 ``# type: ignore`` 是否包含错误代码 [ignore-without-code]
 -------------------------------------------------------------------------
 
-Warn when a ``# type: ignore`` comment does not specify any error codes.
-This clarifies the intent of the ignore and ensures that only the
-expected errors are silenced.
+当 ``# type: ignore`` 注释未指定任何错误代码时发出警告。这可以明确忽略的意图，并确保仅静默预期的错误。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -393,26 +339,25 @@ Example:
 
     f = Foo('foo')
 
-    # This line has a typo that mypy can't help with as both:
-    # - the expected error 'assignment', and
-    # - the unexpected error 'attr-defined'
-    # are silenced.
-    # Error: "type: ignore" comment without error code (consider "type: ignore[attr-defined]" instead)
+    # 这行有一个拼写错误，mypy 无法处理，因为：
+    # - 预期错误 'assignment'，以及
+    # - 意外错误 'attr-defined'
+    # 都被静默。
+    # 错误: "type: ignore" 注释没有错误代码（考虑使用 "type: ignore[attr-defined]"）
     f.nme = 42  # type: ignore
 
-    # This line warns correctly about the typo in the attribute name
-    # Error: "Foo" has no attribute "nme"; maybe "name"?
+    # 这一行正确地警告了属性名称中的拼写错误
+    # 错误: "Foo" 没有属性 "nme"; 也许是 "name"?
     f.nme = 42  # type: ignore[assignment]
 
 .. _code-unused-awaitable:
 
-Check that awaitable return value is used [unused-awaitable]
+检查可等待返回值是否被使用 [unused-awaitable]
 ------------------------------------------------------------
 
-If you use :option:`--enable-error-code unused-awaitable <mypy --enable-error-code>`,
-mypy generates an error if you don't use a returned value that defines ``__await__``.
+如果您使用 :option:`--enable-error-code unused-awaitable <mypy --enable-error-code>`，mypy 将生成错误，如果您不使用一个定义了 ``__await__`` 的返回值。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -423,80 +368,68 @@ Example:
     async def f() -> int: ...
 
     async def g() -> None:
-        # Error: Value of type "Task[int]" must be used
-        #        Are you missing an await?
+        # 错误: 类型 "Task[int]" 的值必须被使用
+        #        您是否缺少 await？
         asyncio.create_task(f())
 
-You can assign the value to a temporary, otherwise unused variable to
-silence the error:
+您可以将值赋给一个临时的、未使用的变量来静默错误：
 
 .. code-block:: python
 
     async def g() -> None:
-        _ = asyncio.create_task(f())  # No error
+        _ = asyncio.create_task(f())  # 没有错误
 
 .. _code-unused-ignore:
 
-Check that ``# type: ignore`` comment is used [unused-ignore]
+检查 ``# type: ignore`` 注释是否被使用 [unused-ignore]
 -------------------------------------------------------------
 
-If you use :option:`--enable-error-code unused-ignore <mypy --enable-error-code>`,
-or :option:`--warn-unused-ignores <mypy --warn-unused-ignores>`
-mypy generates an error if you don't use a ``# type: ignore`` comment, i.e. if
-there is a comment, but there would be no error generated by mypy on this line
-anyway.
+如果您使用 :option:`--enable-error-code unused-ignore <mypy --enable-error-code>`，或 :option:`--warn-unused-ignores <mypy --warn-unused-ignores>`，mypy 将生成错误，如果您没有使用 ``# type: ignore`` 注释，即如果有注释，但这一行上不会由 mypy 生成任何错误。
 
-Example:
+示例：
 
 .. code-block:: python
 
-    # Use "mypy --warn-unused-ignores ..."
+    # 使用 "mypy --warn-unused-ignores ..."
 
     def add(a: int, b: int) -> int:
-        # Error: unused "type: ignore" comment
+        # 错误: 未使用的 "type: ignore" 注释
         return a + b  # type: ignore
 
-Note that due to a specific nature of this comment, the only way to selectively
-silence it, is to include the error code explicitly. Also note that this error is
-not shown if the ``# type: ignore`` is not used due to code being statically
-unreachable (e.g. due to platform or version checks).
+请注意，由于此注释的特定性质，唯一可以选择性静默它的方法是显式包含错误代码。还请注意，如果由于代码静态不可达（例如由于平台或版本检查），未使用 ``# type: ignore`` ，则不会显示此错误。
 
-Example:
+示例：
 
 .. code-block:: python
 
-    # Use "mypy --warn-unused-ignores ..."
+    # 使用 "mypy --warn-unused-ignores ..."
 
     import sys
 
     try:
-        # The "[unused-ignore]" is needed to get a clean mypy run
-        # on both Python 3.8, and 3.9 where this module was added
+        # "[unused-ignore]" 是必需的，以便在 Python 3.8 和 3.9 上进行干净的 mypy 运行
+        # 此模块在这两个版本中均已添加
         import graphlib  # type: ignore[import,unused-ignore]
     except ImportError:
         pass
 
     if sys.version_info >= (3, 9):
-        # The following will not generate an error on either
-        # Python 3.8, or Python 3.9
+        # 以下内容在 Python 3.8 或 3.9 上都不会生成错误
         42 + "testing..."  # type: ignore
 
 .. _code-explicit-override:
 
-Check that ``@override`` is used when overriding a base class method [explicit-override]
+检查在重写基类方法时是否使用 ``@override`` [explicit-override]
 ----------------------------------------------------------------------------------------
 
-If you use :option:`--enable-error-code explicit-override <mypy --enable-error-code>`
-mypy generates an error if you override a base class method without using the
-``@override`` decorator. An error will not be emitted for overrides of ``__init__``
-or ``__new__``. See `PEP 698 <https://peps.python.org/pep-0698/#strict-enforcement-per-project>`_.
+如果您使用 :option:`--enable-error-code explicit-override <mypy --enable-error-code>` ，mypy 将生成错误，如果您在重写基类方法时未使用 ``@override`` 装饰器。重写 ``__init__`` 或 ``__new__`` 时不会发出错误。请参见 `PEP 698 <https://peps.python.org/pep-0698/#strict-enforcement-per-project>`_。
 
 .. note::
 
-    Starting with Python 3.12, the ``@override`` decorator can be imported from ``typing``.
-    To use it with older Python versions, import it from ``typing_extensions`` instead.
+    从 Python 3.12 开始，可以从 ``typing`` 导入 ``@override``。
+    若要在旧版本的 Python 中使用，请从 ``typing_extensions`` 导入它。
 
-Example:
+示例：
 
 .. code-block:: python
 
@@ -513,7 +446,7 @@ Example:
 
 
     class Child(Parent):
-        def f(self, x: int) -> None:  # Error: Missing @override decorator
+        def f(self, x: int) -> None:  # 错误: 缺少 @override 装饰器
             pass
 
         @override
@@ -522,13 +455,10 @@ Example:
 
 .. _code-mutable-override:
 
-Check that overrides of mutable attributes are safe [mutable-override]
+检查可变属性的重写是否安全 [mutable-override]
 ----------------------------------------------------------------------
 
-`mutable-override` will enable the check for unsafe overrides of mutable attributes.
-For historical reasons, and because this is a relatively common pattern in Python,
-this check is not enabled by default. The example below is unsafe, and will be
-flagged when this error code is enabled:
+`mutable-override` 将启用对可变属性不安全重写的检查。由于历史原因，并且因为这是 Python 中相对常见的模式，因此默认情况下未启用此检查。下面的示例是不安全的，当启用此错误代码时将被标记：
 
 .. code-block:: python
 
@@ -540,72 +470,66 @@ flagged when this error code is enabled:
         z: float
 
     class D(C):
-        x: int  # Error: Covariant override of a mutable attribute
-                # (base class "C" defined the type as "float",
-                # expression has type "int")  [mutable-override]
-        y: float  # OK
-        z: Any  # OK
+        x: int  # 错误: 可变属性的协变重写
+                # （基类 "C" 定义的类型为 "float",
+                # 表达式的类型为 "int"）[mutable-override]
+        y: float  # 正确
+        z: Any  # 正确
 
     def f(c: C) -> None:
         c.x = 1.1
     d = D()
     f(d)
-    d.x >> 1  # This will crash at runtime, because d.x is now float, not an int
+    d.x >> 1  # 这将在运行时崩溃，因为 d.x 现在是 float，而不是 int
 
 .. _code-unimported-reveal:
 
-Check that ``reveal_type`` is imported from typing or typing_extensions [unimported-reveal]
+检查 ``reveal_type`` 是否从 typing 或 typing_extensions 导入 [unimported-reveal]
 -------------------------------------------------------------------------------------------
 
-Mypy used to have ``reveal_type`` as a special builtin
-that only existed during type-checking.
-In runtime it fails with expected ``NameError``,
-which can cause real problem in production, hidden from mypy.
+Mypy 以前将 ``reveal_type`` 作为一种特殊的内置函数，仅在类型检查期间存在。在运行时，它会以预期的 ``NameError`` 失败，这可能在生产中造成实际问题，而被 mypy 隐藏。
 
-But, in Python3.11 :py:func:`typing.reveal_type` was added.
-``typing_extensions`` ported this helper to all supported Python versions.
+但是，在 Python3.11 中添加了 :py:func:`typing.reveal_type`。``typing_extensions`` 将此辅助功能移植到所有支持的 Python 版本中。
 
-Now users can actually import ``reveal_type`` to make the runtime code safe.
+现在用户可以实际导入 ``reveal_type`` 来确保运行时代码安全。
 
 .. note::
 
-    Starting with Python 3.11, the ``reveal_type`` function can be imported from ``typing``.
-    To use it with older Python versions, import it from ``typing_extensions`` instead.
+    从 Python 3.11 开始，可以从 ``typing`` 导入 ``reveal_type``。
+    若要在旧版本的 Python 中使用，请从 ``typing_extensions`` 导入它。
 
 .. code-block:: python
 
     # mypy: enable-error-code="unimported-reveal"
 
     x = 1
-    reveal_type(x)  # Note: Revealed type is "builtins.int" \
-                    # Error: Name "reveal_type" is not defined
+    reveal_type(x)  # 注意: 显示的类型是 "builtins.int" \
+                    # 错误: 名称 "reveal_type" 未定义
 
-Correct usage:
+正确用法：
 
 .. code-block:: python
 
     # mypy: enable-error-code="unimported-reveal"
-    from typing import reveal_type   # or `typing_extensions`
+    from typing import reveal_type   # 或者 `typing_extensions`
 
     x = 1
-    # This won't raise an error:
-    reveal_type(x)  # Note: Revealed type is "builtins.int"
+    # 这不会引发错误：
+    reveal_type(x)  # 注意: 显示的类型是 "builtins.int"
 
-When this code is enabled, using ``reveal_locals`` is always an error,
-because there's no way one can import it.
+当启用此代码时，使用 ``reveal_locals`` 始终是错误的，因为无法导入它。
 
 .. _code-narrowed-type-not-subtype:
 
-Check that ``TypeIs`` narrows types [narrowed-type-not-subtype]
+检查 ``TypeIs`` 是否缩小类型 [narrowed-type-not-subtype]
 ---------------------------------------------------------------
 
-:pep:`742` requires that when ``TypeIs`` is used, the narrowed
-type must be a subtype of the original type::
+:pep:`742` 要求在使用 ``TypeIs`` 时，缩小的类型必须是原始类型的子类型::
 
     from typing_extensions import TypeIs
 
-    def f(x: int) -> TypeIs[str]:  # Error, str is not a subtype of int
+    def f(x: int) -> TypeIs[str]:  # 错误，str 不是 int 的子类型
         ...
 
-    def g(x: object) -> TypeIs[str]:  # OK
+    def g(x: object) -> TypeIs[str]:  # 正确
         ...
