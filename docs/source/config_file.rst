@@ -22,7 +22,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 一些标志支持用户主目录和环境变量扩展。要引用用户主目录，请在路径开头使用 ``~``。要扩展环境变量，请使用 ``$VARNAME`` 或 ``${VARNAME}``。
 
 配置文件格式(Config file format)
-*******************************
+**********************************
 
 配置文件格式是常见的 :doc:`ini 文件 <python:library/configparser>` 格式。它应包含方括号中的部分名称和形式为 `NAME = VALUE` 的标志设置。注释以 ``#`` 字符开头。
 
@@ -208,7 +208,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
               | ^three\.   # 或以 "three." 开头的文件
           )'''  # TOML 的单引号字符串不需要转义反斜杠
 
-       请参见 :ref:`使用 pyproject.toml`。
+       请参见 :ref:`using-a-pyproject-toml`。
 
 .. confval:: namespace_packages
 
@@ -466,7 +466,7 @@ None 和 Optional 处理(None and Optional handling)
 
 
 配置警告(Configuring warnings)
-********************
+****************************************
 
 有关更多信息，请参见命令行文档的 :ref:`配置警告 <configuring-warnings>` 部分。
 
@@ -703,7 +703,7 @@ None 和 Optional 处理(None and Optional handling)
     （而不是 ``|`` 操作符），即使在 Python 3.10+ 中也是如此。
 
 增量模式(Incremental mode)
-****************
+********************************
 
 这些选项只能在全局部分（``[mypy]``）中设置。
 
@@ -766,7 +766,7 @@ None 和 Optional 处理(None and Optional handling)
 
     :type: comma-separated list of strings
 
-    逗号分隔的 mypy 插件列表。请参见 :ref:`使用插件扩展 mypy`。
+    逗号分隔的 mypy 插件列表。请参见 :ref:`extending-mypy-using-plugins`。
 
 .. confval:: pdb
 

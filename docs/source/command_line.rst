@@ -3,7 +3,7 @@
 .. program:: mypy
 
 mypy命令行(command line)
-=====================
+===================================
 
 本节记录了 mypy 的命令行接口。您可以通过运行 :option:`mypy --help` 查看可用标志的快速摘要。
 
@@ -54,7 +54,7 @@ Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以
 
 
 可选参数(arguments)
-******************
+***************************
 
 .. option:: -h, --help
 
@@ -96,7 +96,7 @@ Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以
 .. _import-discovery:
 
 导入发现(Import discovery)
-****************
+********************************
 
 以下标志自定义 mypy 如何发现和跟踪导入。
 
@@ -340,7 +340,7 @@ None 和 Optional 处理(None and Optional handling)
 .. _configuring-warnings:
 
 配置警告(Configuring warnings)
-********************
+****************************************
 
 以下标志为合理但在某种程度上可能存在问题或冗余的代码启用警告。
 
@@ -665,7 +665,7 @@ None 和 Optional 处理(None and Optional handling)
 
     如果设置了该选项，则此设置将覆盖 ``MYPY_CACHE_DIR`` 环境变量。
 
-    即使禁用增量模式，mypy 仍然会始终写入缓存，以便“预热”缓存。要禁用写入缓存，请使用 ``--cache-dir=/dev/null``（UNIX）或 ``--cache-dir=nul``（Windows）。
+    即使禁用增量模式，mypy 仍然会始终写入缓存，以便“预热”缓存。要禁用写入缓存，请使用 ``--cache-dir=/dev/null`` （UNIX）或 ``--cache-dir=nul`` （Windows）。
 
 .. option:: --sqlite-cache
 
@@ -733,7 +733,7 @@ None 和 Optional 处理(None and Optional handling)
 
 
 报告生成(Report generation)
-*****************
+**********************************
 
 如果设置了这些标志，mypy 将在指定目录中以指定格式生成报告。
 
@@ -820,7 +820,7 @@ None 和 Optional 处理(None and Optional handling)
 
 
 杂项(Miscellaneous)
-*************
+**************************
 
 .. option:: --install-types
 
