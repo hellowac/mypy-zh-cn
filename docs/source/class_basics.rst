@@ -1,7 +1,7 @@
 .. _class-basics:
 
-Class 基础
-============
+Class 基础(basics)
+========================
 
 本节将帮助您开始注解类(class)。包括内置类(Built-in classes)，如 `int`，也遵循相同的规则。
 

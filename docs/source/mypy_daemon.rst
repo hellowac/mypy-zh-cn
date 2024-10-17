@@ -2,182 +2,108 @@
 
 .. program:: dmypy
 
-Mypy daemon (mypy server)
-=========================
+Mypy 守护进程 (mypy 服务)
+===========================
 
-Instead of running mypy as a command-line tool, you can also run it as
-a long-running daemon (server) process and use a command-line client to
-send type-checking requests to the server.  This way mypy can perform type
-checking much faster, since program state cached from previous runs is kept
-in memory and doesn't have to be read from the file system on each run.
-The server also uses finer-grained dependency tracking to reduce the amount
-of work that needs to be done.
+除了将 mypy 作为命令行工具运行外，您还可以将其作为一个长时间运行的守护进程（服务器）来运行，并使用命令行客户端向服务器发送类型检查请求。通过这种方式，mypy 可以更快地执行类型检查，因为之前运行时缓存的程序状态保留在内存中，而不必在每次运行时从文件系统读取。服务器还使用更细粒度的依赖追踪，以减少需要执行的工作量。
 
-If you have a large codebase to check, running mypy using the mypy
-daemon can be *10 or more times faster* than the regular command-line
-``mypy`` tool, especially if your workflow involves running mypy
-repeatedly after small edits -- which is often a good idea, as this way
-you'll find errors sooner.
+如果您有一个大型代码库要检查，使用 mypy 守护进程运行 mypy 的速度可能比常规命令行 ``mypy`` 工具快 *10 倍或更多*，尤其是如果您的工作流涉及在小幅修改后重复运行 mypy——这通常是个好主意，因为这样您能更早发现错误。
 
 .. note::
 
-    The command-line interface of mypy daemon may change in future mypy
-    releases.
+    mypy 守护进程的命令行接口在未来的 mypy 版本中可能会发生变化。
 
 .. note::
 
-    Each mypy daemon process supports one user and one set of source files,
-    and it can only process one type checking request at a time. You can
-    run multiple mypy daemon processes to type check multiple repositories.
+    每个 mypy 守护进程支持一个用户和一组源文件，并且它一次只能处理一个类型检查请求。您可以运行多个 mypy 守护进程来检查多个代码库。
 
+基本用法(Basic usage)
+**********************
 
-Basic usage
-***********
-
-The client utility ``dmypy`` is used to control the mypy daemon.
-Use ``dmypy run -- <flags> <files>`` to type check a set of files
-(or directories). This will launch the daemon if it is not running.
-You can use almost arbitrary mypy flags after ``--``.  The daemon
-will always run on the current host. Example::
+客户端工具 ``dmypy`` 用于控制 mypy 守护进程。
+使用 ``dmypy run -- <flags> <files>`` 来检查一组文件（或目录）的类型。这将在守护进程未运行时启动它。您可以在 ``--`` 后使用几乎任意的 mypy 标志。守护进程将始终在当前主机上运行。示例::
 
     dmypy run -- prog.py pkg/*.py
 
-``dmypy run`` will automatically restart the daemon if the
-configuration or mypy version changes.
+``dmypy run`` 会自动在配置或 mypy 版本更改时重启守护进程。
 
-The initial run will process all the code and may take a while to
-finish, but subsequent runs will be quick, especially if you've only
-changed a few files. (You can use :ref:`remote caching <remote-cache>`
-to speed up the initial run. The speedup can be significant if
-you have a large codebase.)
+初始运行将处理所有代码，可能需要一些时间才能完成，但后续运行将非常快速，尤其是在您只更改了少数文件的情况下。（您可以使用 :ref:`remote caching <remote-cache>` 来加速初始运行。如果您有一个大型代码库，速度提升可能会很显著。）
 
 .. note::
 
-   Mypy 0.780 added support for following imports in dmypy (enabled by
-   default). This functionality is still experimental. You can use
-   ``--follow-imports=skip`` or ``--follow-imports=error`` to fall
-   back to the stable functionality.  See :ref:`follow-imports` for
-   details on how these work.
+   Mypy 0.780 添加了对 dmypy 中的 following imports 的支持（默认启用）。此功能仍在实验阶段。您可以使用 ``--follow-imports=skip`` 或 ``--follow-imports=error`` 以回退到稳定功能。有关这些功能的详细信息，请参见 :ref:`follow-imports`。
 
 .. note::
 
-    The mypy daemon requires ``--local-partial-types`` and automatically enables it.
+    mypy 守护进程需要 ``--local-partial-types`` 并会自动启用它。
 
 
-Daemon client commands
-**********************
+守护进程客户端命令(Daemon client commands)
+********************************************
 
-While ``dmypy run`` is sufficient for most uses, some workflows
-(ones using :ref:`remote caching <remote-cache>`, perhaps),
-require more precise control over the lifetime of the daemon process:
+虽然 ``dmypy run`` 足以满足大多数使用场景，但一些工作流（例如使用 :ref:`remote caching <remote-cache>` 的工作流）需要对守护进程生命周期进行更精确的控制：
 
-* ``dmypy stop`` stops the daemon.
+* ``dmypy stop`` 停止守护进程。
 
-* ``dmypy start -- <flags>`` starts the daemon but does not check any files.
-  You can use almost arbitrary mypy flags after ``--``.
+* ``dmypy start -- <flags>`` 启动守护进程，但不检查任何文件。您可以在 ``--`` 后使用几乎任意的 mypy 标志。
 
-* ``dmypy restart -- <flags>`` restarts the daemon. The flags are the same
-  as with ``dmypy start``. This is equivalent to a stop command followed
-  by a start.
+* ``dmypy restart -- <flags>`` 重启守护进程。标志与 ``dmypy start`` 相同。这相当于先停止再启动。
 
-* Use ``dmypy run --timeout SECONDS -- <flags>`` (or
-  ``start`` or ``restart``) to automatically
-  shut down the daemon after inactivity. By default, the daemon runs
-  until it's explicitly stopped.
+* 使用 ``dmypy run --timeout SECONDS -- <flags>``（或 ``start`` 或 ``restart``）在不活动后自动关闭守护进程。默认情况下，守护进程会一直运行，直到明确停止。
 
-* ``dmypy check <files>`` checks a set of files using an already
-  running daemon.
+* ``dmypy check <files>`` 使用已在运行的守护进程检查一组文件。
 
-* ``dmypy recheck`` checks the same set of files as the most recent
-  ``check`` or ``recheck`` command. (You can also use the :option:`--update`
-  and :option:`--remove` options to alter the set of files, and to define
-  which files should be processed.)
+* ``dmypy recheck`` 检查与最近一次 ``check`` 或 ``recheck`` 命令相同的文件集。（您还可以使用 :option:`--update` 和 :option:`--remove` 选项来更改文件集，并定义应处理哪些文件。）
 
-* ``dmypy status`` checks whether a daemon is running. It prints a
-  diagnostic and exits with ``0`` if there is a running daemon.
+* ``dmypy status`` 检查守护进程是否正在运行。如果有正在运行的守护进程，则打印诊断信息并以 ``0`` 退出。
 
-Use ``dmypy --help`` for help on additional commands and command-line
-options not discussed here, and ``dmypy <command> --help`` for help on
-command-specific options.
+使用 ``dmypy --help`` 获取有关未在此讨论的附加命令和命令行选项的帮助，以及 ``dmypy <command> --help`` 获取特定命令选项的帮助。
 
-Additional daemon flags
-***********************
+附加守护进程标志(Additional daemon flags)
+**********************************************
 
 .. option:: --status-file FILE
 
-   Use ``FILE`` as the status file for storing daemon runtime state. This is
-   normally a JSON file that contains information about daemon process and
-   connection. The default path is ``.dmypy.json`` in the current working
-   directory.
+   使用 ``FILE`` 作为存储守护进程运行状态的状态文件。这通常是一个 JSON 文件，包含有关守护进程和连接的信息。默认路径为当前工作目录中的 ``.dmypy.json``。
 
 .. option:: --log-file FILE
 
-   Direct daemon stdout/stderr to ``FILE``. This is useful for debugging daemon
-   crashes, since the server traceback is not always printed by the client.
-   This is available for the ``start``, ``restart``, and ``run`` commands.
+   将守护进程的 stdout/stderr 定向到 ``FILE``。这对于调试守护进程崩溃非常有用，因为服务器的追踪信息并不总是由客户端打印。此选项适用于 ``start``、``restart`` 和 ``run`` 命令。
 
 .. option:: --timeout TIMEOUT
 
-   Automatically shut down server after ``TIMEOUT`` seconds of inactivity.
-   This is available for the ``start``, ``restart``, and ``run`` commands.
+   在 ``TIMEOUT`` 秒的不活动后自动关闭服务器。此选项适用于 ``start``、``restart`` 和 ``run`` 命令。
 
 .. option:: --update FILE
 
-   Re-check ``FILE``, or add it to the set of files being
-   checked (and check it). This option may be repeated, and it's only available for
-   the ``recheck`` command.  By default, mypy finds and checks all files changed
-   since the previous run and files that depend on them.  However, if you use this option
-   (and/or :option:`--remove`), mypy assumes that only the explicitly
-   specified files have changed. This is only useful to
-   speed up mypy if you type check a very large number of files, and use an
-   external, fast file system watcher, such as `watchman`_ or
-   `watchdog`_, to determine which files got edited or deleted.
-   *Note:* This option is never required and is only available for
-   performance tuning.
+   重新检查 ``FILE``，或将其添加到被检查的文件集中（并检查它）。此选项可以重复，仅适用于 ``recheck`` 命令。默认情况下，mypy 找到并检查自上次运行以来更改的所有文件及其依赖文件。然而，如果使用此选项（和/或 :option:`--remove`），mypy 假设只有明确指定的文件已更改。这仅在您检查大量文件并使用外部快速文件系统监视器（如 `watchman`_ 或 `watchdog`_）来确定哪些文件已被编辑或删除时有用。
+   *注意：* 此选项从不需要，仅用于性能调优。
 
 .. option:: --remove FILE
 
-   Remove ``FILE`` from the set of files being checked. This option may be
-   repeated. This is only available for the
-   ``recheck`` command. See :option:`--update` above for when this may be useful.
-   *Note:* This option is never required and is only available for performance
-   tuning.
+   从被检查的文件集中移除 ``FILE``。此选项可以重复，仅适用于 ``recheck`` 命令。有关何时可能有用，请参见上述 :option:`--update`。
+   *注意：* 此选项从不需要，仅用于性能调优。
 
 .. option:: --fswatcher-dump-file FILE
 
-   Collect information about the current internal file state. This is
-   only available for the ``status`` command. This will dump JSON to
-   ``FILE`` in the format ``{path: [modification_time, size,
-   content_hash]}``. This is useful for debugging the built-in file
-   system watcher. *Note:* This is an internal flag and the format may
-   change.
+   收集当前内部文件状态的信息。此选项仅适用于 ``status`` 命令。此操作将以格式 ``{path: [modification_time, size, content_hash]}`` 将 JSON 转储到 ``FILE``。这对于调试内置文件系统监视器非常有用。*注意：* 这是一个内部标志，格式可能会变化。
 
 .. option:: --perf-stats-file FILE
 
-   Write performance profiling information to ``FILE``. This is only available
-   for the ``check``, ``recheck``, and ``run`` commands.
+   将性能分析信息写入 ``FILE``。此选项仅适用于 ``check``、``recheck`` 和 ``run`` 命令。
 
 .. option:: --export-types
 
-   Store all expression types in memory for future use. This is useful to speed
-   up future calls to ``dmypy inspect`` (but uses more memory). Only valid for
-   ``check``, ``recheck``, and ``run`` command.
+   将所有表达式类型存储在内存中以供将来使用。这对于加速后续调用 ``dmypy inspect`` 很有帮助（但会使用更多内存）。仅对 ``check``、``recheck`` 和 ``run`` 命令有效。
 
-Static inference of annotations
-*******************************
+静态推断注解(Static inference of annotations)
+*******************************************************
 
-The mypy daemon supports (as an experimental feature) statically inferring
-draft function and method type annotations. Use ``dmypy suggest FUNCTION`` to
-generate a draft signature in the format
-``(param_type_1, param_type_2, ...) -> ret_type`` (types are included for all
-arguments, including keyword-only arguments, ``*args`` and ``**kwargs``).
+mypy 守护进程支持（作为实验性功能）静态推断草拟的函数和方法类型注释。使用 ``dmypy suggest FUNCTION`` 生成格式为 ``(param_type_1, param_type_2, ...) -> ret_type`` 的草拟签名（所有参数的类型均包括在内，包括仅限关键字的参数、``*args`` 和 ``**kwargs``）。
 
-This is a low-level feature intended to be used by editor integrations,
-IDEs, and other tools (for example, the `mypy plugin for PyCharm`_),
-to automatically add annotations to source files, or to propose function
-signatures.
+这是一个低级功能，旨在供编辑器集成、IDE 和其他工具使用（例如， `PyCharm 的 mypy 插件`_ ），以自动将注释添加到源文件中，或建议函数签名。
 
-In this example, the function ``format_id()`` has no annotation:
+在此示例中，函数 ``format_id()`` 没有注释：
 
 .. code-block:: python
 
@@ -186,29 +112,21 @@ In this example, the function ``format_id()`` has no annotation:
 
    root = format_id(0)
 
-``dmypy suggest`` uses call sites, return statements, and other heuristics (such as
-looking for signatures in base classes) to infer that ``format_id()`` accepts
-an ``int`` argument and returns a ``str``. Use ``dmypy suggest module.format_id`` to
-print the suggested signature for the function.
+``dmypy suggest`` 使用调用点、返回语句和其他启发式方法（例如查找基类中的签名）推断 ``format_id()`` 接受一个 ``int`` 参数并返回一个 ``str``。使用 ``dmypy suggest module.format_id`` 打印该函数的建议签名。
 
-More generally, the target function may be specified in two ways:
+更一般地，目标函数可以通过两种方式指定：
 
-* By its fully qualified name, i.e. ``[package.]module.[class.]function``.
+* 通过其完全限定名称，即 ``[package.]module.[class.]function``。
 
-* By its location in a source file, i.e. ``/path/to/file.py:line``. The path can be
-  absolute or relative, and ``line`` can refer to any line number within
-  the function body.
+* 通过其在源文件中的位置，即 ``/path/to/file.py:line``。路径可以是绝对路径或相对路径，``line`` 可以指函数体内的任何行号。
 
-This command can also be used to find a more precise alternative for an existing,
-imprecise annotation with some ``Any`` types.
+该命令也可用于查找现有不精确注释中一些 ``Any`` 类型的更精确替代方案。
 
-The following flags customize various aspects of the ``dmypy suggest``
-command.
+以下标志用于自定义 ``dmypy suggest`` 命令的各个方面。
 
 .. option:: --json
 
-   Output the signature as JSON, so that `PyAnnotate`_ can read it and add
-   the signature to the source file. Here is what the JSON looks like:
+   以 JSON 格式输出签名，以便 `PyAnnotate`_ 能够读取并将签名添加到源文件中。JSON 的格式如下：
 
    .. code-block:: python
 
@@ -220,51 +138,36 @@ command.
 
 .. option:: --no-errors
 
-   Only produce suggestions that cause no errors in the checked code. By default,
-   mypy will try to find the most precise type, even if it causes some type errors.
+   仅生成不会导致检查代码中出现错误的建议。默认情况下，mypy 会尝试找到最精确的类型，即使这会导致一些类型错误。
 
 .. option:: --no-any
 
-   Only produce suggestions that don't contain ``Any`` types. By default mypy
-   proposes the most precise signature found, even if it contains ``Any`` types.
+   仅生成不包含 ``Any`` 类型的建议。默认情况下，mypy 提出找到的最精确签名，即使它包含 ``Any`` 类型。
 
 .. option:: --flex-any FRACTION
 
-   Only allow some fraction of types in the suggested signature to be ``Any`` types.
-   The fraction ranges from ``0`` (same as ``--no-any``) to ``1``.
+   仅允许建议签名中的某些类型为 ``Any`` 类型。该比例范围为 ``0`` （与 ``--no-any`` 相同）到 ``1``。
 
 .. option:: --callsites
 
-   Only find call sites for a given function instead of suggesting a type.
-   This will produce a list with line numbers and types of actual
-   arguments for each call: ``/path/to/file.py:line: (arg_type_1, arg_type_2, ...)``.
+   仅查找给定函数的调用点，而不是建议类型。这将生成一个列表，列出每个调用的行号和实际参数的类型：``/path/to/file.py:line: (arg_type_1, arg_type_2, ...)``。
 
 .. option:: --use-fixme NAME
 
-   Use a dummy name instead of plain ``Any`` for types that cannot
-   be inferred. This may be useful to emphasize to a user that a given type
-   couldn't be inferred and needs to be entered manually.
+   对于无法推断的类型，使用一个虚拟名称而不是普通的 ``Any``。这可能有助于提醒用户某个类型无法被推断，需要手动输入。
 
 .. option:: --max-guesses NUMBER
 
-   Set the maximum number of types to try for a function (default: ``64``).
+   设置为一个函数尝试的最大类型数量（默认值：``64``）。
 
-Statically inspect expressions
-******************************
+静态检查表达式(Statically inspect expressions)
+************************************************************
 
-The daemon allows to get declared or inferred type of an expression (or other
-information about an expression, such as known attributes or definition location)
-using ``dmypy inspect LOCATION`` command. The location of the expression should be
-specified in the format ``path/to/file.py:line:column[:end_line:end_column]``.
-Both line and column are 1-based. Both start and end position are inclusive.
-These rules match how mypy prints the error location in error messages.
+守护进程允许使用 ``dmypy inspect LOCATION`` 命令获取表达式的声明或推断类型（或关于表达式的其他信息，例如已知属性或定义位置）。表达式的位置应按格式 ``path/to/file.py:line:column[:end_line:end_column]`` 指定。行和列均为 1 基数。起始和结束位置均为包含性。这些规则与 mypy 在错误消息中打印错误位置的方式一致。
 
-If a span is given (i.e. all 4 numbers), then only an exactly matching expression
-is inspected. If only a position is given (i.e. 2 numbers, line and column), mypy
-will inspect all *expressions*, that include this position, starting from the
-innermost one.
+如果提供了一个范围（即所有 4 个数字），则仅检查与之完全匹配的表达式。如果只提供了一个位置（即 2 个数字，行和列），mypy 将检查所有包含该位置的 *表达式*，从最内层的开始。
 
-Consider this Python code snippet:
+考虑以下 Python 代码片段：
 
 .. code-block:: python
 
@@ -272,44 +175,25 @@ Consider this Python code snippet:
        x
        longer_name
 
-Here to find the type of ``x`` one needs to call ``dmypy inspect src.py:2:5:2:5``
-or ``dmypy inspect src.py:2:5``. While for ``longer_name`` one needs to call
-``dmypy inspect src.py:3:5:3:15`` or, for example, ``dmypy inspect src.py:3:10``.
-Please note that this command is only valid after daemon had a successful type
-check (without parse errors), so that types are populated, e.g. using
-``dmypy check``. In case where multiple expressions match the provided location,
-their types are returned separated by a newline.
+要查找 ``x`` 的类型，需要调用 ``dmypy inspect src.py:2:5:2:5`` 或 ``dmypy inspect src.py:2:5``。而对于 ``longer_name``，需要调用 ``dmypy inspect src.py:3:5:3:15``，或者例如 ``dmypy inspect src.py:3:10``。请注意，此命令仅在守护进程成功完成类型检查（没有解析错误）后有效，以便类型被填充，例如使用 ``dmypy check``。在多个表达式与提供的位置匹配的情况下，其类型将以换行符分隔返回。
 
-Important note: it is recommended to check files with :option:`--export-types`
-since otherwise most inspections will not work without :option:`--force-reload`.
+重要提示：建议使用 :option:`--export-types` 检查文件，否则大多数检查在没有 :option:`--force-reload` 的情况下将无法正常工作。
 
 .. option:: --show INSPECTION
 
-   What kind of inspection to run for expression(s) found. Currently the supported
-   inspections are:
+   要对找到的表达式运行哪种检查。目前支持的检查包括：
 
-   * ``type`` (default): Show the best known type of a given expression.
-   * ``attrs``: Show which attributes are valid for an expression (e.g. for
-     auto-completion). Format is ``{"Base1": ["name_1", "name_2", ...]; "Base2": ...}``.
-     Names are sorted by method resolution order. If expression refers to a module,
-     then module attributes will be under key like ``"<full.module.name>"``.
-   * ``definition`` (experimental): Show the definition location for a name
-     expression or member expression. Format is ``path/to/file.py:line:column:Symbol``.
-     If multiple definitions are found (e.g. for a Union attribute), they are
-     separated by comma.
+   * ``type`` （默认）：显示给定表达式的最佳已知类型。
+   * ``attrs``：显示表达式有效的属性（例如，用于自动补全）。格式为 ``{"Base1": ["name_1", "name_2", ...]; "Base2": ...}``。名称按方法解析顺序排序。如果表达式指向模块，则模块属性将在类似 ``"<full.module.name>"`` 的键下。
+   * ``definition``（实验性）：显示名称表达式或成员表达式的定义位置。格式为 ``path/to/file.py:line:column:Symbol``。如果找到多个定义（例如，对于一个联合属性），它们将用逗号分隔。
 
 .. option:: --verbose
 
-   Increase verbosity of types string representation (can be repeated).
-   For example, this will print fully qualified names of instance types (like
-   ``"builtins.str"``), instead of just a short name (like ``"str"``).
+   增加类型字符串表示的详细程度（可以重复）。例如，这将打印实例类型的完全限定名称（如 ``"builtins.str"``），而不仅仅是简短名称（如 ``"str"``）。
 
 .. option:: --limit NUM
 
-   If the location is given as ``line:column``, this will cause daemon to
-   return only at most ``NUM`` inspections of innermost expressions.
-   Value of 0 means no limit (this is the default). For example, if one calls
-   ``dmypy inspect src.py:4:10 --limit=1`` with this code
+   如果位置以 ``line:column`` 给出，这将导致守护进程仅返回最多 ``NUM`` 个最内层表达式的检查结果。值为 0 意味着没有限制（这是默认值）。例如，如果调用 ``dmypy inspect src.py:4:10 --limit=1``，代码如下：
 
    .. code-block:: python
 
@@ -318,33 +202,23 @@ since otherwise most inspections will not work without :option:`--force-reload`.
       baz: int
       bar(foo(baz))
 
-   This will output just one type ``"int"`` (for ``baz`` name expression).
-   While without the limit option, it would output all three types: ``"int"``,
-   ``"str"``, and ``"None"``.
+   这将只输出一个类型 ``"int"`` （针对 ``baz`` 名称表达式）。而没有限制选项时，它将输出所有三种类型：``"int"``, ``"str"``, 和 ``"None"``。
 
 .. option:: --include-span
 
-   With this option on, the daemon will prepend each inspection result with
-   the full span of corresponding expression, formatted as ``1:2:1:4 -> "int"``.
-   This may be useful in case multiple expressions match a location.
+   启用此选项后，守护进程将为每个检查结果添加对应表达式的完整范围，格式为 ``1:2:1:4 -> "int"``。在多个表达式匹配同一位置时，这可能会很有用。
 
 .. option:: --include-kind
 
-   With this option on, the daemon will prepend each inspection result with
-   the kind of corresponding expression, formatted as ``NameExpr -> "int"``.
-   If both this option and :option:`--include-span` are on, the kind will
-   appear first, for example ``NameExpr:1:2:1:4 -> "int"``.
+   启用此选项后，守护进程将为每个检查结果添加对应表达式的类型，格式为 ``NameExpr -> "int"``。如果同时启用了此选项和 :option:`--include-span`，则类型将优先显示，例如 ``NameExpr:1:2:1:4 -> "int"``。
 
 .. option:: --include-object-attrs
 
-   This will make the daemon include attributes of ``object`` (excluded by
-   default) in case of an ``atts`` inspection.
+   如果进行 ``atts`` 检查，此选项将使守护进程包括 ``object`` 的属性（默认情况下排除）。
 
 .. option:: --union-attrs
 
-   Include attributes valid for some of possible expression types (by default
-   an intersection is returned). This is useful for union types of type variables
-   with values. For example, with this code:
+   包含有效的某些可能表达式类型的属性（默认情况下返回交集）。这对于具有值的类型变量的联合类型很有用。例如，以下代码：
 
    .. code-block:: python
 
@@ -359,22 +233,17 @@ since otherwise most inspections will not work without :option:`--force-reload`.
       var: Union[A, B]
       var
 
-   The command ``dmypy inspect --show attrs src.py:10:1`` will return
-   ``{"A": ["z"], "B": ["z"]}``, while with ``--union-attrs`` it will return
-   ``{"A": ["x", "z"], "B": ["y", "z"]}``.
+   命令 ``dmypy inspect --show attrs src.py:10:1`` 将返回 ``{"A": ["z"], "B": ["z"]}``，而使用 ``--union-attrs`` 时将返回 ``{"A": ["x", "z"], "B": ["y", "z"]}``。
 
 .. option:: --force-reload
 
-   Force re-parsing and re-type-checking file before inspection. By default
-   this is done only when needed (for example file was not loaded from cache
-   or daemon was initially run without ``--export-types`` mypy option),
-   since reloading may be slow (up to few seconds for very large files).
+   在检查之前强制重新解析和重新类型检查文件。默认情况下，这仅在需要时执行（例如，文件未从缓存加载或守护进程最初未使用 ``--export-types`` mypy 选项运行），因为重新加载可能很慢（对于非常大的文件，可能需要几秒钟）。
 
-.. TODO: Add similar section about find usages when added, and then move
-   this to a separate file.
+.. TODO: 添加有关查找用法的类似部分，待添加后将其移至单独文件。
 
 
 .. _watchman: https://facebook.github.io/watchman/
 .. _watchdog: https://pypi.org/project/watchdog/
 .. _PyAnnotate: https://github.com/dropbox/pyannotate
 .. _mypy plugin for PyCharm: https://github.com/dropbox/mypy-PyCharm-plugin
+.. _PyCharm 的 mypy 插件: https://github.com/dropbox/mypy-PyCharm-plugin

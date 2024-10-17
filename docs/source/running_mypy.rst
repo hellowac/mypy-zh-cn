@@ -1,214 +1,132 @@
 .. _running-mypy:
 
-Running mypy and managing imports
+运行 mypy 和管理导入(imports)
 =================================
 
-The :ref:`getting-started` page should have already introduced you
-to the basics of how to run mypy -- pass in the files and directories
-you want to type check via the command line::
+:ref:`getting-started` 页面应该已经向您介绍了如何运行 mypy 的基础知识——通过命令行传入您想要进行类型检查的文件和目录::
 
     $ mypy foo.py bar.py some_directory
 
-This page discusses in more detail how exactly to specify what files
-you want mypy to type check, how mypy discovers imported modules,
-and recommendations on how to handle any issues you may encounter
-along the way.
+本页面将更详细地讨论如何准确指定您希望 mypy 进行类型检查的文件、mypy 如何发现导入的模块，以及如何处理您在此过程中可能遇到的任何问题的建议。
 
-If you are interested in learning about how to configure the
-actual way mypy type checks your code, see our
-:ref:`command-line` guide.
+如果您有兴趣了解如何配置 mypy 实际类型检查代码的方式，请参见我们的 :ref:`command-line` 指南。
 
 
 .. _specifying-code-to-be-checked:
 
-Specifying code to be checked
+指定要检查的代码(Specifying)
 *****************************
 
-Mypy lets you specify what files it should type check in several different ways.
+Mypy 允许您以几种不同的方式指定要进行类型检查的文件。
 
-1.  First, you can pass in paths to Python files and directories you
-    want to type check. For example::
+1.  首先，您可以传入要进行类型检查的 Python 文件和目录的路径。例如::
 
         $ mypy file_1.py foo/file_2.py file_3.pyi some/directory
 
-    The above command tells mypy it should type check all of the provided
-    files together. In addition, mypy will recursively type check the
-    entire contents of any provided directories.
+    上述命令告诉 mypy 应该一起对提供的所有文件进行类型检查。此外，mypy 将递归地对任何提供的目录的全部内容进行类型检查。
 
-    For more details about how exactly this is done, see
-    :ref:`Mapping file paths to modules <mapping-paths-to-modules>`.
+    有关具体操作的更多详细信息，请参见 :ref:`Mapping file paths to modules <mapping-paths-to-modules>`。
 
-2.  Second, you can use the :option:`-m <mypy -m>` flag (long form: :option:`--module <mypy --module>`) to
-    specify a module name to be type checked. The name of a module
-    is identical to the name you would use to import that module
-    within a Python program. For example, running::
+2.  其次，您可以使用 :option:`-m <mypy -m>` 标志（长形式：:option:`--module <mypy --module>`）来指定要进行类型检查的模块名称。模块的名称与您在 Python 程序中导入该模块时使用的名称相同。例如，运行::
 
         $ mypy -m html.parser
 
-    ...will type check the module ``html.parser`` (this happens to be
-    a library stub).
+    ...将对模块 ``html.parser`` 进行类型检查（这恰好是一个库的存根）。
 
-    Mypy will use an algorithm very similar to the one Python uses to
-    find where modules and imports are located on the file system.
-    For more details, see :ref:`finding-imports`.
+    Mypy 将使用与 Python 类似的算法查找模块和导入在文件系统上的位置。有关更多详细信息，请参见 :ref:`finding-imports`。
 
-3.  Third, you can use the :option:`-p <mypy -p>` (long form: :option:`--package <mypy --package>`) flag to
-    specify a package to be (recursively) type checked. This flag
-    is almost identical to the :option:`-m <mypy -m>` flag except that if you give it
-    a package name, mypy will recursively type check all submodules
-    and subpackages of that package. For example, running::
+3.  第三，您可以使用 :option:`-p <mypy -p>` （长形式：:option:`--package <mypy --package>`）标志来指定要进行（递归）类型检查的包。该标志几乎与 :option:`-m <mypy -m>` 标志相同，只是如果您提供包名称，mypy 将递归地对该包的所有子模块和子包进行类型检查。例如，运行::
 
         $ mypy -p html
 
-    ...will type check the entire ``html`` package (of library stubs).
-    In contrast, if we had used the :option:`-m <mypy -m>` flag, mypy would have type
-    checked just ``html``'s ``__init__.py`` file and anything imported
-    from there.
+    ...将对整个 ``html`` 包（库存根）进行类型检查。相反，如果我们使用 :option:`-m <mypy -m>` 标志，mypy 只会对 ``html`` 的 ``__init__.py`` 文件及从中导入的任何内容进行类型检查。
 
-    Note that we can specify multiple packages and modules on the
-    command line. For example::
+    请注意，我们可以在命令行中指定多个包和模块。例如::
 
       $ mypy --package p.a --package p.b --module c
 
-4.  Fourth, you can also instruct mypy to directly type check small
-    strings as programs by using the :option:`-c <mypy -c>` (long form: :option:`--command <mypy --command>`)
-    flag. For example::
+4.  第四，您还可以通过使用 :option:`-c <mypy -c>` （长形式：:option:`--command <mypy --command>`）标志来指示 mypy 直接对小字符串作为程序进行类型检查。例如::
 
         $ mypy -c 'x = [1, 2]; print(x())'
 
-    ...will type check the above string as a mini-program (and in this case,
-    will report that ``list[int]`` is not callable).
+    ...将对上述字符串进行类型检查作为一个迷你程序（在这种情况下，将报告 ``list[int]`` 不是可调用的）。
 
-You can also use the :confval:`files` option in your :file:`mypy.ini` file to specify which
-files to check, in which case you can simply run ``mypy`` with no arguments.
+您还可以在 :file:`mypy.ini` 文件中使用 :confval:`files` 选项来指定要检查的文件，在这种情况下，您可以简单地运行 ``mypy`` 而不带参数。
 
 
-Reading a list of files from a file
+从文件读取文件列表(a list of files)
 ***********************************
 
-Finally, any command-line argument starting with ``@`` reads additional
-command-line arguments from the file following the ``@`` character.
-This is primarily useful if you have a file containing a list of files
-that you want to be type-checked: instead of using shell syntax like::
+最后，任何以 ``@`` 开头的命令行参数都会从 ``@`` 字符后面的文件中读取附加的命令行参数。这主要在您有一个包含要进行类型检查的文件列表的文件时非常有用：可以使用以下方式代替使用 shell 语法::
 
     $ mypy $(cat file_of_files.txt)
 
-you can use this instead::
+您可以改为使用::
 
     $ mypy @file_of_files.txt
 
-This file can technically also contain any command line flag, not
-just file paths. However, if you want to configure many different
-flags, the recommended approach is to use a
-:ref:`configuration file <config-file>` instead.
-
+这个文件在技术上也可以包含任何命令行标志，而不仅仅是文件路径。然而，如果您想配置许多不同的标志，推荐的方法是使用 :ref:`configuration file <config-file>`。
 
 .. _mapping-paths-to-modules:
 
-Mapping file paths to modules
-*****************************
+映射文件路径到到模块(module mapping)
+**********************************************************
 
-One of the main ways you can tell mypy what to type check
-is by providing mypy a list of paths. For example::
+您可以告诉 mypy 要进行类型检查的主要方式之一是提供 mypy 的路径列表。例如::
 
     $ mypy file_1.py foo/file_2.py file_3.pyi some/directory
 
-This section describes how exactly mypy maps the provided paths
-to modules to type check.
+本节描述了 mypy 如何将提供的路径映射到要进行类型检查的模块。
 
-- Mypy will check all paths provided that correspond to files.
+- Mypy 将检查所有与提供的文件对应的路径。
 
-- Mypy will recursively discover and check all files ending in ``.py`` or
-  ``.pyi`` in directory paths provided, after accounting for
-  :option:`--exclude <mypy --exclude>`.
+- Mypy 将递归发现并检查提供的目录路径中以 ``.py`` 或 ``.pyi`` 结尾的所有文件，考虑到 :option:`--exclude <mypy --exclude>`。
 
-- For each file to be checked, mypy will attempt to associate the file (e.g.
-  ``project/foo/bar/baz.py``) with a fully qualified module name (e.g.
-  ``foo.bar.baz``). The directory the package is in (``project``) is then
-  added to mypy's module search paths.
+- 对于每个要检查的文件，mypy 将尝试将文件（例如 ``project/foo/bar/baz.py``）与完全合格的模块名称（例如 ``foo.bar.baz``）关联。包所在的目录（``project``）随后将添加到 mypy 的模块搜索路径中。
 
-How mypy determines fully qualified module names depends on if the options
-:option:`--no-namespace-packages <mypy --no-namespace-packages>` and
-:option:`--explicit-package-bases <mypy --explicit-package-bases>` are set.
+mypy 确定完全合格模块名称的方式取决于是否设置了选项 :option:`--no-namespace-packages <mypy --no-namespace-packages>` 和 :option:`--explicit-package-bases <mypy --explicit-package-bases>`。
 
-1. If :option:`--no-namespace-packages <mypy --no-namespace-packages>` is set,
-   mypy will rely solely upon the presence of ``__init__.py[i]`` files to
-   determine the fully qualified module name. That is, mypy will crawl up the
-   directory tree for as long as it continues to find ``__init__.py`` (or
-   ``__init__.pyi``) files.
+1. 如果设置了 :option:`--no-namespace-packages <mypy --no-namespace-packages>`，mypy 将完全依赖 ``__init__.py[i]`` 文件的存在来确定完全合格的模块名称。也就是说，mypy 将向上遍历目录树，只要继续找到 ``__init__.py`` （或 ``__init__.pyi`` ）文件。
 
-   For example, if your directory tree consists of ``pkg/subpkg/mod.py``, mypy
-   would require ``pkg/__init__.py`` and ``pkg/subpkg/__init__.py`` to exist in
-   order correctly associate ``mod.py`` with ``pkg.subpkg.mod``
+   例如，如果您的目录树包含 ``pkg/subpkg/mod.py``，mypy 将要求 ``pkg/__init__.py`` 和 ``pkg/subpkg/__init__.py`` 存在，以便正确将 ``mod.py`` 关联到 ``pkg.subpkg.mod``。
 
-2. The default case. If :option:`--namespace-packages <mypy
-   --no-namespace-packages>` is on, but :option:`--explicit-package-bases <mypy
-   --explicit-package-bases>` is off, mypy will allow for the possibility that
-   directories without ``__init__.py[i]`` are packages. Specifically, mypy will
-   look at all parent directories of the file and use the location of the
-   highest ``__init__.py[i]`` in the directory tree to determine the top-level
-   package.
+2. 默认情况。如果 :option:`--namespace-packages <mypy --no-namespace-packages>` 打开，但 :option:`--explicit-package-bases <mypy --explicit-package-bases>` 关闭，mypy 将允许没有 ``__init__.py[i]`` 的目录被视为包。具体而言，mypy 将查看文件的所有父目录，并使用目录树中最高的 ``__init__.py[i]`` 的位置来确定顶级包。
 
-   For example, say your directory tree consists solely of ``pkg/__init__.py``
-   and ``pkg/a/b/c/d/mod.py``. When determining ``mod.py``'s fully qualified
-   module name, mypy will look at ``pkg/__init__.py`` and conclude that the
-   associated module name is ``pkg.a.b.c.d.mod``.
+   例如，假设您的目录树仅包含 ``pkg/__init__.py`` 和 ``pkg/a/b/c/d/mod.py``。在确定 ``mod.py`` 的完全合格模块名称时，mypy 将查看 ``pkg/__init__.py`` 并得出关联的模块名称是 ``pkg.a.b.c.d.mod``。
 
-3. You'll notice that the above case still relies on ``__init__.py``. If
-   you can't put an ``__init__.py`` in your top-level package, but still wish to
-   pass paths (as opposed to packages or modules using the ``-p`` or ``-m``
-   flags), :option:`--explicit-package-bases <mypy --explicit-package-bases>`
-   provides a solution.
+3. 您会注意到上述情况仍然依赖于 ``__init__.py``。如果您无法在顶级包中放置 ``__init__.py`` ，但仍希望传递路径（而不是使用 ``-p`` 或 ``-m`` 标志的包或模块），:option:`--explicit-package-bases <mypy --explicit-package-bases>` 提供了解决方案。
 
-   With :option:`--explicit-package-bases <mypy --explicit-package-bases>`, mypy
-   will locate the nearest parent directory that is a member of the ``MYPYPATH``
-   environment variable, the :confval:`mypy_path` config or is the current
-   working directory. Mypy will then use the relative path to determine the
-   fully qualified module name.
+   使用 :option:`--explicit-package-bases <mypy --explicit-package-bases>`，mypy 将定位到最近的父目录，该目录是 ``MYPYPATH`` 环境变量的成员、:confval:`mypy_path` 配置或当前工作目录。然后，mypy 将使用相对路径来确定完全合格的模块名称。
 
-   For example, say your directory tree consists solely of
-   ``src/namespace_pkg/mod.py``. If you run the following command, mypy
-   will correctly associate ``mod.py`` with ``namespace_pkg.mod``::
+   例如，假设您的目录树仅包含 ``src/namespace_pkg/mod.py``。如果您运行以下命令，mypy 将正确地将 ``mod.py`` 关联到 ``namespace_pkg.mod``::
 
        $ MYPYPATH=src mypy --namespace-packages --explicit-package-bases .
 
-If you pass a file not ending in ``.py[i]``, the module name assumed is
-``__main__`` (matching the behavior of the Python interpreter), unless
-:option:`--scripts-are-modules <mypy --scripts-are-modules>` is passed.
+如果您传递一个不以 ``.py[i]`` 结尾的文件，则假定的模块名称是 ``__main__`` （与 Python 解释器的行为相匹配），除非传递了 :option:`--scripts-are-modules <mypy --scripts-are-modules>`。
 
-Passing :option:`-v <mypy -v>` will show you the files and associated module
-names that mypy will check.
+传递 :option:`-v <mypy -v>` 将显示 mypy 将检查的文件和关联的模块名称。
 
 
-How mypy handles imports
-************************
+mypy 如何处理导入(handles imports)
+************************************************
 
-When mypy encounters an ``import`` statement, it will first
-:ref:`attempt to locate <finding-imports>` that module
-or type stubs for that module in the file system. Mypy will then
-type check the imported module. There are three different outcomes
-of this process:
+当 mypy 遇到 ``import`` 语句时，它将首先 :ref:`尝试定位 <finding-imports>` 文件系统中的该模块或该模块的类型存根。然后，mypy 将对导入的模块进行类型检查。这个过程有三种不同的结果：
 
-1.  Mypy is unable to follow the import: the module either does not
-    exist, or is a third party library that does not use type hints.
+1.  Mypy 无法跟踪导入：该模块要么不存在，要么是一个不使用类型提示的第三方库。
 
-2.  Mypy is able to follow and type check the import, but you did
-    not want mypy to type check that module at all.
+2.  Mypy 能够跟踪并进行类型检查，但您并不希望 mypy 检查该模块。
 
-3.  Mypy is able to successfully both follow and type check the
-    module, and you want mypy to type check that module.
+3.  Mypy 成功地跟踪并进行了类型检查，并且您希望 mypy 检查该模块。
 
-The third outcome is what mypy will do in the ideal case. The following
-sections will discuss what to do in the other two cases.
+第三种结果是 mypy 在理想情况下会执行的操作。接下来的部分将讨论在其他两种情况下该怎么做。
 
 .. _ignore-missing-imports:
 .. _fix-missing-imports:
 
-Missing imports
-***************
+缺失导入(Missing imports)
+******************************
 
-When you import a module, mypy may report that it is unable to follow
-the import. This can cause errors that look like the following:
+当您导入一个模块时，mypy 可能会报告它无法跟踪该导入。这可能导致以下类似的错误：
 
 .. code-block:: text
 
@@ -216,117 +134,69 @@ the import. This can cause errors that look like the following:
     main.py:2: error: Library stubs not installed for "requests"
     main.py:3: error: Cannot find implementation or library stub for module named "this_module_does_not_exist"
 
-If you get any of these errors on an import, mypy will assume the type of that
-module is ``Any``, the dynamic type. This means attempting to access any
-attribute of the module will automatically succeed:
+如果您在导入时遇到这些错误中的任何一个，mypy 将假设该模块的类型为 ``Any``，即动态类型。这意味着尝试访问该模块的任何属性将自动成功：
 
 .. code-block:: python
 
     # Error: Cannot find implementation or library stub for module named 'does_not_exist'
     import does_not_exist
 
-    # But this type checks, and x will have type 'Any'
+    # 但这会通过类型检查，x 将具有类型 'Any'
     x = does_not_exist.foobar()
 
-This can result in mypy failing to warn you about errors in your code. Since
-operations on ``Any`` result in ``Any``, these dynamic types can propagate
-through your code, making type checking less effective. See
-:ref:`dynamic-typing` for more information.
+这可能导致 mypy 未能警告您代码中的错误。由于对 ``Any`` 的操作结果仍为 ``Any``，这些动态类型可能在您的代码中传播，从而降低类型检查的有效性。有关更多信息，请参见 :ref:`dynamic-typing`。
 
-The next sections describe what each of these errors means and recommended next steps; scroll to
-the section that matches your error.
+接下来的部分将描述这些错误的含义及推荐的下一步措施；请滚动到与您的错误匹配的部分。
 
 
-Missing library stubs or py.typed marker
-----------------------------------------
+缺失包存根文件或py.typed标记(Missing library stubs)
+----------------------------------------------------------
 
-If you are getting a ``Skipping analyzing X: module is installed, but missing library stubs or py.typed marker``,
-error, this means mypy was able to find the module you were importing, but no
-corresponding type hints.
+如果您收到 ``Skipping analyzing X: module is installed, but missing library stubs or py.typed marker`` 错误，这意味着 mypy 能够找到您正在导入的模块，但没有相应的类型提示。
 
-Mypy will not try inferring the types of any 3rd party libraries you have installed
-unless they either have declared themselves to be
-:ref:`PEP 561 compliant stub package <installed-packages>` (e.g. with a ``py.typed`` file) or have registered
-themselves on `typeshed <https://github.com/python/typeshed>`_, the repository
-of types for the standard library and some 3rd party libraries.
+Mypy 不会尝试推断您安装的任何第三方库的类型，除非它们已声明自己符合 :ref:`PEP 561 compliant stub package <installed-packages>` （例如，包含 ``py.typed`` 文件）或在 `typeshed <https://github.com/python/typeshed>`_ 上注册，该库是标准库和一些第三方库的类型存根。
 
-If you are getting this error, try to obtain type hints for the library you're using:
+如果您遇到此错误，请尝试为您使用的库获取类型提示：
 
-1.  Upgrading the version of the library you're using, in case a newer version
-    has started to include type hints.
+1.  升级您使用的库的版本，以防较新版本开始包含类型提示。
 
-2.  Searching to see if there is a :ref:`PEP 561 compliant stub package <installed-packages>`
-    corresponding to your third party library. Stub packages let you install
-    type hints independently from the library itself.
+2.  查找是否有与您第三方库对应的 :ref:`PEP 561 compliant stub package <installed-packages>`。存根包使您能够独立于库本身安装类型提示。
 
-    For example, if you want type hints for the ``django`` library, you can
-    install the `django-stubs <https://pypi.org/project/django-stubs/>`_ package.
+    例如，如果您想要 ``django`` 库的类型提示，可以安装 `django-stubs <https://pypi.org/project/django-stubs/>`_ 包。
 
-3.  :ref:`Writing your own stub files <stub-files>` containing type hints for
-    the library. You can point mypy at your type hints either by passing
-    them in via the command line, by using the  :confval:`files` or :confval:`mypy_path`
-    config file options, or by
-    adding the location to the ``MYPYPATH`` environment variable.
+3.  :ref:`编写自己的存根文件 <stub-files>`，其中包含库的类型提示。您可以通过命令行传递、使用 :confval:`files` 或 :confval:`mypy_path` 配置文件选项，或通过将位置添加到 ``MYPYPATH`` 环境变量来指向您的类型提示。
 
-    These stub files do not need to be complete! A good strategy is to use
-    :ref:`stubgen <stubgen>`, a program that comes bundled with mypy, to generate a first
-    rough draft of the stubs. You can then iterate on just the parts of the
-    library you need.
+    这些存根文件不需要完整！一个好的策略是使用 :ref:`stubgen <stubgen>`，这是与 mypy 一起打包的程序，生成存根的初步草稿。然后，您可以仅在所需的库部分进行迭代。
 
-    If you want to share your work, you can try contributing your stubs back
-    to the library -- see our documentation on creating
-    :ref:`PEP 561 compliant packages <installed-packages>`.
+    如果您想分享您的工作，可以尝试将您的存根贡献回库中——请参阅我们关于创建 :ref:`PEP 561 compliant packages <installed-packages>` 的文档。
 
-If you are unable to find any existing type hints nor have time to write your
-own, you can instead *suppress* the errors.
+如果您无法找到现有的类型提示，也没有时间编写自己的类型提示，您可以选择 *抑制(suppress)* 错误。
 
-All this will do is make mypy stop reporting an error on the line containing the
-import: the imported module will continue to be of type ``Any``, and mypy may
-not catch errors in its use.
+这只会使 mypy 停止在包含导入的行上报告错误：导入的模块将继续为类型 ``Any``，并且 mypy 可能不会捕获其使用中的错误。
 
-1.  To suppress a *single* missing import error, add a ``# type: ignore`` at the end of the
-    line containing the import.
+1.  要抑制 *单个(single)* 缺失导入错误，请在包含导入的行末尾添加 ``# type: ignore``。
 
-2.  To suppress *all* missing import errors from a single library, add
-    a per-module section to your :ref:`mypy config file <config-file>` setting
-    :confval:`ignore_missing_imports` to True for that library. For example,
-    suppose your codebase
-    makes heavy use of an (untyped) library named ``foobar``. You can silence
-    all import errors associated with that library and that library alone by
-    adding the following section to your config file::
+2.  要抑制来自单个库的 *所有* 缺失导入错误，请在您的 :ref:`mypy 配置文件 <config-file>` 中添加一个每模块部分，将 :confval:`ignore_missing_imports` 设置为 True。例如，假设您的代码库大量使用一个（未类型化的）库 ``foobar``。您可以通过在配置文件中添加以下部分来静默与该库相关的所有导入错误::
 
         [mypy-foobar.*]
         ignore_missing_imports = True
 
-    Note: this option is equivalent to adding a ``# type: ignore`` to every
-    import of ``foobar`` in your codebase. For more information, see the
-    documentation about configuring
-    :ref:`import discovery <config-file-import-discovery>` in config files.
-    The ``.*`` after ``foobar`` will ignore imports of ``foobar`` modules
-    and subpackages in addition to the ``foobar`` top-level package namespace.
+    注意：此选项等同于在您的代码库中对 ``foobar`` 的每个导入添加 ``# type: ignore``。有关更多信息，请参阅有关配置 :ref:`import discovery <config-file-import-discovery>` 的文档。``.*`` 在 ``foobar`` 后将忽略对 ``foobar`` 模块和子包的导入，除了 ``foobar`` 顶级包命名空间之外。
 
-3.  To suppress *all* missing import errors for *all* untyped libraries
-    in your codebase, use :option:`--disable-error-code=import-untyped <mypy --ignore-missing-imports>`.
-    See :ref:`code-import-untyped` for more details on this error code.
+3.  要抑制代码库中 *所有(all)* 未类型化库的 *所有(all)* 缺失导入错误，请使用 :option:`--disable-error-code=import-untyped <mypy --ignore-missing-imports>`。有关此错误代码的更多详细信息，请参见 :ref:`code-import-untyped`。
 
-    You can also set :confval:`disable_error_code`, like so::
+    您还可以像这样设置 :confval:`disable_error_code`::
 
         [mypy]
         disable_error_code = import-untyped
 
-
-    You can also set the :option:`--ignore-missing-imports <mypy --ignore-missing-imports>`
-    command line flag or set the :confval:`ignore_missing_imports` config file
-    option to True in the *global* section of your mypy config file. We
-    recommend avoiding ``--ignore-missing-imports`` if possible: it's equivalent
-    to adding a ``# type: ignore`` to all unresolved imports in your codebase.
+    您还可以设置 :option:`--ignore-missing-imports <mypy --ignore-missing-imports>` 命令行标志，或在您的 mypy 配置文件的 *全局* 部分将 :confval:`ignore_missing_imports` 配置选项设置为 True。如果可能，我们建议避免使用 ``--ignore-missing-imports``：这等同于对您代码库中的所有未解析导入添加 ``# type: ignore``。
 
 
-Library stubs not installed
----------------------------
+包存根文件未安装(not installed)
+------------------------------------
 
-If mypy can't find stubs for a third-party library, and it knows that stubs exist for
-the library, you will get a message like this:
+如果 mypy 找不到第三方库的存根，但它知道该库的存根存在，您将收到如下消息：
 
 .. code-block:: text
 
@@ -334,196 +204,105 @@ the library, you will get a message like this:
     main.py:1: note: Hint: "python3 -m pip install types-PyYAML"
     main.py:1: note: (or run "mypy --install-types" to install all missing stub packages)
 
-You can resolve the issue by running the suggested pip commands.
-If you're running mypy in CI, you can ensure the presence of any stub packages
-you need the same as you would any other test dependency, e.g. by adding them to
-the appropriate ``requirements.txt`` file.
+您可以通过运行建议的 pip 命令来解决此问题。如果您在 CI 中运行 mypy，可以确保您需要的任何存根包的存在，方法与其他测试依赖项相同，例如，将它们添加到相应的 ``requirements.txt`` 文件中。
 
-Alternatively, add the :option:`--install-types <mypy --install-types>`
-to your mypy command to install all known missing stubs:
+另外，您可以将 :option:`--install-types <mypy --install-types>` 添加到您的 mypy 命令中，以安装所有已知的缺失存根：
 
 .. code-block:: text
 
     mypy --install-types
 
-This is slower than explicitly installing stubs, since it effectively
-runs mypy twice -- the first time to find the missing stubs, and
-the second time to type check your code properly after mypy has
-installed the stubs. It also can make controlling stub versions harder,
-resulting in less reproducible type checking.
+这比显式安装存根要慢，因为它实际上运行了两次 mypy——第一次用于查找缺失的存根，第二次在 mypy 安装了存根后正确地进行类型检查。它还可能使控制存根版本变得更加困难，从而导致类型检查的可重复性降低。
 
-By default, :option:`--install-types <mypy --install-types>` shows a confirmation prompt.
-Use :option:`--non-interactive <mypy --non-interactive>` to install all suggested
-stub packages without asking for confirmation *and* type check your code:
+默认情况下，:option:`--install-types <mypy --install-types>` 会显示确认提示。使用 :option:`--non-interactive <mypy --non-interactive>` 可以在不要求确认的情况下安装所有建议的存根包，并对您的代码进行类型检查：
 
-If you've already installed the relevant third-party libraries in an environment
-other than the one mypy is running in, you can use :option:`--python-executable
-<mypy --python-executable>` flag to point to the Python executable for that
-environment, and mypy will find packages installed for that Python executable.
+如果您已经在 mypy 运行的环境之外安装了相关的第三方库，可以使用 :option:`--python-executable <mypy --python-executable>` 标志指向该环境的 Python 可执行文件，mypy 将找到为该 Python 可执行文件安装的包。
 
-If you've installed the relevant stub packages and are still getting this error,
-see the :ref:`section below <missing-type-hints-for-third-party-library>`.
+如果您已安装相关的存根包，但仍然收到此错误，请参见下面的 :ref:`部分 <missing-type-hints-for-third-party-library>`。
 
 .. _missing-type-hints-for-third-party-library:
 
-Cannot find implementation or library stub
+无法找到实现或库存根(Cannot find)
 ------------------------------------------
 
-If you are getting a ``Cannot find implementation or library stub for module``
-error, this means mypy was not able to find the module you are trying to
-import, whether it comes bundled with type hints or not. If you are getting
-this error, try:
+如果您收到 ``Cannot find implementation or library stub for module`` 错误，这意味着 mypy 无法找到您尝试导入的模块，无论它是否附带类型提示。如果您遇到此错误，请尝试：
 
-1.  Making sure your import does not contain a typo.
+1.  确保您的导入没有拼写错误。
 
-2.  If the module is a third party library, making sure that mypy is able
-    to find the interpreter containing the installed library.
+2.  如果该模块是第三方库，请确保 mypy 能够找到包含已安装库的解释器。
 
-    For example, if you are running your code in a virtualenv, make sure
-    to install and use mypy within the virtualenv. Alternatively, if you
-    want to use a globally installed mypy, set the
-    :option:`--python-executable <mypy --python-executable>` command
-    line flag to point the Python interpreter containing your installed
-    third party packages.
+    例如，如果您在 virtualenv 中运行代码，请确保在 virtualenv 中安装和使用 mypy。或者，如果您想使用全局安装的 mypy，请将 :option:`--python-executable <mypy --python-executable>` 命令行标志设置为指向包含您已安装的第三方包的 Python 解释器。
 
-    You can confirm that you are running mypy from the environment you expect
-    by running it like ``python -m mypy ...``. You can confirm that you are
-    installing into the environment you expect by running pip like
-    ``python -m pip ...``.
+    您可以通过像 ``python -m mypy ...`` 这样运行 mypy 来确认您是在预期的环境中运行。您可以通过运行 pip，如 ``python -m pip ...`` 来确认您在预期的环境中安装。
 
-3.  Reading the :ref:`finding-imports` section below to make sure you
-    understand how exactly mypy searches for and finds modules and modify
-    how you're invoking mypy accordingly.
+3.  阅读下面的 :ref:`finding-imports` 部分，以确保您理解 mypy 如何搜索和查找模块，并相应地修改您调用 mypy 的方式。
 
-4.  Directly specifying the directory containing the module you want to
-    type check from the command line, by using the :confval:`mypy_path`
-    or :confval:`files` config file options,
-    or by using the ``MYPYPATH`` environment variable.
+4.  通过使用 :confval:`mypy_path` 或 :confval:`files` 配置文件选项，或使用 ``MYPYPATH`` 环境变量，直接指定包含您要进行类型检查的模块的目录。
 
-    Note: if the module you are trying to import is actually a *submodule* of
-    some package, you should specify the directory containing the *entire* package.
-    For example, suppose you are trying to add the module ``foo.bar.baz``
-    which is located at ``~/foo-project/src/foo/bar/baz.py``. In this case,
-    you must run ``mypy ~/foo-project/src`` (or set the ``MYPYPATH`` to
-    ``~/foo-project/src``).
+    注意：如果您尝试导入的模块实际上是某个包的 *子模块*，则应指定包含 *整个* 包的目录。例如，假设您尝试添加的模块是 ``foo.bar.baz``，它位于 ``~/foo-project/src/foo/bar/baz.py``。在这种情况下，您必须运行 ``mypy ~/foo-project/src``（或将 ``MYPYPATH`` 设置为 ``~/foo-project/src``）。
 
 .. _finding-imports:
 
-How imports are found
-*********************
+如何发现导入(found import)
+******************************
 
-When mypy encounters an ``import`` statement or receives module
-names from the command line via the :option:`--module <mypy --module>` or :option:`--package <mypy --package>`
-flags, mypy tries to find the module on the file system similar
-to the way Python finds it. However, there are some differences.
+当 mypy 遇到 ``import`` 语句或通过 :option:`--module <mypy --module>` 或 :option:`--package <mypy --package>` 标志从命令行接收模块名称时，mypy 尝试在文件系统上查找该模块，类似于 Python 查找模块的方式。然而，有一些不同之处。
 
-First, mypy has its own search path.
-This is computed from the following items:
+首先，mypy 有自己的搜索路径。这是根据以下项目计算得出的：
 
-- The ``MYPYPATH`` environment variable
-  (a list of directories, colon-separated on UNIX systems, semicolon-separated on Windows).
-- The :confval:`mypy_path` config file option.
-- The directories containing the sources given on the command line
-  (see :ref:`Mapping file paths to modules <mapping-paths-to-modules>`).
-- The installed packages marked as safe for type checking (see
-  :ref:`PEP 561 support <installed-packages>`)
-- The relevant directories of the
-  `typeshed <https://github.com/python/typeshed>`_ repo.
+- ``MYPYPATH`` 环境变量（在 UNIX 系统上为以冒号分隔的目录列表，在 Windows 上为以分号分隔）。
+- :confval:`mypy_path` 配置文件选项。
+- 命令行中给出的源代码所包含的目录（见 :ref:`Mapping file paths to modules <mapping-paths-to-modules>`）。
+- 标记为安全进行类型检查的已安装包（见 :ref:`PEP 561 support <installed-packages>`）。
+- `typeshed <https://github.com/python/typeshed>`_ 仓库的相关目录。
 
 .. note::
 
-    You cannot point to a stub-only package (:pep:`561`) via the ``MYPYPATH``, it must be
-    installed (see :ref:`PEP 561 support <installed-packages>`)
+    您不能通过 ``MYPYPATH`` 指向仅包含存根的包 (:pep:`561`)，它必须已安装（见 :ref:`PEP 561 support <installed-packages>`）。
 
-Second, mypy searches for stub files in addition to regular Python files
-and packages.
-The rules for searching for a module ``foo`` are as follows:
+其次，mypy 在查找常规 Python 文件和包时，还会搜索存根文件。查找模块 ``foo`` 的规则如下：
 
-- The search looks in each of the directories in the search path
-  (see above) until a match is found.
-- If a package named ``foo`` is found (i.e. a directory
-  ``foo`` containing an ``__init__.py`` or ``__init__.pyi`` file)
-  that's a match.
-- If a stub file named ``foo.pyi`` is found, that's a match.
-- If a Python module named ``foo.py`` is found, that's a match.
+- 搜索会查看搜索路径中的每个目录（见上文），直到找到匹配项。
+- 如果找到名为 ``foo`` 的包（即一个包含 ``__init__.py`` 或 ``__init__.pyi`` 文件的目录 ``foo``），那么这是一个匹配。
+- 如果找到名为 ``foo.pyi`` 的存根文件，那么这是一个匹配。
+- 如果找到名为 ``foo.py`` 的 Python 模块，那么这是一个匹配。
 
-These matches are tried in order, so that if multiple matches are found
-in the same directory on the search path
-(e.g. a package and a Python file, or a stub file and a Python file)
-the first one in the above list wins.
+这些匹配项是按顺序尝试的，因此如果在搜索路径的同一目录中找到多个匹配项（例如，一个包和一个 Python 文件，或一个存根文件和一个 Python 文件），则列表中第一个的匹配将胜出。
 
-In particular, if a Python file and a stub file are both present in the
-same directory on the search path, only the stub file is used.
-(However, if the files are in different directories, the one found
-in the earlier directory is used.)
+特别是，如果在搜索路径的同一目录中同时存在一个 Python 文件和一个存根文件，则仅使用存根文件。（但是，如果文件位于不同的目录中，则使用在较早的目录中找到的文件。）
 
-Setting :confval:`mypy_path`/``MYPYPATH`` is mostly useful in the case
-where you want to try running mypy against multiple distinct
-sets of files that happen to share some common dependencies.
+设置 :confval:`mypy_path`/``MYPYPATH`` 在您想要尝试对多组不同文件进行 mypy 检查且这些文件恰好共享一些公共依赖项的情况下特别有用。
 
-For example, if you have multiple projects that happen to be
-using the same set of work-in-progress stubs, it could be
-convenient to just have your ``MYPYPATH`` point to a single
-directory containing the stubs.
+例如，如果您有多个项目恰好使用同一组正在进行中的存根，直接将 ``MYPYPATH`` 指向包含存根的单一目录可能会更方便。
 
 .. _follow-imports:
 
-Following imports
-*****************
+跟踪导入(Following imports)
+**********************************
 
-Mypy is designed to :ref:`doggedly follow all imports <finding-imports>`,
-even if the imported module is not a file you explicitly wanted mypy to check.
+Mypy 旨在 :ref:`坚持跟踪所有导入 <finding-imports>`，即使导入的模块不是您明确希望 mypy 检查的文件。
 
-For example, suppose we have two modules ``mycode.foo`` and ``mycode.bar``:
-the former has type hints and the latter does not. We run
-:option:`mypy -m mycode.foo <mypy -m>` and mypy discovers that ``mycode.foo`` imports
-``mycode.bar``.
+例如，假设我们有两个模块 ``mycode.foo`` 和 ``mycode.bar``：前者有类型提示，后者没有。我们运行 :option:`mypy -m mycode.foo <mypy -m>`，mypy 发现 ``mycode.foo`` 导入了 ``mycode.bar``。
 
-How do we want mypy to type check ``mycode.bar``? Mypy's behaviour here is
-configurable -- although we **strongly recommend** using the default --
-by using the :option:`--follow-imports <mypy --follow-imports>` flag. This flag
-accepts one of four string values:
+我们希望 mypy 如何检查 ``mycode.bar`` 的类型？这里 mypy 的行为是可配置的——尽管我们 **强烈推荐** 使用默认设置——通过使用 :option:`--follow-imports <mypy --follow-imports>` 标志。此标志接受四个字符串值之一：
 
--   ``normal`` (the default, recommended) follows all imports normally and
-    type checks all top level code (as well as the bodies of all
-    functions and methods with at least one type annotation in
-    the signature).
+-   ``normal`` （默认，推荐）正常跟踪所有导入并检查所有顶级代码的类型（以及所有具有至少一个类型注释的函数和方法的主体）。
 
--   ``silent`` behaves in the same way as ``normal`` but will
-    additionally *suppress* any error messages.
+-   ``silent`` 的行为与 ``normal`` 相同，但会额外 *抑制(suppress)* 任何错误消息。
 
--   ``skip`` will *not* follow imports and instead will silently
-    replace the module (and *anything imported from it*) with an
-    object of type ``Any``.
+-   ``skip`` *不(not)* 跟踪导入，而是会静默地将模块（及其 *任何导入的内容(anything imported from it)* ）替换为类型为 ``Any`` 的对象。
 
--   ``error`` behaves in the same way as ``skip`` but is not quite as
-    silent -- it will flag the import as an error, like this::
+-   ``error`` 的行为与 ``skip`` 相同，但并不完全静默——它会将导入标记为错误，如下所示::
 
         main.py:1: note: Import of "mycode.bar" ignored
         main.py:1: note: (Using --follow-imports=error, module not passed on command line)
 
-If you are starting a new codebase and plan on using type hints from
-the start, we recommend you use either :option:`--follow-imports=normal <mypy --follow-imports>`
-(the default) or :option:`--follow-imports=error <mypy --follow-imports>`. Either option will help
-make sure you are not skipping checking any part of your codebase by
-accident.
+如果您正在启动一个新的代码库并计划从一开始就使用类型提示，我们建议您使用 :option:`--follow-imports=normal <mypy --follow-imports>` （默认）或 :option:`--follow-imports=error <mypy --follow-imports>` 。任一选项将帮助确保您不会意外跳过检查代码库的任何部分。
 
-If you are planning on adding type hints to a large, existing code base,
-we recommend you start by trying to make your entire codebase (including
-files that do not use type hints) pass under :option:`--follow-imports=normal <mypy --follow-imports>`.
-This is usually not too difficult to do: mypy is designed to report as
-few error messages as possible when it is looking at unannotated code.
+如果您计划在一个大型现有代码库中添加类型提示，我们建议您首先尝试使整个代码库（包括不使用类型提示的文件）在 :option:`--follow-imports=normal <mypy --follow-imports>` 下通过。这通常并不太难做到：mypy 设计时考虑了在查看未注解代码时报告尽可能少的错误消息。
 
-Only if doing this is intractable, we recommend passing mypy just the files
-you want to type check and use :option:`--follow-imports=silent <mypy --follow-imports>`. Even if
-mypy is unable to perfectly type check a file, it can still glean some
-useful information by parsing it (for example, understanding what methods
-a given object has). See :ref:`existing-code` for more recommendations.
+仅当这样做不可行时，我们建议您只传递希望检查的文件，并使用 :option:`--follow-imports=silent <mypy --follow-imports>`。即使 mypy 无法完美地检查一个文件的类型，它仍然可以通过解析文件获取一些有用的信息（例如，理解某个对象具有的方法）。有关更多建议，请参见 :ref:`existing-code`。
 
-We do not recommend using ``skip`` unless you know what you are doing:
-while this option can be quite powerful, it can also cause many
-hard-to-debug errors.
+我们不推荐使用 ``skip``，除非您知道自己在做什么：虽然此选项可能非常强大，但也可能导致许多难以调试的错误。
 
-Adjusting import following behaviour is often most useful when restricted to
-specific modules. This can be accomplished by setting a per-module
-:confval:`follow_imports` config option.
+调整导入跟踪行为通常在限制于特定模块时最有用。这可以通过设置每个模块的 :confval:`follow_imports` 配置选项来实现。

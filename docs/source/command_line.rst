@@ -2,207 +2,154 @@
 
 .. program:: mypy
 
-The mypy command line
+mypy命令行(command line)
 =====================
 
-This section documents mypy's command line interface. You can view
-a quick summary of the available flags by running :option:`mypy --help`.
+本节记录了 mypy 的命令行接口。您可以通过运行 :option:`mypy --help` 查看可用标志的快速摘要。
 
 .. note::
 
-   Command line flags are liable to change between releases.
+   命令行标志可能在不同版本之间发生变化。
 
+指定类型检查的内容(what to type check)
+***************************************
 
-Specifying what to type check
-*****************************
-
-By default, you can specify what code you want mypy to type check
-by passing in the paths to what you want to have type checked::
+默认情况下，您可以通过传递希望 mypy 检查的路径来指定要进行类型检查的代码::
 
     $ mypy foo.py bar.py some_directory
 
-Note that directories are checked recursively.
+请注意，目录会递归检查。
 
-Mypy also lets you specify what code to type check in several other
-ways. A short summary of the relevant flags is included below:
-for full details, see :ref:`running-mypy`.
+Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以下是相关标志的简要总结；有关完整细节，请参见 :ref:`running-mypy`。
 
 .. option:: -m MODULE, --module MODULE
 
-    Asks mypy to type check the provided module. This flag may be
-    repeated multiple times.
+    要求 mypy 对提供的模块进行类型检查。此标志可以重复多次。
 
-    Mypy *will not* recursively type check any submodules of the provided
-    module.
+    Mypy *不会* 递归检查提供的模块的任何子模块。
 
 .. option:: -p PACKAGE, --package PACKAGE
 
-    Asks mypy to type check the provided package. This flag may be
-    repeated multiple times.
+    要求 mypy 对提供的包进行类型检查。此标志可以重复多次。
 
-    Mypy *will* recursively type check any submodules of the provided
-    package. This flag is identical to :option:`--module` apart from this
-    behavior.
+    Mypy *会* 递归检查提供的包的任何子模块。此标志的行为与 :option:`--module` 相同，除了这一点。
 
 .. option:: -c PROGRAM_TEXT, --command PROGRAM_TEXT
 
-    Asks mypy to type check the provided string as a program.
-
+    要求 mypy 对提供的字符串作为程序进行类型检查。
 
 .. option:: --exclude
 
-    A regular expression that matches file names, directory names and paths
-    which mypy should ignore while recursively discovering files to check.
-    Use forward slashes on all platforms.
+    一个正则表达式，用于匹配文件名、目录名和路径，mypy 在递归发现要检查的文件时应忽略这些匹配项。所有平台上均使用正斜杠。
 
-    For instance, to avoid discovering any files named `setup.py` you could
-    pass ``--exclude '/setup\.py$'``. Similarly, you can ignore discovering
-    directories with a given name by e.g. ``--exclude /build/`` or
-    those matching a subpath with ``--exclude /project/vendor/``. To ignore
-    multiple files / directories / paths, you can provide the --exclude
-    flag more than once, e.g ``--exclude '/setup\.py$' --exclude '/build/'``.
+    例如，为了避免发现任何名为 `setup.py` 的文件，您可以传递 ``--exclude '/setup\.py$'``。同样，您可以通过 e.g. ``--exclude /build/`` 忽略发现具有给定名称的目录，或者通过 ``--exclude /project/vendor/`` 忽略与子路径匹配的目录。要忽略多个文件/目录/路径，您可以多次提供 --exclude 标志，例如 ``--exclude '/setup\.py$' --exclude '/build/'``。
 
-    Note that this flag only affects recursive directory tree discovery, that
-    is, when mypy is discovering files within a directory tree or submodules of
-    a package to check. If you pass a file or module explicitly it will still be
-    checked. For instance, ``mypy --exclude '/setup.py$'
-    but_still_check/setup.py``.
+    请注意，此标志仅影响递归目录树发现，即当 mypy 在发现要检查的目录树或包的子模块中的文件时。如果您明确传递一个文件或模块，它仍然会被检查。例如，``mypy --exclude '/setup.py$'
+    but_still_check/setup.py``。
 
-    In particular, ``--exclude`` does not affect mypy's :ref:`import following
-    <follow-imports>`. You can use a per-module :confval:`follow_imports` config
-    option to additionally avoid mypy from following imports and checking code
-    you do not wish to be checked.
+    特别地，``--exclude`` 不影响 mypy 的 :ref:`导入跟踪 <follow-imports>`。您可以使用每个模块的 :confval:`follow_imports` 配置选项，进一步避免 mypy 跟踪导入并检查您不希望被检查的代码。
 
-    Note that mypy will never recursively discover files and directories named
-    "site-packages", "node_modules" or "__pycache__", or those whose name starts
-    with a period, exactly as ``--exclude
-    '/(site-packages|node_modules|__pycache__|\..*)/$'`` would. Mypy will also
-    never recursively discover files with extensions other than ``.py`` or
-    ``.pyi``.
+    请注意，mypy 永远不会递归发现名为 "site-packages"、"node_modules" 或 "__pycache__" 的文件和目录，或那些名称以句点开头的文件和目录，正如 ``--exclude
+    '/(site-packages|node_modules|__pycache__|\..*)/$'`` 所示。Mypy 也不会递归发现扩展名不是 ``.py`` 或 ``.pyi`` 的文件。
 
 
-Optional arguments
+可选参数(arguments)
 ******************
 
 .. option:: -h, --help
 
-    Show help message and exit.
+    显示帮助信息并退出。
 
 .. option:: -v, --verbose
 
-    More verbose messages.
+    显示更详细的信息。
 
 .. option:: -V, --version
 
-    Show program's version number and exit.
+    显示程序的版本号并退出。
 
 .. option:: -O FORMAT, --output FORMAT {json}
 
-    Set a custom output format.
+    设置自定义输出格式。
 
 .. _config-file-flag:
 
-Config file
-***********
+配置文件(Config file)
+***********************
 
 .. option:: --config-file CONFIG_FILE
 
-    This flag makes mypy read configuration settings from the given file.
+    此标志使 mypy 从指定文件读取配置设置。
 
-    By default settings are read from ``mypy.ini``, ``.mypy.ini``, ``pyproject.toml``, or ``setup.cfg``
-    in the current directory. Settings override mypy's built-in defaults and
-    command line flags can override settings.
+    默认情况下，设置从当前目录中的 ``mypy.ini``, ``.mypy.ini``, ``pyproject.toml`` 或 ``setup.cfg`` 读取。设置会覆盖 mypy 的内置默认值，命令行标志也可以覆盖设置。
 
-    Specifying :option:`--config-file= <--config-file>` (with no filename) will ignore *all*
-    config files.
+    指定 :option:`--config-file= <--config-file>` （不带文件名）将忽略 *所有* 配置文件。
 
-    See :ref:`config-file` for the syntax of configuration files.
+    请参见 :ref:`config-file` 了解配置文件的语法。
 
 .. option:: --warn-unused-configs
 
-    This flag makes mypy warn about unused ``[mypy-<pattern>]`` config
-    file sections.
-    (This requires turning off incremental mode using :option:`--no-incremental`.)
+    此标志使 mypy 对未使用的 ``[mypy-<pattern>]`` 配置文件部分发出警告。
+    （这需要使用 :option:`--no-incremental` 关闭增量模式。）
 
 
 .. _import-discovery:
 
-Import discovery
+导入发现(Import discovery)
 ****************
 
-The following flags customize how exactly mypy discovers and follows
-imports.
+以下标志自定义 mypy 如何发现和跟踪导入。
 
 .. option:: --explicit-package-bases
 
-    This flag tells mypy that top-level packages will be based in either the
-    current directory, or a member of the ``MYPYPATH`` environment variable or
-    :confval:`mypy_path` config option. This option is only useful
-    in the absence of `__init__.py`. See :ref:`Mapping file
-    paths to modules <mapping-paths-to-modules>` for details.
+    此标志告诉 mypy 顶级包将基于当前目录、``MYPYPATH`` 环境变量或 :confval:`mypy_path` 配置选项的某个成员。此选项仅在缺少 `__init__.py` 的情况下有用。有关详细信息，请参见 :ref:`Mapping file paths to modules <mapping-paths-to-modules>`。
 
 .. option:: --ignore-missing-imports
 
-    This flag makes mypy ignore all missing imports. It is equivalent
-    to adding ``# type: ignore`` comments to all unresolved imports
-    within your codebase.
+    此标志使 mypy 忽略所有缺失的导入。它等同于在代码库中所有未解析的导入上添加 ``# type: ignore`` 注释。
 
-    Note that this flag does *not* suppress errors about missing names
-    in successfully resolved modules. For example, if one has the
-    following files::
+    请注意，此标志 *不* 会抑制关于成功解析的模块中缺失名称的错误。例如，如果有以下文件::
 
         package/__init__.py
         package/mod.py
 
-    Then mypy will generate the following errors with :option:`--ignore-missing-imports`:
+    那么 mypy 在使用 :option:`--ignore-missing-imports` 时会生成以下错误：
 
     .. code-block:: python
 
-        import package.unknown      # No error, ignored
-        x = package.unknown.func()  # OK. 'func' is assumed to be of type 'Any'
+        import package.unknown      # 无错误，被忽略
+        x = package.unknown.func()  # OK. 'func' 被假定为类型 'Any'
 
-        from package import unknown          # No error, ignored
-        from package.mod import NonExisting  # Error: Module has no attribute 'NonExisting'
+        from package import unknown          # 无错误，被忽略
+        from package.mod import NonExisting  # 错误：模块没有属性 'NonExisting'
 
-    For more details, see :ref:`ignore-missing-imports`.
+    有关更多详细信息，请参见 :ref:`ignore-missing-imports`。
 
 .. option:: --follow-imports {normal,silent,skip,error}
 
-    This flag adjusts how mypy follows imported modules that were not
-    explicitly passed in via the command line.
+    此标志调整 mypy 跟踪未通过命令行显式传递的导入模块的方式。
 
-    The default option is ``normal``: mypy will follow and type check
-    all modules. For more information on what the other options do,
-    see :ref:`Following imports <follow-imports>`.
+    默认选项为 ``normal``：mypy 将跟踪并类型检查所有模块。有关其他选项的更多信息，请参见 :ref:`Following imports <follow-imports>`。
 
 .. option:: --python-executable EXECUTABLE
 
-    This flag will have mypy collect type information from :pep:`561`
-    compliant packages installed for the Python executable ``EXECUTABLE``.
-    If not provided, mypy will use PEP 561 compliant packages installed for
-    the Python executable running mypy.
+    此标志将使 mypy 从为 Python 可执行文件 ``EXECUTABLE`` 安装的 :pep:`561` 兼容包中收集类型信息。如果未提供，mypy 将使用为运行 mypy 的 Python 可执行文件安装的 PEP 561 兼容包。
 
-    See :ref:`installed-packages` for more on making PEP 561 compliant packages.
+    有关如何制作 PEP 561 兼容包的更多信息，请参见 :ref:`installed-packages`。
 
 .. option:: --no-site-packages
 
-    This flag will disable searching for :pep:`561` compliant packages. This
-    will also disable searching for a usable Python executable.
+    此标志将禁用搜索 :pep:`561` 兼容包。这也将禁用搜索可用的 Python 可执行文件。
 
-    Use this  flag if mypy cannot find a Python executable for the version of
-    Python being checked, and you don't need to use PEP 561 typed packages.
-    Otherwise, use :option:`--python-executable`.
+    如果 mypy 无法为正在检查的 Python 版本找到 Python 可执行文件，并且您不需要使用 PEP 561 类型的包，则使用此标志。否则，请使用 :option:`--python-executable`。
 
 .. option:: --no-silence-site-packages
 
-    By default, mypy will suppress any error messages generated within :pep:`561`
-    compliant packages. Adding this flag will disable this behavior.
+    默认情况下，mypy 会抑制在 :pep:`561` 兼容包内生成的任何错误消息。添加此标志将禁用此行为。
 
 .. option:: --fast-module-lookup
 
-    The default logic used to scan through search paths to resolve imports has a
-    quadratic worse-case behavior in some cases, which is for instance triggered
-    by a large number of folders sharing a top-level namespace as in::
+    用于扫描搜索路径以解析导入的默认逻辑在某些情况下具有二次最坏情况的行为，例如，当大量文件夹共享顶级命名空间时，如下所示::
 
         foo/
             company/
@@ -218,148 +165,98 @@ imports.
                     c.py
         ...
 
-    If you are in this situation, you can enable an experimental fast path by
-    setting the :option:`--fast-module-lookup` option.
-
+    如果您处于这种情况，可以通过设置 :option:`--fast-module-lookup` 选项来启用实验性的快速路径。
 
 .. option:: --no-namespace-packages
 
-    This flag disables import discovery of namespace packages (see :pep:`420`).
-    In particular, this prevents discovery of packages that don't have an
-    ``__init__.py`` (or ``__init__.pyi``) file.
+    此标志禁用命名空间包的导入发现（见 :pep:`420`）。特别是，这会阻止发现没有 ``__init__.py`` （或 ``__init__.pyi`` ）文件的包。
 
-    This flag affects how mypy finds modules and packages explicitly passed on
-    the command line. It also affects how mypy determines fully qualified module
-    names for files passed on the command line. See :ref:`Mapping file paths to
-    modules <mapping-paths-to-modules>` for details.
+    此标志影响 mypy 如何查找命令行中显式传递的模块和包。它还影响 mypy 如何确定命令行中传递的文件的完全限定模块名称。有关详细信息，请参见 :ref:`映射文件路径到模块 <mapping-paths-to-modules>`。
 
 
 .. _platform-configuration:
 
-Platform configuration
-**********************
+平台配置(Platform configuration)
+**************************************
 
-By default, mypy will assume that you intend to run your code using the same
-operating system and Python version you are using to run mypy itself. The
-following flags let you modify this behavior.
+默认情况下，mypy 会假定您打算在与运行 mypy 本身相同的操作系统和 Python 版本上运行代码。以下标志允许您修改此行为。
 
-For more information on how to use these flags, see :ref:`version_and_platform_checks`.
+有关如何使用这些标志的更多信息，请参见 :ref:`version_and_platform_checks`。
 
 .. option:: --python-version X.Y
 
-    This flag will make mypy type check your code as if it were
-    run under Python version X.Y. Without this option, mypy will default to using
-    whatever version of Python is running mypy.
+    此标志将使 mypy 将您的代码类型检查为在 Python 版本 X.Y 下运行。未使用此选项时，mypy 默认使用运行 mypy 的 Python 版本。
 
-    This flag will attempt to find a Python executable of the corresponding
-    version to search for :pep:`561` compliant packages. If you'd like to
-    disable this, use the :option:`--no-site-packages` flag (see
-    :ref:`import-discovery` for more details).
+    此标志将尝试查找对应版本的 Python 可执行文件，以搜索 :pep:`561` 兼容包。如果您希望禁用此功能，请使用 :option:`--no-site-packages` 标志（有关更多详细信息，请参见 :ref:`import-discovery`）。
 
 .. option:: --platform PLATFORM
 
-    This flag will make mypy type check your code as if it were
-    run under the given operating system. Without this option, mypy will
-    default to using whatever operating system you are currently using.
+    此标志将使 mypy 将您的代码类型检查为在给定操作系统下运行。未使用此选项时，mypy 默认使用您当前使用的操作系统。
 
-    The ``PLATFORM`` parameter may be any string supported by
-    :py:data:`sys.platform`.
+    ``PLATFORM`` 参数可以是 :py:data:`sys.platform` 支持的任何字符串。
 
 .. _always-true:
 
 .. option:: --always-true NAME
 
-    This flag will treat all variables named ``NAME`` as
-    compile-time constants that are always true.  This flag may
-    be repeated.
+    此标志将把所有名为 ``NAME`` 的变量视为总是为真的编译时常量。此标志可以重复使用。
 
 .. option:: --always-false NAME
 
-    This flag will treat all variables named ``NAME`` as
-    compile-time constants that are always false.  This flag may
-    be repeated.
+    此标志将把所有名为 ``NAME`` 的变量视为总是为假的编译时常量。此标志可以重复使用。
 
 
 .. _disallow-dynamic-typing:
 
-Disallow dynamic typing
-***********************
+禁止动态类型(Disallow dynamic typing)
+**************************************
 
-The ``Any`` type is used to represent a value that has a :ref:`dynamic type <dynamic-typing>`.
-The ``--disallow-any`` family of flags will disallow various uses of the ``Any`` type in
-a module -- this lets us strategically disallow the use of dynamic typing in a controlled way.
+``Any`` 类型用于表示具有 :ref:`dynamic type <dynamic-typing>` 的值。``--disallow-any`` 系列标志将禁止在模块中以各种方式使用 ``Any`` 类型——这让我们能够以受控的方式战略性地禁止动态类型的使用。
 
-The following options are available:
+以下选项可用：
 
 .. option:: --disallow-any-unimported
 
-    This flag disallows usage of types that come from unfollowed imports
-    (such types become aliases for ``Any``). Unfollowed imports occur either
-    when the imported module does not exist or when :option:`--follow-imports=skip <--follow-imports>`
-    is set.
+    此标志禁止使用来自未跟踪导入的类型（此类类型变为 ``Any`` 的别名）。未跟踪导入发生在导入的模块不存在或设置了 :option:`--follow-imports=skip <--follow-imports>` 时。
 
 .. option:: --disallow-any-expr
 
-    This flag disallows all expressions in the module that have type ``Any``.
-    If an expression of type ``Any`` appears anywhere in the module
-    mypy will output an error unless the expression is immediately
-    used as an argument to :py:func:`~typing.cast` or assigned to a variable with an
-    explicit type annotation.
+    此标志禁止模块中所有类型为 ``Any`` 的表达式。如果类型为 ``Any`` 的表达式在模块中的任何地方出现，mypy 将输出错误，除非该表达式立即用作 :py:func:`~typing.cast` 的参数或赋值给具有显式类型注释的变量。
 
-    In addition, declaring a variable of type ``Any``
-    or casting to type ``Any`` is not allowed. Note that calling functions
-    that take parameters of type ``Any`` is still allowed.
+    此外，声明类型为 ``Any`` 的变量或转换为类型 ``Any`` 也是不允许的。请注意，调用参数类型为 ``Any`` 的函数仍然是允许的。
 
 .. option:: --disallow-any-decorated
 
-    This flag disallows functions that have ``Any`` in their signature
-    after decorator transformation.
+    此标志禁止在装饰器转换后签名中包含 ``Any`` 的函数。
 
 .. option:: --disallow-any-explicit
 
-    This flag disallows explicit ``Any`` in type positions such as type
-    annotations and generic type parameters.
+    此标志禁止在类型位置中显式使用 ``Any``，如类型注释和泛型类型参数。
 
 .. option:: --disallow-any-generics
 
-    This flag disallows usage of generic types that do not specify explicit
-    type parameters. For example, you can't use a bare ``x: list``. Instead, you
-    must always write something like ``x: list[int]``.
+    此标志禁止使用未指定显式类型参数的泛型类型。例如，您不能使用裸的 ``x: list``。相反，您必须始终写成 ``x: list[int]``。
 
 .. option:: --disallow-subclassing-any
 
-    This flag reports an error whenever a class subclasses a value of
-    type ``Any``.  This may occur when the base class is imported from
-    a module that doesn't exist (when using
-    :option:`--ignore-missing-imports`) or is
-    ignored due to :option:`--follow-imports=skip <--follow-imports>` or a
-    ``# type: ignore`` comment on the ``import`` statement.
+    此标志在类继承类型为 ``Any`` 的值时报告错误。这可能发生在基类从不存在的模块中导入（使用 :option:`--ignore-missing-imports`）或由于 :option:`--follow-imports=skip <--follow-imports>` 或 ``import`` 语句上的 ``# type: ignore`` 注释而被忽略。
 
-    Since the module is silenced, the imported class is given a type of ``Any``.
-    By default mypy will assume that the subclass correctly inherited
-    the base class even though that may not actually be the case.  This
-    flag makes mypy raise an error instead.
-
+    由于模块被静默处理，导入的类被赋予类型 ``Any``。默认情况下，mypy 会假定子类正确继承了基类，即使实际上可能并非如此。此标志使 mypy 报告错误。
 
 .. _untyped-definitions-and-calls:
 
-Untyped definitions and calls
-*****************************
+未类型化的定义和调用(Untyped definitions and calls)
+*****************************************************
 
-The following flags configure how mypy handles untyped function
-definitions or calls.
+以下标志配置 mypy 如何处理未类型化的函数定义或调用。
 
 .. option:: --disallow-untyped-calls
 
-    This flag reports an error whenever a function with type annotations
-    calls a function defined without annotations.
+    此标志在函数带有类型注解的情况下，报告调用未定义注解的函数时的错误。
 
 .. option:: --untyped-calls-exclude
 
-    This flag allows to selectively disable :option:`--disallow-untyped-calls`
-    for functions and methods defined in specific packages, modules, or classes.
-    Note that each exclude entry acts as a prefix. For example (assuming there
-    are no type annotations for ``third_party_lib`` available):
+    此标志允许有选择性地禁用 :option:`--disallow-untyped-calls`，适用于特定包、模块或类中定义的函数和方法。请注意，每个排除条目作为前缀起作用。例如（假设没有可用的 ``third_party_lib`` 的类型注解）：
 
     .. code-block:: python
 
@@ -370,11 +267,11 @@ definitions or calls.
         from third_party_lib.module_b import other_func
         import foo
 
-        some_func()  # OK, function comes from module `third_party_lib.module_a`
-        other_func()  # E: Call to untyped function "other_func" in typed context
+        some_func()  # OK，函数来自模块 `third_party_lib.module_a`
+        other_func()  # E: 在类型上下文中调用未类型化函数 "other_func"
 
-        foo.A().meth()  # OK, method was defined in class `foo.A`
-        foo.B().meth()  # E: Call to untyped function "meth" in typed context
+        foo.A().meth()  # OK，方法在类 `foo.A` 中定义
+        foo.B().meth()  # E: 在类型上下文中调用未类型化函数 "meth"
 
         # file foo.py
         class A:
@@ -384,276 +281,217 @@ definitions or calls.
 
 .. option:: --disallow-untyped-defs
 
-    This flag reports an error whenever it encounters a function definition
-    without type annotations or with incomplete type annotations.
-    (a superset of :option:`--disallow-incomplete-defs`).
+    此标志在遇到没有类型注解或带有不完整类型注解的函数定义时报告错误。
+    （是 :option:`--disallow-incomplete-defs` 的超集）。
 
-    For example, it would report an error for :code:`def f(a, b)` and :code:`def f(a: int, b)`.
+    例如，它会对 :code:`def f(a, b)` 和 :code:`def f(a: int, b)` 报告错误。
 
 .. option:: --disallow-incomplete-defs
 
-    This flag reports an error whenever it encounters a partly annotated
-    function definition, while still allowing entirely unannotated definitions.
+    此标志在遇到部分注解的函数定义时报告错误，同时仍允许完全未注解的定义。
 
-    For example, it would report an error for :code:`def f(a: int, b)` but not :code:`def f(a, b)`.
+    例如，它会对 :code:`def f(a: int, b)` 报告错误，但不会对 :code:`def f(a, b)` 报告错误。
 
 .. option:: --check-untyped-defs
 
-    This flag is less severe than the previous two options -- it type checks
-    the body of every function, regardless of whether it has type annotations.
-    (By default the bodies of functions without annotations are not type
-    checked.)
+    此标志的严厉程度低于前两个选项——它对每个函数的主体进行类型检查，无论其是否有类型注解。
+    （默认情况下，未注解的函数主体不进行类型检查。）
 
-    It will assume all arguments have type ``Any`` and always infer ``Any``
-    as the return type.
+    它将假定所有参数的类型为 ``Any``，并始终推断返回类型为 ``Any``。
 
 .. option:: --disallow-untyped-decorators
 
-    This flag reports an error whenever a function with type annotations
-    is decorated with a decorator without annotations.
+    此标志在带有类型注解的函数被未注解的装饰器装饰时报告错误。
 
 
 .. _none-and-optional-handling:
 
-None and Optional handling
-**************************
+None 和 Optional 处理(None and Optional handling)
+****************************************************
 
-The following flags adjust how mypy handles values of type ``None``.
+以下标志调整 mypy 如何处理类型为 ``None`` 的值。
 
 .. _implicit-optional:
 
 .. option:: --implicit-optional
 
-    This flag causes mypy to treat parameters with a ``None``
-    default value as having an implicit optional type (``T | None``).
+    此标志使 mypy 将默认值为 ``None`` 的参数视为具有隐式可选类型（``T | None``）。
 
-    For example, if this flag is set, mypy would assume that the ``x``
-    parameter is actually of type ``int | None`` in the code snippet below,
-    since the default parameter is ``None``:
+    例如，如果设置了此标志，mypy 将假定下面代码片段中的 ``x`` 参数实际上是类型 ``int | None``，因为默认参数为 ``None``：
 
     .. code-block:: python
 
         def foo(x: int = None) -> None:
             print(x)
 
-    **Note:** This was disabled by default starting in mypy 0.980.
+    **注意：** 从 mypy 0.980 开始，此功能默认禁用。
 
 .. _no_strict_optional:
 
 .. option:: --no-strict-optional
 
-    This flag effectively disables checking of optional
-    types and ``None`` values. With this option, mypy doesn't
-    generally check the use of ``None`` values -- it is treated
-    as compatible with every type.
+    此标志有效地禁用可选类型和 ``None`` 值的检查。使用此选项时，mypy 通常不检查 ``None`` 值的使用——它被视为与每种类型兼容。
 
     .. warning::
 
-        ``--no-strict-optional`` is evil. Avoid using it and definitely do
-        not use it without understanding what it does.
+        ``--no-strict-optional`` 是有害的。避免使用它，并且绝对不要在不理解其作用的情况下使用它。
 
 
 .. _configuring-warnings:
 
-Configuring warnings
+配置警告(Configuring warnings)
 ********************
 
-The following flags enable warnings for code that is sound but is
-potentially problematic or redundant in some way.
+以下标志为合理但在某种程度上可能存在问题或冗余的代码启用警告。
 
 .. option:: --warn-redundant-casts
 
-    This flag will make mypy report an error whenever your code uses
-    an unnecessary cast that can safely be removed.
+    此标志将使 mypy 在代码使用可以安全删除的不必要类型转换时报告错误。
 
 .. option:: --warn-unused-ignores
 
-    This flag will make mypy report an error whenever your code uses
-    a ``# type: ignore`` comment on a line that is not actually
-    generating an error message.
+    此标志将使 mypy 在代码中使用不实际生成错误消息的 ``# type: ignore`` 注释时报告错误。
 
-    This flag, along with the :option:`--warn-redundant-casts` flag, are both
-    particularly useful when you are upgrading mypy. Previously,
-    you may have needed to add casts or ``# type: ignore`` annotations
-    to work around bugs in mypy or missing stubs for 3rd party libraries.
+    此标志与 :option:`--warn-redundant-casts` 标志特别有用，尤其是在您升级 mypy 时。之前，您可能需要添加类型转换或 ``# type: ignore`` 注释，以解决 mypy 中的错误或缺少第三方库的存根。
 
-    These two flags let you discover cases where either workarounds are
-    no longer necessary.
+    这两个标志使您能够发现这些解决方法不再必要的情况。
 
 .. option:: --no-warn-no-return
 
-    By default, mypy will generate errors when a function is missing
-    return statements in some execution paths. The only exceptions
-    are when:
+    默认情况下，当函数在某些执行路径中缺少返回语句时，mypy 将生成错误。唯一的例外是：
 
-    -   The function has a ``None`` or ``Any`` return type
-    -   The function has an empty body and is marked as an abstract method,
-        is in a protocol class, or is in a stub file
-    -  The execution path can never return; for example, if an exception
-        is always raised
+    -   函数具有 ``None`` 或 ``Any`` 返回类型
+    -   函数具有空主体并被标记为抽象方法、位于协议类中或在存根文件中
+    -   执行路径永远不会返回；例如，如果总是引发异常
 
-    Passing in :option:`--no-warn-no-return` will disable these error
-    messages in all cases.
+    传入 :option:`--no-warn-no-return` 将在所有情况下禁用这些错误消息。
 
 .. option:: --warn-return-any
 
-    This flag causes mypy to generate a warning when returning a value
-    with type ``Any`` from a function declared with a non-``Any`` return type.
+    此标志会使 mypy 在从声明为非 ``Any`` 返回类型的函数中返回类型为 ``Any`` 的值时生成警告。
 
 .. option:: --warn-unreachable
 
-    This flag will make mypy report an error whenever it encounters
-    code determined to be unreachable or redundant after performing type analysis.
-    This can be a helpful way of detecting certain kinds of bugs in your code.
+    此标志将在 mypy 遇到经过类型分析确定为不可达或冗余的代码时报告错误。这是一种检测代码中某些类型的错误的有效方式。
 
-    For example, enabling this flag will make mypy report that the ``x > 7``
-    check is redundant and that the ``else`` block below is unreachable.
+    例如，启用此标志将使 mypy 报告 ``x > 7`` 检查是冗余的，并且下面的 ``else`` 块是不可达的。
 
     .. code-block:: python
 
         def process(x: int) -> None:
-            # Error: Right operand of "or" is never evaluated
+            # 错误：或运算符的右操作数从未被求值
             if isinstance(x, int) or x > 7:
-                # Error: Unsupported operand types for + ("int" and "str")
+                # 错误：对 + 的不支持操作数类型（"int" 和 "str"）
                 print(x + "bad")
             else:
-                # Error: 'Statement is unreachable' error
+                # 错误：'语句不可达' 错误
                 print(x + "bad")
 
-    To help prevent mypy from generating spurious warnings, the "Statement is
-    unreachable" warning will be silenced in exactly two cases:
+    为了防止 mypy 生成虚假的警告，"语句不可达" 警告将在以下两种情况下被抑制：
 
-    1.  When the unreachable statement is a ``raise`` statement, is an
-        ``assert False`` statement, or calls a function that has the :py:data:`~typing.NoReturn`
-        return type hint. In other words, when the unreachable statement
-        throws an error or terminates the program in some way.
-    2.  When the unreachable statement was *intentionally* marked as unreachable
-        using :ref:`version_and_platform_checks`.
+    1.  当不可达语句是 ``raise`` 语句、``assert False`` 语句，或调用具有 :py:data:`~typing.NoReturn` 返回类型提示的函数时。换句话说，当不可达语句抛出错误或以某种方式终止程序时。
+    2.  当不可达语句被 *故意* 标记为不可达时，使用 :ref:`version_and_platform_checks`。
 
     .. note::
 
-        Mypy currently cannot detect and report unreachable or redundant code
-        inside any functions using :ref:`type-variable-value-restriction`.
+        当前，mypy 无法检测和报告任何使用 :ref:`type-variable-value-restriction` 的函数中的不可达或冗余代码。
 
-        This limitation will be removed in future releases of mypy.
+        此限制将在未来的 mypy 版本中移除。
 
 .. option:: --report-deprecated-as-error
 
-    By default, mypy emits notes if your code imports or uses deprecated
-    features.    This flag converts such notes to errors, causing mypy to
-    eventually finish with a non-zero exit code.  Features are considered
-    deprecated when decorated with ``warnings.deprecated``.
+    默认情况下，如果您的代码导入或使用了已弃用的特性，mypy 会发出说明。此标志将此类说明转换为错误，导致 mypy 最终以非零退出代码结束。当特性被标记为 ``warnings.deprecated`` 时，视为已弃用。
 
 .. _miscellaneous-strictness-flags:
 
-Miscellaneous strictness flags
-******************************
+其他严格性标志(Miscellaneous strictness flags)
+***************************************************
 
-This section documents any other flags that do not neatly fall under any
-of the above sections.
+本节记录了任何不完全适合上述任何部分的其他标志。
 
 .. option:: --allow-untyped-globals
 
-    This flag causes mypy to suppress errors caused by not being able to fully
-    infer the types of global and class variables.
+    此标志使 mypy 抑制由于无法完全推断全局和类变量类型而导致的错误。
 
 .. option:: --allow-redefinition
 
-    By default, mypy won't allow a variable to be redefined with an
-    unrelated type. This flag enables redefinition of a variable with an
-    arbitrary type *in some contexts*: only redefinitions within the
-    same block and nesting depth as the original definition are allowed.
-    Example where this can be useful:
+    默认情况下，mypy 不允许用无关类型重新定义变量。此标志允许在某些上下文中使用任意类型重新定义变量：仅允许在与原始定义相同的块和嵌套深度内进行重新定义。以下示例展示了这种情况的有用性：
 
     .. code-block:: python
 
        def process(items: list[str]) -> None:
-           # 'items' has type list[str]
+           # 'items' 的类型是 list[str]
            items = [item.split() for item in items]
-           # 'items' now has type list[list[str]]
+           # 'items' 现在的类型是 list[list[str]]
 
-    The variable must be used before it can be redefined:
+    变量必须在重新定义之前使用：
 
     .. code-block:: python
 
         def process(items: list[str]) -> None:
-           items = "mypy"  # invalid redefinition to str because the variable hasn't been used yet
+           items = "mypy"  # 无效的重新定义为 str，因为变量尚未使用
            print(items)
-           items = "100"  # valid, items now has type str
-           items = int(items)  # valid, items now has type int
+           items = "100"  # 有效，items 现在的类型是 str
+           items = int(items)  # 有效，items 现在的类型是 int
 
 .. option:: --local-partial-types
 
-    In mypy, the most common cases for partial types are variables initialized using ``None``,
-    but without explicit ``X | None`` annotations. By default, mypy won't check partial types
-    spanning module top level or class top level. This flag changes the behavior to only allow
-    partial types at local level, therefore it disallows inferring variable type for ``None``
-    from two assignments in different scopes. For example:
+    在 mypy 中，部分类型最常见的情况是使用 ``None`` 初始化的变量，但没有显式的 ``X | None`` 注释。默认情况下，mypy 不会检查跨模块顶层或类顶层的部分类型。此标志更改行为，仅允许在本地级别进行部分类型，因此不允许从不同作用域中的两个赋值推断 ``None`` 的变量类型。例如：
 
     .. code-block:: python
 
-        a = None  # Need type annotation here if using --local-partial-types
+        a = None  # 如果使用 --local-partial-types，这里需要类型注释
         b: int | None = None
 
         class Foo:
-            bar = None  # Need type annotation here if using --local-partial-types
+            bar = None  # 如果使用 --local-partial-types，这里需要类型注释
             baz: int | None = None
 
             def __init__(self) -> None:
                 self.bar = 1
 
-        reveal_type(Foo().bar)  # 'int | None' without --local-partial-types
+        reveal_type(Foo().bar)  # 'int | None'，在没有 --local-partial-types 的情况下
 
-    Note: this option is always implicitly enabled in mypy daemon and will become
-    enabled by default for mypy in a future release.
+    注意：此选项在 mypy 守护进程中始终隐式启用，并将在未来的 mypy 版本中默认启用。
 
 .. option:: --no-implicit-reexport
 
-    By default, imported values to a module are treated as exported and mypy allows
-    other modules to import them. This flag changes the behavior to not re-export unless
-    the item is imported using from-as or is included in ``__all__``. Note this is
-    always treated as enabled for stub files. For example:
+    默认情况下，导入到模块的值被视为已导出，mypy 允许其他模块导入它们。此标志更改行为，仅在使用 from-as 导入或包含在 ``__all__`` 中时才重新导出项。注意，这在存根文件中始终视为启用。例如：
 
     .. code-block:: python
 
-       # This won't re-export the value
+       # 这不会重新导出该值
        from foo import bar
 
-       # Neither will this
+       # 这也不会
        from foo import bar as bang
 
-       # This will re-export it as bar and allow other modules to import it
+       # 这将以 bar 重新导出，并允许其他模块导入它
        from foo import bar as bar
 
-       # This will also re-export bar
+       # 这也会重新导出 bar
        from foo import bar
        __all__ = ['bar']
 
-
 .. option:: --strict-equality
 
-    By default, mypy allows always-false comparisons like ``42 == 'no'``.
-    Use this flag to prohibit such comparisons of non-overlapping types, and
-    similar identity and container checks:
+    默认情况下，mypy 允许总是为假的比较，例如 ``42 == 'no'``。使用此标志禁止此类不同类型的比较，以及类似的身份和容器检查：
 
     .. code-block:: python
 
        items: list[int]
-       if 'some string' in items:  # Error: non-overlapping container check!
+       if 'some string' in items:  # 错误：非重叠容器检查！
            ...
 
        text: str
-       if text != b'other bytes':  # Error: non-overlapping equality check!
+       if text != b'other bytes':  # 错误：非重叠相等检查！
            ...
 
-       assert text is not None  # OK, check against None is allowed as a special case.
+       assert text is not None  # OK，检查 None 被允许作为特殊情况。
 
 .. option:: --extra-checks
 
-    This flag enables additional checks that are technically correct but may be
-    impractical in real code. In particular, it prohibits partial overlap in
-    ``TypedDict`` updates, and makes arguments prepended via ``Concatenate``
-    positional-only. For example:
+    此标志启用技术上正确但在实际代码中可能不切实际的额外检查。特别是，它禁止在 ``TypedDict`` 更新中的部分重叠，并使通过 ``Concatenate`` 预置的参数仅限于位置参数。例如：
 
     .. code-block:: python
 
@@ -667,8 +505,8 @@ of the above sections.
            b: int
 
        def test(foo: Foo, bar: Bar) -> None:
-           # This is technically unsafe since foo can have a subtype of Foo at
-           # runtime, where type of key "b" is incompatible with int, see below
+           # 这在技术上是不安全的，因为 foo 可以在运行时具有 Foo 的子类型，
+           # 其中键 "b" 的类型与 int 不兼容，见下文
            bar.update(foo)
 
        class Bad(Foo):
@@ -678,57 +516,50 @@ of the above sections.
 
 .. option:: --strict
 
-    This flag mode enables all optional error checking flags.  You can see the
-    list of flags enabled by strict mode in the full :option:`mypy --help` output.
+    此标志模式启用所有可选错误检查标志。您可以在完整的 :option:`mypy --help` 输出中查看严格模式启用的标志列表。
 
-    Note: the exact list of flags enabled by running :option:`--strict` may change
-    over time.
+    注意：通过运行 :option:`--strict` 启用的标志的确切列表可能会随时间而变化。
 
 .. option:: --disable-error-code
 
-    This flag allows disabling one or multiple error codes globally.
-    See :ref:`error-codes` for more information.
+    此标志允许全局禁用一个或多个错误代码。有关更多信息，请参见 :ref:`error-codes`。
 
     .. code-block:: python
 
-        # no flag
+        # 无标志
         x = 'a string'
-        x.trim()  # error: "str" has no attribute "trim"  [attr-defined]
+        x.trim()  # 错误：“str”没有属性“trim”  [attr-defined]
 
-        # When using --disable-error-code attr-defined
+        # 当使用 --disable-error-code attr-defined 时
         x = 'a string'
         x.trim()
 
 .. option:: --enable-error-code
 
-    This flag allows enabling one or multiple error codes globally.
-    See :ref:`error-codes` for more information.
+    此标志允许全局启用一个或多个错误代码。有关更多信息，请参见 :ref:`error-codes`。
 
-    Note: This flag will override disabled error codes from the
-    :option:`--disable-error-code <mypy --disable-error-code>` flag.
+    注意：此标志将覆盖来自 :option:`--disable-error-code <mypy --disable-error-code>` 标志的禁用错误代码。
 
     .. code-block:: python
 
-        # When using --disable-error-code attr-defined
+        # 当使用 --disable-error-code attr-defined 时
         x = 'a string'
         x.trim()
 
         # --disable-error-code attr-defined --enable-error-code attr-defined
         x = 'a string'
-        x.trim()  # error: "str" has no attribute "trim"  [attr-defined]
+        x.trim()  # 错误：“str”没有属性“trim”  [attr-defined]
 
 .. _configuring-error-messages:
 
-Configuring error messages
-**************************
+配置错误消息(Configuring error messages)
+********************************************
 
-The following flags let you adjust how much detail mypy displays
-in error messages.
+以下标志允许您调整 mypy 在错误消息中显示的详细程度。
 
 .. option:: --show-error-context
 
-    This flag will precede all errors with "note" messages explaining the
-    context of the error. For example, consider the following program:
+    此标志将在所有错误前添加“注释”消息，解释错误的上下文。例如，考虑以下程序：
 
     .. code-block:: python
 
@@ -736,307 +567,226 @@ in error messages.
             def foo(self, x: int) -> int:
                 return x + "bar"
 
-    Mypy normally displays an error message that looks like this::
+    Mypy 通常显示的错误消息如下所示::
 
         main.py:3: error: Unsupported operand types for + ("int" and "str")
 
-    If we enable this flag, the error message now looks like this::
+    如果启用此标志，错误消息现在如下所示::
 
         main.py: note: In member "foo" of class "Test":
         main.py:3: error: Unsupported operand types for + ("int" and "str")
 
 .. option:: --show-column-numbers
 
-    This flag will add column offsets to error messages.
-    For example, the following indicates an error in line 12, column 9
-    (note that column offsets are 0-based)::
+    此标志将向错误消息添加列偏移量。
+    例如，以下指示在第 12 行第 9 列的错误
+    （注意，列偏移量是 0 基的）::
 
         main.py:12:9: error: Unsupported operand types for / ("int" and "str")
 
 .. option:: --show-error-code-links
 
-    This flag will also display a link to error code documentation, anchored to the error code reported by mypy.
-    The corresponding error code will be highlighted within the documentation page.
-    If we enable this flag, the error message now looks like this::
+    此标志还将显示指向错误代码文档的链接，链接到 mypy 报告的错误代码。
+    相应的错误代码将在文档页面中高亮显示。
+    如果启用此标志，错误消息现在如下所示::
 
         main.py:3: error: Unsupported operand types for - ("int" and "str")  [operator]
         main.py:3: note: See 'https://mypy.rtfd.io/en/stable/_refs.html#code-operator' for more info
 
-
-
 .. option:: --show-error-end
 
-    This flag will make mypy show not just that start position where
-    an error was detected, but also the end position of the relevant expression.
-    This way various tools can easily highlight the whole error span. The format is
-    ``file:line:column:end_line:end_column``. This option implies
-    ``--show-column-numbers``.
+    此标志将使 mypy 显示错误被检测到的起始位置，以及相关表达式的结束位置。
+    这样，各种工具可以轻松突出显示整个错误跨度。格式为
+    ``file:line:column:end_line:end_column``。此选项隐含
+    ``--show-column-numbers``。
 
 .. option:: --hide-error-codes
 
-    This flag will hide the error code ``[<code>]`` from error messages. By default, the error
-    code is shown after each error message::
+    此标志将从错误消息中隐藏错误代码 ``[<code>]``。默认情况下，错误
+    代码在每个错误消息后显示::
 
         prog.py:1: error: "str" has no attribute "trim"  [attr-defined]
 
-    See :ref:`error-codes` for more information.
+    有关更多信息，请参见 :ref:`error-codes`。
 
 .. option:: --pretty
 
-    Use visually nicer output in error messages: use soft word wrap,
-    show source code snippets, and show error location markers.
+    在错误消息中使用更美观的输出：使用软换行，
+    显示源代码片段，并显示错误位置标记。
 
 .. option:: --no-color-output
 
-    This flag will disable color output in error messages, enabled by default.
+    此标志将禁用错误消息中的颜色输出，默认情况下启用。
 
 .. option:: --no-error-summary
 
-    This flag will disable error summary. By default mypy shows a summary line
-    including total number of errors, number of files with errors, and number
-    of files checked.
+    此标志将禁用错误摘要。默认情况下，mypy 显示一行摘要
+    包括错误总数、包含错误的文件数量和检查的文件数量。
 
 .. option:: --show-absolute-path
 
-    Show absolute paths to files.
+    显示文件的绝对路径。
 
 .. option:: --soft-error-limit N
 
-    This flag will adjust the limit after which mypy will (sometimes)
-    disable reporting most additional errors. The limit only applies
-    if it seems likely that most of the remaining errors will not be
-    useful or they may be overly noisy. If ``N`` is negative, there is
-    no limit. The default limit is -1.
+    此标志将调整 mypy 在此之后（有时）禁用报告大多数附加错误的限制。仅在似乎
+    大多数剩余错误可能不太有用或可能过于嘈杂时，限制才适用。如果 ``N`` 为负数，则没有限制。默认限制为 -1。
 
 .. option:: --force-uppercase-builtins
 
-    Always use ``List`` instead of ``list`` in error messages,
-    even on Python 3.9+.
+    始终在错误消息中使用 ``List`` 而不是 ``list``，
+    即使在 Python 3.9+ 中。
 
 .. option:: --force-union-syntax
 
-    Always use ``Union[]`` and ``Optional[]`` for union types
-    in error messages (instead of the ``|`` operator),
-    even on Python 3.10+.
+    始终在错误消息中使用 ``Union[]`` 和 ``Optional[]`` 表示联合类型
+    （而不是 ``|`` 运算符），
+    即使在 Python 3.10+ 中。
 
 
 .. _incremental:
 
-Incremental mode
-****************
+增量模式(Incremental mode)
+********************************
 
-By default, mypy will store type information into a cache. Mypy
-will use this information to avoid unnecessary recomputation when
-it type checks your code again.  This can help speed up the type
-checking process, especially when most parts of your program have
-not changed since the previous mypy run.
+默认情况下，mypy 会将类型信息存储到缓存中。Mypy 将使用这些信息以避免在再次类型检查代码时进行不必要的重新计算。这可以帮助加快类型检查过程，尤其是在自上次 mypy 运行以来，大部分程序部分没有改变的情况下。
 
-If you want to speed up how long it takes to recheck your code
-beyond what incremental mode can offer, try running mypy in
-:ref:`daemon mode <mypy_daemon>`.
+如果您希望加快重新检查代码的速度，超出增量模式所能提供的范围，可以尝试在 :ref:`daemon mode <mypy_daemon>` 中运行 mypy。
 
 .. option:: --no-incremental
 
-    This flag disables incremental mode: mypy will no longer reference
-    the cache when re-run.
+    此标志禁用增量模式：mypy 将不再在重新运行时引用缓存。
 
-    Note that mypy will still write out to the cache even when
-    incremental mode is disabled: see the :option:`--cache-dir` flag below
-    for more details.
+    请注意，即使禁用增量模式，mypy 仍然会写入缓存：有关更多详细信息，请参见下面的 :option:`--cache-dir` 标志。
 
 .. option:: --cache-dir DIR
 
-    By default, mypy stores all cache data inside of a folder named
-    ``.mypy_cache`` in the current directory. This flag lets you
-    change this folder. This flag can also be useful for controlling
-    cache use when using :ref:`remote caching <remote-cache>`.
+    默认情况下，mypy 将所有缓存数据存储在当前目录下名为 ``.mypy_cache`` 的文件夹中。此标志允许您更改该文件夹。此标志在使用 :ref:`remote caching <remote-cache>` 时也可以用于控制缓存的使用。
 
-    This setting will override the ``MYPY_CACHE_DIR`` environment
-    variable if it is set.
+    如果设置了该选项，则此设置将覆盖 ``MYPY_CACHE_DIR`` 环境变量。
 
-    Mypy will also always write to the cache even when incremental
-    mode is disabled so it can "warm up" the cache. To disable
-    writing to the cache, use ``--cache-dir=/dev/null`` (UNIX)
-    or ``--cache-dir=nul`` (Windows).
+    即使禁用增量模式，mypy 仍然会始终写入缓存，以便“预热”缓存。要禁用写入缓存，请使用 ``--cache-dir=/dev/null``（UNIX）或 ``--cache-dir=nul``（Windows）。
 
 .. option:: --sqlite-cache
 
-    Use an `SQLite`_ database to store the cache.
+    使用 `SQLite`_ 数据库来存储缓存。
 
 .. option:: --cache-fine-grained
 
-    Include fine-grained dependency information in the cache for the mypy daemon.
+    在 mypy 守护进程的缓存中包含细粒度的依赖信息。
 
 .. option:: --skip-version-check
 
-    By default, mypy will ignore cache data generated by a different
-    version of mypy. This flag disables that behavior.
+    默认情况下，mypy 将忽略由不同版本的 mypy 生成的缓存数据。此标志禁用该行为。
 
 .. option:: --skip-cache-mtime-checks
 
-    Skip cache internal consistency checks based on mtime.
+    跳过基于 mtime 的缓存内部一致性检查。
 
+高级选项(Advanced options)
+********************************
 
-Advanced options
-****************
-
-The following flags are useful mostly for people who are interested
-in developing or debugging mypy internals.
+以下标志主要适用于有兴趣开发或调试 mypy 内部的人。
 
 .. option:: --pdb
 
-    This flag will invoke the Python debugger when mypy encounters
-    a fatal error.
+    当 mypy 遇到致命错误时，此标志将调用 Python 调试器。
 
 .. option:: --show-traceback, --tb
 
-    If set, this flag will display a full traceback when mypy
-    encounters a fatal error.
+    如果设置，此标志将在 mypy 遇到致命错误时显示完整的回溯信息。
 
 .. option:: --raise-exceptions
 
-    Raise exception on fatal error.
+    在致命错误时引发异常。
 
 .. option:: --custom-typing-module MODULE
 
-    This flag lets you use a custom module as a substitute for the
-    :py:mod:`typing` module.
+    此标志允许您使用自定义模块替代 :py:mod:`typing` 模块。
 
 .. option:: --custom-typeshed-dir DIR
 
-    This flag specifies the directory where mypy looks for standard library typeshed
-    stubs, instead of the typeshed that ships with mypy.  This is
-    primarily intended to make it easier to test typeshed changes before
-    submitting them upstream, but also allows you to use a forked version of
-    typeshed.
+    此标志指定 mypy 查找标准库 typeshed 存根的目录，而不是与 mypy 一起提供的 typeshed。这主要是为了便于在提交变更之前测试 typeshed 的更改，但也允许您使用一个分叉版本的 typeshed。
 
-    Note that this doesn't affect third-party library stubs. To test third-party stubs,
-    for example try ``MYPYPATH=stubs/six mypy ...``.
+    请注意，这不会影响第三方库的存根。要测试第三方存根，例如可以尝试 ``MYPYPATH=stubs/six mypy ...``。
 
 .. _warn-incomplete-stub:
 
 .. option:: --warn-incomplete-stub
 
-    This flag modifies both the :option:`--disallow-untyped-defs` and
-    :option:`--disallow-incomplete-defs` flags so they also report errors
-    if stubs in typeshed are missing type annotations or has incomplete
-    annotations. If both flags are missing, :option:`--warn-incomplete-stub`
-    also does nothing.
+    此标志修改 :option:`--disallow-untyped-defs` 和
+    :option:`--disallow-incomplete-defs` 标志，以便在 typeshed 中缺少类型注释或具有不完整注释时也报告错误。如果两个标志都缺失，:option:`--warn-incomplete-stub` 也不会执行任何操作。
 
-    This flag is mainly intended to be used by people who want contribute
-    to typeshed and would like a convenient way to find gaps and omissions.
+    此标志主要供希望贡献 typeshed 的人使用，以便方便地查找缺口和遗漏。
 
-    If you want mypy to report an error when your codebase *uses* an untyped
-    function, whether that function is defined in typeshed or not, use the
-    :option:`--disallow-untyped-calls` flag. See :ref:`untyped-definitions-and-calls`
-    for more details.
+    如果您希望 mypy 在代码库 *使用* 未类型化的函数时报告错误，无论该函数是否在 typeshed 中定义，请使用 :option:`--disallow-untyped-calls` 标志。有关更多详细信息，请参见 :ref:`untyped-definitions-and-calls`。
 
 .. _shadow-file:
 
 .. option:: --shadow-file SOURCE_FILE SHADOW_FILE
 
-    When mypy is asked to type check ``SOURCE_FILE``, this flag makes mypy
-    read from and type check the contents of ``SHADOW_FILE`` instead. However,
-    diagnostics will continue to refer to ``SOURCE_FILE``.
+    当请求 mypy 对 ``SOURCE_FILE`` 进行类型检查时，此标志使 mypy 从 ``SHADOW_FILE`` 读取并进行类型检查。然而，诊断仍将引用 ``SOURCE_FILE``。
 
-    Specifying this argument multiple times (``--shadow-file X1 Y1 --shadow-file X2 Y2``)
-    will allow mypy to perform multiple substitutions.
+    多次指定此参数（``--shadow-file X1 Y1 --shadow-file X2 Y2``）将允许 mypy 执行多个替换。
 
-    This allows tooling to create temporary files with helpful modifications
-    without having to change the source file in place. For example, suppose we
-    have a pipeline that adds ``reveal_type`` for certain variables.
-    This pipeline is run on ``original.py`` to produce ``temp.py``.
-    Running ``mypy --shadow-file original.py temp.py original.py`` will then
-    cause mypy to type check the contents of ``temp.py`` instead of  ``original.py``,
-    but error messages will still reference ``original.py``.
+    这允许工具创建临时文件并进行有用的修改，而不必直接更改源文件。例如，假设我们有一个管道为某些变量添加 ``reveal_type``。这个管道在 ``original.py`` 上运行以生成 ``temp.py``。运行 ``mypy --shadow-file original.py temp.py original.py`` 将导致 mypy 对 ``temp.py`` 的内容进行类型检查，而不是 ``original.py``，但错误消息仍将引用 ``original.py``。
 
 
-Report generation
+报告生成(Report generation)
 *****************
 
-If these flags are set, mypy will generate a report in the specified
-format into the specified directory.
+如果设置了这些标志，mypy 将在指定目录中以指定格式生成报告。
 
 .. option:: --any-exprs-report DIR
 
-    Causes mypy to generate a text file report documenting how many
-    expressions of type ``Any`` are present within your codebase.
+    使 mypy 生成一个文本文件报告，记录代码库中存在多少类型为 ``Any`` 的表达式。
 
 .. option:: --cobertura-xml-report DIR
 
-    Causes mypy to generate a Cobertura XML type checking coverage report.
+    使 mypy 生成一个 Cobertura XML 类型检查覆盖率报告。
 
-    To generate this report, you must either manually install the `lxml`_
-    library or specify mypy installation with the setuptools extra
-    ``mypy[reports]``.
+    要生成此报告，您必须手动安装 `lxml`_ 库，或指定带有 setuptools 附加项 ``mypy[reports]`` 的 mypy 安装。
 
 .. option:: --html-report / --xslt-html-report DIR
 
-    Causes mypy to generate an HTML type checking coverage report.
+    使 mypy 生成一个 HTML 类型检查覆盖率报告。
 
-    To generate this report, you must either manually install the `lxml`_
-    library or specify mypy installation with the setuptools extra
-    ``mypy[reports]``.
+    要生成此报告，您必须手动安装 `lxml`_ 库，或指定带有 setuptools 附加项 ``mypy[reports]`` 的 mypy 安装。
 
 .. option:: --linecount-report DIR
 
-    Causes mypy to generate a text file report documenting the functions
-    and lines that are typed and untyped within your codebase.
+    使 mypy 生成一个文本文件报告，记录代码库中已类型化和未类型化的函数及行数。
 
 .. option:: --linecoverage-report DIR
 
-    Causes mypy to generate a JSON file that maps each source file's
-    absolute filename to a list of line numbers that belong to typed
-    functions in that file.
+    使 mypy 生成一个 JSON 文件，将每个源文件的绝对文件名映射到该文件中类型化函数所属的行号列表。
 
 .. option:: --lineprecision-report DIR
 
-    Causes mypy to generate a flat text file report with per-module
-    statistics of how many lines are typechecked etc.
+    使 mypy 生成一个平面文本文件报告，包含每个模块的统计信息，例如有多少行被类型检查等。
 
 .. option:: --txt-report / --xslt-txt-report DIR
 
-    Causes mypy to generate a text file type checking coverage report.
+    使 mypy 生成一个文本文件类型检查覆盖率报告。
 
-    To generate this report, you must either manually install the `lxml`_
-    library or specify mypy installation with the setuptools extra
-    ``mypy[reports]``.
+    要生成此报告，您必须手动安装 `lxml`_ 库，或指定带有 setuptools 附加项 ``mypy[reports]`` 的 mypy 安装。
 
 .. option:: --xml-report DIR
 
-    Causes mypy to generate an XML type checking coverage report.
+    使 mypy 生成一个 XML 类型检查覆盖率报告。
 
-    To generate this report, you must either manually install the `lxml`_
-    library or specify mypy installation with the setuptools extra
-    ``mypy[reports]``.
+    要生成此报告，您必须手动安装 `lxml`_ 库，或指定带有 setuptools 附加项 ``mypy[reports]`` 的 mypy 安装。
 
-
-Enabling incomplete/experimental features
-*****************************************
+启用不完整/实验性功能(Enabling incomplete/experimental features)
+*****************************************************************
 
 .. option:: --enable-incomplete-feature {PreciseTupleTypes, InlineTypedDict}
 
-    Some features may require several mypy releases to implement, for example
-    due to their complexity, potential for backwards incompatibility, or
-    ambiguous semantics that would benefit from feedback from the community.
-    You can enable such features for early preview using this flag. Note that
-    it is not guaranteed that all features will be ultimately enabled by
-    default. In *rare cases* we may decide to not go ahead with certain
-    features.
+    某些功能可能需要多个 mypy 版本才能实现，例如由于其复杂性、潜在的向后不兼容性或模糊的语义，这些都需要来自社区的反馈。您可以使用此标志启用这些功能以供早期预览。请注意，并不能保证所有功能最终都会默认启用。在 *少数情况下*，我们可能决定不继续某些功能。
 
-List of currently incomplete/experimental features:
+当前不完整/实验性功能列表：
 
-* ``PreciseTupleTypes``: this feature will infer more precise tuple types in
-  various scenarios. Before variadic types were added to the Python type system
-  by :pep:`646`, it was impossible to express a type like "a tuple with
-  at least two integers". The best type available was ``tuple[int, ...]``.
-  Therefore, mypy applied very lenient checking for variable-length tuples.
-  Now this type can be expressed as ``tuple[int, int, *tuple[int, ...]]``.
-  For such more precise types (when explicitly *defined* by a user) mypy,
-  for example, warns about unsafe index access, and generally handles them
-  in a type-safe manner. However, to avoid problems in existing code, mypy
-  does not *infer* these precise types when it technically can. Here are
-  notable examples where ``PreciseTupleTypes`` infers more precise types:
+* ``PreciseTupleTypes``：此功能将在各种场景中推断更精确的元组类型。在 :pep:`646` 添加可变参数类型到 Python 类型系统之前，无法表达像“一个包含至少两个整数的元组”这样的类型。可用的最佳类型是 ``tuple[int, ...]``。因此，mypy 对可变长度元组进行了非常宽松的检查。现在，这种类型可以表示为 ``tuple[int, int, *tuple[int, ...]]``。对于这些更精确的类型（当由用户显式 *定义* 时），mypy 例如会警告不安全的索引访问，并一般以类型安全的方式处理它们。然而，为了避免现有代码中的问题，mypy 在技术上能够推断这些精确类型时并不会 *推断* 这些类型。以下是 ``PreciseTupleTypes`` 推断更精确类型的显著示例：
 
   .. code-block:: python
 
@@ -1061,8 +811,7 @@ List of currently incomplete/experimental features:
          # Without PreciseTupleTypes: tuple[int, ...]
          # With PreciseTupleTypes: tuple[()] | tuple[int] | tuple[int, int]
 
-* ``InlineTypedDict``: this feature enables non-standard syntax for inline
-  :ref:`TypedDicts <typeddict>`, for example:
+* ``InlineTypedDict``：此功能启用非标准语法的内联 :ref:`TypedDicts <typeddict>`，例如：
 
   .. code-block:: python
 
@@ -1070,68 +819,38 @@ List of currently incomplete/experimental features:
          return {"int": 42, "str": "test"}
 
 
-Miscellaneous
+杂项(Miscellaneous)
 *************
 
 .. option:: --install-types
 
-    This flag causes mypy to install known missing stub packages for
-    third-party libraries using pip.  It will display the pip command
-    that will be run, and expects a confirmation before installing
-    anything. For security reasons, these stubs are limited to only a
-    small subset of manually selected packages that have been
-    verified by the typeshed team. These packages include only stub
-    files and no executable code.
+    此标志使 mypy 使用 pip 安装第三方库中已知缺失的存根包。它将显示将要运行的 pip 命令，并在安装任何内容之前期望确认。出于安全原因，这些存根仅限于一小部分经过类型仓库团队验证的手动选择包。这些包仅包含存根文件，不包含可执行代码。
 
-    If you use this option without providing any files or modules to
-    type check, mypy will install stub packages suggested during the
-    previous mypy run. If there are files or modules to type check,
-    mypy first type checks those, and proposes to install missing
-    stubs at the end of the run, but only if any missing modules were
-    detected.
+    如果您使用此选项而不提供任何要类型检查的文件或模块，mypy 将安装在上次 mypy 运行期间建议的存根包。如果有要类型检查的文件或模块，mypy 首先对这些文件进行类型检查，并在运行结束时建议安装缺失的存根，但仅在检测到任何缺失模块的情况下。
 
     .. note::
 
-        This is new in mypy 0.900. Previous mypy versions included a
-        selection of third-party package stubs, instead of having
-        them installed separately.
+        这是 mypy 0.900 中的新功能。之前的 mypy 版本包括一系列第三方包存根，而不是单独安装它们。
 
 .. option:: --non-interactive
 
-   When used together with :option:`--install-types <mypy
-   --install-types>`, this causes mypy to install all suggested stub
-   packages using pip without asking for confirmation, and then
-   continues to perform type checking using the installed stubs, if
-   some files or modules are provided to type check.
+   当与 :option:`--install-types <mypy --install-types>` 一起使用时，此选项将导致 mypy 使用 pip 安装所有建议的存根包，而无需确认，然后继续使用已安装的存根进行类型检查，如果提供了一些文件或模块进行检查。
 
-   This is implemented as up to two mypy runs internally. The first run
-   is used to find missing stub packages, and output is shown from
-   this run only if no missing stub packages were found. If missing
-   stub packages were found, they are installed and then another run
-   is performed.
+   这在内部实现为最多两次 mypy 运行。第一次运行用于查找缺失的存根包，仅当未找到缺失的存根包时才显示此运行的输出。如果找到缺失的存根包，将进行安装，然后再进行一次运行。
 
 .. option:: --junit-xml JUNIT_XML
 
-    Causes mypy to generate a JUnit XML test result document with
-    type checking results. This can make it easier to integrate mypy
-    with continuous integration (CI) tools.
+    使 mypy 生成一个包含类型检查结果的 JUnit XML 测试结果文档。这可以使 mypy 更容易与持续集成 (CI) 工具集成。
 
 .. option:: --find-occurrences CLASS.MEMBER
 
-    This flag will make mypy print out all usages of a class member
-    based on static type information. This feature is experimental.
+    此标志将使 mypy 打印出基于静态类型信息的类成员的所有用法。此功能仍处于实验阶段。
 
 .. option:: --scripts-are-modules
 
-    This flag will give command line arguments that appear to be
-    scripts (i.e. files whose name does not end in ``.py``)
-    a module name derived from the script name rather than the fixed
-    name :py:mod:`__main__`.
+    此标志将给出看起来像脚本的命令行参数（即文件名不以 ``.py`` 结尾），而是从脚本名称派生的模块名称，而不是固定名称 :py:mod:`__main__`。
 
-    This lets you check more than one script in a single mypy invocation.
-    (The default :py:mod:`__main__` is technically more correct, but if you
-    have many scripts that import a large package, the behavior enabled
-    by this flag is often more convenient.)
+    这使您可以在一次 mypy 调用中检查多个脚本。（默认的 :py:mod:`__main__` 从技术上讲更为准确，但如果您有许多导入大型包的脚本，则此标志启用的行为通常更方便。）
 
 .. _lxml: https://pypi.org/project/lxml/
 .. _SQLite: https://www.sqlite.org/
