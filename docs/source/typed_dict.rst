@@ -3,25 +3,15 @@
 TypedDict
 *********
 
-Python programs often use dictionaries with string keys to represent objects.
-``TypedDict`` lets you give precise types for dictionaries that represent
-objects with a fixed schema, such as ``{'id': 1, 'items': ['x']}``.
+Python 程序经常使用字符串键的字典来表示对象。``TypedDict`` 让你可以为表示具有固定模式的字典提供精确的类型，例如 ``{'id': 1, 'items': ['x']}`` 。
 
-Here is a typical example:
+这里是一个典型的例子：
 
 .. code-block:: python
 
    movie = {'name': 'Blade Runner', 'year': 1982}
 
-Only a fixed set of string keys is expected (``'name'`` and
-``'year'`` above), and each key has an independent value type (``str``
-for ``'name'`` and ``int`` for ``'year'`` above). We've previously
-seen the ``dict[K, V]`` type, which lets you declare uniform
-dictionary types, where every value has the same type, and arbitrary keys
-are supported. This is clearly not a good fit for
-``movie`` above. Instead, you can use a ``TypedDict`` to give a precise
-type for objects like ``movie``, where the type of each
-dictionary value depends on the key:
+只期望一组固定的字符串键（上面的 ``'name'`` 和 ``'year'``），每个键都有独立的值类型（上面的 ``'name'`` 为 ``str``，而 ``'year'`` 为 ``int``）。我们之前见过 ``dict[K, V]`` 类型，它让你声明统一的字典类型，其中每个值具有相同的类型，并且支持任意键。这显然不适合上面的 ``movie``。相反，你可以使用 ``TypedDict`` 为像 ``movie`` 这样的对象提供精确的类型，其中每个字典值的类型取决于键：
 
 .. code-block:: python
 
@@ -31,65 +21,38 @@ dictionary value depends on the key:
 
    movie: Movie = {'name': 'Blade Runner', 'year': 1982}
 
-``Movie`` is a ``TypedDict`` type with two items: ``'name'`` (with type ``str``)
-and ``'year'`` (with type ``int``). Note that we used an explicit type
-annotation for the ``movie`` variable. This type annotation is
-important -- without it, mypy will try to infer a regular, uniform
-:py:class:`dict` type for ``movie``, which is not what we want here.
+``Movie`` 是一个 ``TypedDict`` 类型，包含两个项目：``'name'``（类型为 ``str``）和 ``'year'``（类型为 ``int``）。注意我们为 ``movie`` 变量使用了显式类型注解。这个类型注解很重要——如果没有它，mypy 会尝试推断 ``movie`` 为一个常规的、统一的 :py:class:`dict` 类型，这不是我们想要的。
 
 .. note::
 
-   If you pass a ``TypedDict`` object as an argument to a function, no
-   type annotation is usually necessary since mypy can infer the
-   desired type based on the declared argument type. Also, if an
-   assignment target has been previously defined, and it has a
-   ``TypedDict`` type, mypy will treat the assigned value as a ``TypedDict``,
-   not :py:class:`dict`.
+   如果你将 ``TypedDict`` 对象作为参数传递给函数，通常不需要类型注解，因为 mypy 可以根据声明的参数类型推断所需的类型。此外，如果赋值目标之前已经定义，并且具有 ``TypedDict`` 类型，mypy 会将分配的值视为 ``TypedDict``，而不是 :py:class:`dict`。
 
-Now mypy will recognize these as valid:
+现在 mypy 会将这些视为有效：
 
 .. code-block:: python
 
-   name = movie['name']  # Okay; type of name is str
-   year = movie['year']  # Okay; type of year is int
+   name = movie['name']  # 可以；name 的类型是 str
+   year = movie['year']  # 可以；year 的类型是 int
 
-Mypy will detect an invalid key as an error:
+Mypy 会将无效键检测为错误：
 
 .. code-block:: python
 
-   director = movie['director']  # Error: 'director' is not a valid key
+   director = movie['director']  # 错误：'director' 不是有效的键
 
-Mypy will also reject a runtime-computed expression as a key, as
-it can't verify that it's a valid key. You can only use string
-literals as ``TypedDict`` keys.
+Mypy 还会拒绝将运行时计算的表达式作为键，因为它无法验证这是否是有效键。你只能使用字符串字面量作为 ``TypedDict`` 键。
 
-The ``TypedDict`` type object can also act as a constructor. It
-returns a normal :py:class:`dict` object at runtime -- a ``TypedDict`` does
-not define a new runtime type:
+``TypedDict`` 类型对象也可以作为构造函数。它在运行时返回一个普通的 :py:class:`dict` 对象——``TypedDict`` 不定义新的运行时类型：
 
 .. code-block:: python
 
    toy_story = Movie(name='Toy Story', year=1995)
 
-This is equivalent to just constructing a dictionary directly using
-``{ ... }`` or ``dict(key=value, ...)``. The constructor form is
-sometimes convenient, since it can be used without a type annotation,
-and it also makes the type of the object explicit.
+这等同于直接使用 ``{ ... }`` 或 ``dict(key=value, ...)`` 构造字典。构造函数的形式有时很方便，因为它可以在没有类型注解的情况下使用，并且还使对象的类型明确。
 
-Like all types, ``TypedDict``\s can be used as components to build
-arbitrarily complex types. For example, you can define nested
-``TypedDict``\s and containers with ``TypedDict`` items.
-Unlike most other types, mypy uses structural compatibility checking
-(or structural subtyping) with ``TypedDict``\s. A ``TypedDict`` object with
-extra items is compatible with (a subtype of) a narrower
-``TypedDict``, assuming item types are compatible (*totality* also affects
-subtyping, as discussed below).
+像所有类型一样，``TypedDict`` 可以用作构建任意复杂类型的组件。例如，你可以定义嵌套的 ``TypedDict`` 和包含 ``TypedDict`` 项的容器。与大多数其他类型不同，mypy 使用结构兼容性检查（或结构子类型）来处理 ``TypedDict``。具有额外项目的 ``TypedDict`` 对象与（子类型）更窄的 ``TypedDict`` 兼容，前提是项目类型兼容（*完整性* 也影响子类型，具体讨论如下）。
 
-A ``TypedDict`` object is not a subtype of the regular ``dict[...]``
-type (and vice versa), since :py:class:`dict` allows arbitrary keys to be
-added and removed, unlike ``TypedDict``. However, any ``TypedDict`` object is
-a subtype of (that is, compatible with) ``Mapping[str, object]``, since
-:py:class:`~collections.abc.Mapping` only provides read-only access to the dictionary items:
+``TypedDict`` 对象不是常规 ``dict[...]`` 类型的子类型（反之亦然），因为 :py:class:`dict` 允许添加和删除任意键，而 ``TypedDict`` 则不然。然而，任何 ``TypedDict`` 对象都是 ``Mapping[str, object]`` 的子类型（即兼容），因为 :py:class:`~collections.abc.Mapping` 仅提供对字典项的只读访问：
 
 .. code-block:: python
 
@@ -97,13 +60,11 @@ a subtype of (that is, compatible with) ``Mapping[str, object]``, since
        for key, value in obj.items():
            print(f'{key}: {value}')
 
-   print_typed_dict(Movie(name='Toy Story', year=1995))  # OK
+   print_typed_dict(Movie(name='Toy Story', year=1995))  # 可以
 
 .. note::
 
-   Unless you are on Python 3.8 or newer (where ``TypedDict`` is available in
-   standard library :py:mod:`typing` module) you need to install ``typing_extensions``
-   using pip to use ``TypedDict``:
+   除非你使用的是 Python 3.8 或更高版本（在标准库 :py:mod:`typing` 模块中提供 ``TypedDict``），否则你需要使用 pip 安装 ``typing_extensions`` 来使用 ``TypedDict``：
 
    .. code-block:: text
 
@@ -181,26 +142,77 @@ of supported operations:
    -- they could delete required ``TypedDict`` items that are not visible to
    mypy because of structural subtyping.
 
-Class-based syntax
-------------------
+完整性(Totality)
+----------------
 
-An alternative, class-based syntax to define a ``TypedDict`` is supported
-in Python 3.6 and later:
+默认情况下，mypy 确保 ``TypedDict`` 对象具有所有指定的键。否则将被标记为错误：
 
 .. code-block:: python
 
-   from typing import TypedDict  # "from typing_extensions" in Python 3.7 and earlier
+   # 错误：缺少 'year'
+   toy_story: Movie = {'name': 'Toy Story'}
+
+有时你希望在创建 ``TypedDict`` 对象时允许省略键。你可以向 ``TypedDict(...)`` 提供 ``total=False`` 参数来实现这一点：
+
+.. code-block:: python
+
+   GuiOptions = TypedDict(
+       'GuiOptions', {'language': str, 'color': str}, total=False)
+   options: GuiOptions = {}  # 可以
+   options['language'] = 'en'
+
+你可能需要使用 :py:meth:`~dict.get` 来访问部分（非总计）``TypedDict`` 的项，因为使用 ``[]`` 索引可能在运行时失败。然而，mypy 仍然允许在部分 ``TypedDict`` 上使用 ``[]``——你只需要小心，因为这可能导致 :py:exc:`KeyError` 。在任何地方都要求使用 :py:meth:`~dict.get` 会太繁琐。（请注意，你也可以在使用了 total 参数的 ``TypedDict`` 使用 :py:meth:`~dict.get`。）
+
+在错误消息中，不是必需的键会用 ``?`` 显示：
+
+.. code-block:: python
+
+   # 显示的类型是 "TypedDict('GuiOptions', {'language'?: builtins.str,
+   #                                            'color'?: builtins.str})"
+   reveal_type(options)
+
+完整性也会影响结构兼容性。当期望一个完整(total)的 ``TypedDict`` 时，你不能使用部分(partial)的 ``TypedDict``。同样，当期望一个部分(partial)的 ``TypedDict`` 时，完整(total)的 ``TypedDict`` 也是无效的。
+
+支持的操作(Supported operations)
+----------------------------------------
+
+``TypedDict`` 对象支持一组字典操作和方法的子集。在调用大多数方法时，必须使用字符串字面量作为键，否则 mypy 将无法检查键是否有效。支持的操作列表：
+
+* 包含在 :py:class:`~collections.abc.Mapping` 中的任何内容：
+
+  * ``d[key]``
+  * ``key in d``
+  * ``len(d)``
+  * ``for key in d`` （迭代）
+  * :py:meth:`d.get(key[, default]) <dict.get>`
+  * :py:meth:`d.keys() <dict.keys>`
+  * :py:meth:`d.values() <dict.values>`
+  * :py:meth:`d.items() <dict.items>`
+
+* :py:meth:`d.copy() <dict.copy>`
+* :py:meth:`d.setdefault(key, default) <dict.setdefault>`
+* :py:meth:`d1.update(d2) <dict.update>`
+* :py:meth:`d.pop(key[, default]) <dict.pop>`（仅适用于部分(partial) ``TypedDict``）
+* ``del d[key]``（仅适用于部分(partial) ``TypedDict``）
+
+.. note::
+
+   :py:meth:`~dict.clear` 和 :py:meth:`~dict.popitem` 不受支持，因为它们不安全——它们可能删除必需的 ``TypedDict`` 项，而这些项由于结构子类型(structural subtyping)从而对 mypy 不可见。
+
+基于类的语法(Class-based)
+------------------------------------
+
+在 Python 3.6 及更高版本中，支持一种替代的基于类的语法来定义 ``TypedDict``：
+
+.. code-block:: python
+
+   from typing import TypedDict  # 在 Python 3.7 及更早版本中使用 "from typing_extensions"
 
    class Movie(TypedDict):
        name: str
        year: int
 
-The above definition is equivalent to the original ``Movie``
-definition. It doesn't actually define a real class. This syntax also
-supports a form of inheritance -- subclasses can define additional
-items. However, this is primarily a notational shortcut. Since mypy
-uses structural compatibility with ``TypedDict``\s, inheritance is not
-required for compatibility. Here is an example of inheritance:
+上述定义与原始的 ``Movie`` 定义等效。它实际上并不定义一个真实的类。此语法还支持一种继承形式——子类可以定义附加项。然而，这主要是一种符号快捷方式。由于 mypy 对 ``TypedDict`` 使用结构兼容性，因此兼容性不需要继承。以下是继承的示例：
 
 .. code-block:: python
 
@@ -211,14 +223,12 @@ required for compatibility. Here is an example of inheritance:
    class BookBasedMovie(Movie):
        based_on: str
 
-Now ``BookBasedMovie`` has keys ``name``, ``year`` and ``based_on``.
+现在 ``BookBasedMovie`` 具有键 ``name``、``year`` 和 ``based_on``。
 
-Mixing required and non-required items
+混合必须和非必须项(Mixing)
 --------------------------------------
 
-In addition to allowing reuse across ``TypedDict`` types, inheritance also allows
-you to mix required and non-required (using ``total=False``) items
-in a single ``TypedDict``. Example:
+除了允许在 ``TypedDict`` 类型之间重用外，继承还允许你在单个 ``TypedDict`` 中混合必需项和非必需项（使用 ``total=False``）。示例：
 
 .. code-block:: python
 
@@ -229,24 +239,18 @@ in a single ``TypedDict``. Example:
    class Movie(MovieBase, total=False):
        based_on: str
 
-Now ``Movie`` has required keys ``name`` and ``year``, while ``based_on``
-can be left out when constructing an object. A ``TypedDict`` with a mix of required
-and non-required keys, such as ``Movie`` above, will only be compatible with
-another ``TypedDict`` if all required keys in the other ``TypedDict`` are required keys in the
-first ``TypedDict``, and all non-required keys of the other ``TypedDict`` are also non-required keys
-in the first ``TypedDict``.
+现在 ``Movie`` 具有必需键 ``name`` 和 ``year``, 而 ``based_on`` 在构造对象时可以省略。具有必需键和非必需键混合的 ``TypedDict``（如上面的 ``Movie``）仅在另一个 ``TypedDict`` 中所有必需键都是第一个 ``TypedDict`` 中的必需键，并且另一个 ``TypedDict`` 的所有非必需键也是第一个 ``TypedDict`` 的非必需键时，才会兼容。
 
-Read-only items
----------------
+只读项(Read-only)
+------------------------------
 
-You can use ``typing.ReadOnly``, introduced in Python 3.13, or
-``typing_extensions.ReadOnly`` to mark TypedDict items as read-only (:pep:`705`):
+你可以使用在 Python 3.13 中引入的 ``typing.ReadOnly`` 或 ``typing_extensions.ReadOnly`` 来标记 TypedDict 项为只读（:pep:`705`）：
 
 .. code-block:: python
 
     from typing import TypedDict
 
-    # Or "from typing ..." on Python 3.13+
+    # 或在 Python 3.13+ 中使用 "from typing ..."
     from typing_extensions import ReadOnly
 
     class Movie(TypedDict):
@@ -254,12 +258,10 @@ You can use ``typing.ReadOnly``, introduced in Python 3.13, or
         num_watched: int
 
     m: Movie = {"name": "Jaws", "num_watched": 1}
-    m["name"] = "The Godfather"  # Error: "name" is read-only
-    m["num_watched"] += 1  # OK
+    m["name"] = "The Godfather"  # 错误：“name”是只读的
+    m["num_watched"] += 1  # 正确
 
-A TypedDict with a mutable item can be assigned to a TypedDict
-with a corresponding read-only item, and the type of the item can
-vary :ref:`covariantly <variance-of-generics>`:
+具有可变项的 TypedDict 可以分配给具有相应只读项的 TypedDict ，并且项的类型可以 :ref:`协变 <variance-of-generics>`：
 
 .. code-block:: python
 
@@ -274,32 +276,24 @@ vary :ref:`covariantly <variance-of-generics>`:
     def process_entry(i: Entry) -> None: ...
 
     m: Movie = {"name": "Jaws", "year": 1975}
-    process_entry(m)  # OK
+    process_entry(m)  # 正确
 
-Unions of TypedDicts
---------------------
+TypedDicts的联合(Unions)
+----------------------------------------
 
-Since TypedDicts are really just regular dicts at runtime, it is not possible to
-use ``isinstance`` checks to distinguish between different variants of a Union of
-TypedDict in the same way you can with regular objects.
+由于在运行时，TypedDict 实际上只是常规字典，因此不能使用 ``isinstance`` 检查来区分 TypedDict 的不同变体，如同在常规对象中那样。
 
-Instead, you can use the :ref:`tagged union pattern <tagged_unions>`. The referenced
-section of the docs has a full description with an example, but in short, you will
-need to give each TypedDict the same key where each value has a unique
-:ref:`Literal type <literal_types>`. Then, check that key to distinguish
-between your TypedDicts.
+相反，你可以使用 :ref:`标记联合模式 <tagged_unions>`。文档中引用的部分提供了完整的描述和示例，但简而言之，你需要给每个 TypedDict 相同的键，其中每个值具有唯一的 :ref:`字面量类型 <literal_types>`。然后，检查该键以区分你的 TypedDicts。
 
-Inline TypedDict types
-----------------------
+内联TypedDict类型(Inline)
+--------------------------------------------
 
 .. note::
 
-    This is an experimental (non-standard) feature. Use
-    ``--enable-incomplete-feature=InlineTypedDict`` to enable.
+    这是一个实验性（非标准）功能。使用
+    ``--enable-incomplete-feature=InlineTypedDict`` 来启用。
 
-Sometimes you may want to define a complex nested JSON schema, or annotate
-a one-off function that returns a TypedDict. In such cases it may be convenient
-to use inline TypedDict syntax. For example:
+有时你可能想定义一个复杂的嵌套 JSON 架构，或为返回 TypedDict 的一次性函数进行注解。在这种情况下，使用内联 TypedDict 语法可能会很方便。例如：
 
 .. code-block:: python
 
@@ -309,20 +303,17 @@ to use inline TypedDict syntax. For example:
     class Response(TypedDict):
         status: int
         msg: str
-        # Using inline syntax here avoids defining two additional TypedDicts.
+        # 在这里使用内联语法可以避免定义两个额外的 TypedDict。
         content: {"items": list[{"key": str, "value": str}]}
 
-Inline TypedDicts can also by used as targets of type aliases, but due to
-ambiguity with a regular variables it is only allowed for (newer) explicit
-type alias forms:
+内联 TypedDict 也可以作为类型别名的目标，但由于与常规变量的歧义，它仅允许用于（较新）显式类型别名形式：
 
 .. code-block:: python
 
     from typing import TypeAlias
 
-    X = {"a": int, "b": int}  # creates a variable with type dict[str, type[int]]
-    Y: TypeAlias = {"a": int, "b": int}  # creates a type alias
-    type Z = {"a": int, "b": int}  # same as above (Python 3.12+ only)
+    X = {"a": int, "b": int}  # 创建一个类型为 dict[str, type[int]] 的变量
+    Y: TypeAlias = {"a": int, "b": int}  # 创建一个类型别名
+    type Z = {"a": int, "b": int}  # 同上（仅适用于 Python 3.12+）
 
-Also, due to incompatibility with runtime type-checking it is strongly recommended
-to *not* use inline syntax in union types.
+此外，由于与运行时类型检查的不兼容，强烈建议在联合类型中 *不* 使用内联语法。

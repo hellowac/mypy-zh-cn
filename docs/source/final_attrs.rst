@@ -1,33 +1,24 @@
 .. _final_attrs:
 
-Final names, methods and classes
+最终名称, 方法和类(Final)
 ================================
 
-This section introduces these related features:
+本节介绍以下相关功能：
 
-1. *Final names* are variables or attributes that should not be reassigned after
-   initialization. They are useful for declaring constants.
-2. *Final methods* should not be overridden in a subclass.
-3. *Final classes* should not be subclassed.
+1. *Final names* 是在初始化后不应重新赋值的变量或属性。它们对于声明常量很有用。
+2. *Final methods* 不应在子类中被重写。
+3. *Final classes* 不应被子类化。
 
-All of these are only enforced by mypy, and only in annotated code.
-There is no runtime enforcement by the Python runtime.
+所有这些仅由 mypy 强制执行，并且仅在注解代码中。Python 运行时并不强制执行这些规则。
 
 .. note::
 
-    The examples in this page import ``Final`` and ``final`` from the
-    ``typing`` module. These types were added to ``typing`` in Python 3.8,
-    but are also available for use in Python 3.4 - 3.7 via the
-    ``typing_extensions`` package.
+    本页中的示例从 ``typing`` 模块导入 ``Final`` 和 ``final``。这些类型在 Python 3.8 中添加到 ``typing``，但在 Python 3.4 - 3.7 中也可以通过 ``typing_extensions`` 包使用。
 
-Final names
------------
+最终名称(Final names)
+----------------------
 
-You can use the ``typing.Final`` qualifier to indicate that
-a name or attribute should not be reassigned, redefined, or
-overridden. This is often useful for module and class-level
-constants to prevent unintended modification. Mypy will prevent
-further assignments to final names in type-checked code:
+你可以使用 ``typing.Final`` 限定符来指示某个名称或属性不应被重新赋值、重新定义或重写。这通常对于模块和类级常量很有用，以防止意外修改。Mypy 将在类型检查的代码中防止对最终名称的进一步赋值：
 
 .. code-block:: python
 
@@ -38,11 +29,10 @@ further assignments to final names in type-checked code:
    class Base:
        DEFAULT_ID: Final = 0
 
-   RATE = 300  # Error: can't assign to final attribute
-   Base.DEFAULT_ID = 1  # Error: can't override a final attribute
+   RATE = 300  # 错误：无法赋值给最终属性
+   Base.DEFAULT_ID = 1  # 错误：无法重写最终属性
 
-Another use case for final attributes is to protect certain attributes
-from being overridden in a subclass:
+另一个使用 final 属性的用例是保护某些属性不被子类重写：
 
 .. code-block:: python
 
@@ -53,84 +43,67 @@ from being overridden in a subclass:
        ...
 
    class ListView(Window):
-       BORDER_WIDTH = 3  # Error: can't override a final attribute
+       BORDER_WIDTH = 3  # 错误：无法重写最终属性
 
-You can use :py:class:`@property <property>` to make an attribute read-only, but unlike ``Final``,
-it doesn't work with module attributes, and it doesn't prevent overriding in
-subclasses.
+你可以使用 :py:class:`@property <property>` 来使属性只读，但与 ``Final`` 不同，它不适用于模块属性，并且不防止在子类中重写。
 
-Syntax variants
-***************
+语法变体(Syntax variants)
+******************************
 
-You can use ``Final`` in one of these forms:
+你可以使用 ``Final`` 的以下形式之一：
 
-* You can provide an explicit type using the syntax ``Final[<type>]``. Example:
+* 你可以使用语法 ``Final[<type>]`` 提供一个显式类型。例如：
 
   .. code-block:: python
 
      ID: Final[int] = 1
 
-  Here, mypy will infer type ``int`` for ``ID``.
+  在这里，mypy 将推断 ``ID`` 的类型为 ``int``。
 
-* You can omit the type:
+* 你可以省略类型：
 
   .. code-block:: python
 
      ID: Final = 1
 
-  Here, mypy will infer type ``Literal[1]`` for ``ID``. Note that unlike for
-  generic classes, this is *not* the same as ``Final[Any]``.
+  在这里，mypy 将推断 ``ID`` 的类型为 ``Literal[1]``。请注意，与泛型类不同，这 *不是* ``Final[Any]``。
 
-* In class bodies and stub files, you can omit the right-hand side and just write
-  ``ID: Final[int]``.
+* 在类体和存根文件中，你可以省略右侧，只写 ``ID: Final[int]``。
 
-* Finally, you can write ``self.id: Final = 1`` (also optionally with
-  a type in square brackets). This is allowed *only* in
-  :py:meth:`__init__ <object.__init__>` methods so the final instance attribute is
-  assigned only once when an instance is created.
+* 最后，你可以写 ``self.id: Final = 1``（可选地在方括号中指定类型）。这 *仅* 允许在 :py:meth:`__init__ <object.__init__>` 方法中使用，以便最终实例属性仅在创建实例时赋值一次。
 
-Details of using ``Final``
+Final详情(Details)
 **************************
 
-These are the two main rules for defining a final name:
+定义最终名称的两个主要规则如下：
 
-* There can be *at most one* final declaration per module or class for
-  a given attribute. There can't be separate class-level and instance-level
-  constants with the same name.
+* 每个模块或类对于给定属性最多只能有 *一个(at most one)* 最终声明。不能有具有相同名称的类级别和实例级别常量。
 
-* There must be *exactly one* assignment to a final name.
+* 必须对最终名称进行 *恰好一个(exactly one)* 赋值。
 
-A final attribute declared in a class body without an initializer must
-be initialized in the :py:meth:`__init__ <object.__init__>` method (you can skip the
-initializer in stub files):
+在类体中声明的没有初始化器的最终属性必须在 :py:meth:`__init__ <object.__init__>` 方法中初始化（你可以在存根文件中省略初始化器）：
 
 .. code-block:: python
 
    class ImmutablePoint:
        x: Final[int]
-       y: Final[int]  # Error: final attribute without an initializer
+       y: Final[int]  # 错误：没有初始化器的最终属性
 
        def __init__(self) -> None:
-           self.x = 1  # Good
+           self.x = 1  # 正确
 
-``Final`` can only be used as the outermost type in assignments or variable
-annotations. Using it in any other position is an error. In particular,
-``Final`` can't be used in annotations for function arguments:
+``Final`` 只能作为赋值或变量注解中的最外层类型使用。在其他位置使用它会导致错误。特别是， ``Final`` 不能用于函数参数的注解：
 
 .. code-block:: python
 
-   x: list[Final[int]] = []  # Error!
+   x: list[Final[int]] = []  # 错误！
 
-   def fun(x: Final[list[int]]) ->  None:  # Error!
+   def fun(x: Final[list[int]]) -> None:  # 错误！
        ...
 
-``Final`` and :py:data:`~typing.ClassVar` should not be used together. Mypy will infer
-the scope of a final declaration automatically depending on whether it was
-initialized in the class body or in :py:meth:`__init__ <object.__init__>`.
+``Final`` 和 :py:data:`~typing.ClassVar` 不应一起使用。Mypy 将根据最终声明是否在类体中或在 :py:meth:`__init__ <object.__init__>` 中初始化，自动推断最终声明的作用域。
 
-A final attribute can't be overridden by a subclass (even with another
-explicit final declaration). Note, however, that a final attribute can
-override a read-only property:
+最终(Final)属性不能被子类重写（即使使用另一个显式的最终声明）。但是，请注意，最终属性可以覆盖只读属性：
 
 .. code-block:: python
 
@@ -139,26 +112,23 @@ override a read-only property:
        def ID(self) -> int: ...
 
    class Derived(Base):
-       ID: Final = 1  # OK
+       ID: Final = 1  # 正确
 
-Declaring a name as final only guarantees that the name will not be re-bound
-to another value. It doesn't make the value immutable. You can use immutable ABCs
-and containers to prevent mutating such values:
+将名称声明为最终属性仅保证该名称不会被重新绑定到另一个值。它并不使值不可变。你可以使用不可变的 ABC 和容器来防止修改这些值：
 
 .. code-block:: python
 
    x: Final = ['a', 'b']
-   x.append('c')  # OK
+   x.append('c')  # 正确
 
    y: Final[Sequence[str]] = ['a', 'b']
-   y.append('x')  # Error: Sequence is immutable
-   z: Final = ('a', 'b')  # Also an option
+   y.append('x')  # 错误：序列是不可变的
+   z: Final = ('a', 'b')  # 也是一个选项
 
-Final methods
--------------
+最终方法(Final methods)
+--------------------------
 
-Like with attributes, sometimes it is useful to protect a method from
-overriding. You can use the ``typing.final`` decorator for this purpose:
+与属性一样，有时保护方法不被重写也是很有用的。你可以使用 ``typing.final`` 装饰器来实现这一目的：
 
 .. code-block:: python
 
@@ -170,14 +140,12 @@ overriding. You can use the ``typing.final`` decorator for this purpose:
            ...
 
    class Derived(Base):
-       def common_name(self) -> None:  # Error: cannot override a final method
+       def common_name(self) -> None:  # 错误：无法重写最终方法
            ...
 
-This ``@final`` decorator can be used with instance methods, class methods,
-static methods, and properties.
+这个 ``@final`` 装饰器可以与实例方法、类方法、静态方法和属性一起使用。
 
-For overloaded methods, you should add ``@final`` on the implementation
-to make it final (or on the first overload in stubs):
+对于重载方法，你应该在实现上添加 ``@final`` 以使其成为最终方法（或者在存根中的第一个重载上添加）：
 
 .. code-block:: python
 
@@ -192,11 +160,10 @@ to make it final (or on the first overload in stubs):
        def method(self, x=None):
            ...
 
-Final classes
--------------
+最终类(Final classes)
+--------------------------
 
-You can apply the ``typing.final`` decorator to a class to indicate
-to mypy that it should not be subclassed:
+你可以将 ``typing.final`` 装饰器应用于类，以向 mypy 指示该类不应被子类化：
 
 .. code-block:: python
 
@@ -206,25 +173,18 @@ to mypy that it should not be subclassed:
    class Leaf:
        ...
 
-   class MyLeaf(Leaf):  # Error: Leaf can't be subclassed
+   class MyLeaf(Leaf):  # 错误：Leaf 不能被子类化
        ...
 
-The decorator acts as a declaration for mypy (and as documentation for
-humans), but it doesn't actually prevent subclassing at runtime.
+该装饰器作为 mypy 的声明（并作为人类的文档），但实际上并不会阻止在运行时进行子类化。
 
-Here are some situations where using a final class may be useful:
+以下是一些使用最终类可能有用的情况：
 
-* A class wasn't designed to be subclassed. Perhaps subclassing would not
-  work as expected, or subclassing would be error-prone.
-* Subclassing would make code harder to understand or maintain.
-  For example, you may want to prevent unnecessarily tight coupling between
-  base classes and subclasses.
-* You want to retain the freedom to arbitrarily change the class implementation
-  in the future, and these changes might break subclasses.
+* 一个类并不是为了被子类化而设计的。也许子类化无法按预期工作，或者子类化容易出错。
+* 子类化会使代码更难理解或维护。例如，你可能想要防止基类和子类之间不必要的紧耦合。
+* 你希望保留将来随意更改类实现的自由，而这些更改可能会破坏子类。
 
-An abstract class that defines at least one abstract method or
-property and has ``@final`` decorator will generate an error from
-mypy since those attributes could never be implemented.
+具有 ``@final`` 装饰器且定义了至少一个抽象方法或属性的抽象类将会导致 mypy 生成错误，因为这些属性永远无法实现。
 
 .. code-block:: python
 
@@ -232,6 +192,6 @@ mypy since those attributes could never be implemented.
     from typing import final
 
     @final
-    class A(metaclass=ABCMeta):  # error: Final class A has abstract attributes "f"
+    class A(metaclass=ABCMeta):  # 错误：最终类 A 具有抽象属性 "f"
         @abstractmethod
         def f(self, x: int) -> None: pass

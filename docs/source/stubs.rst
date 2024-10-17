@@ -1,116 +1,70 @@
 .. _stub-files:
 
-Stub files
-==========
+存根文件(Stub)
+================
 
-A *stub file* is a file containing a skeleton of the public interface
-of that Python module, including classes, variables, functions -- and
-most importantly, their types.
+*存根文件* 是包含 Python 模块公共接口框架的文件，包括类、变量、函数——最重要的是它们的类型。
 
-Mypy uses stub files stored in the
-`typeshed <https://github.com/python/typeshed>`_ repository to determine
-the types of standard library and third-party library functions, classes,
-and other definitions. You can also create your own stubs that will be
-used to type check your code.
+Mypy 使用存储在 `typeshed <https://github.com/python/typeshed>`_ 仓库中的存根文件来确定标准库和第三方库的函数、类及其他定义的类型。您也可以创建自己的存根，以用于类型检查您的代码。
 
-Creating a stub
+创建存根文件
 ***************
 
-Here is an overview of how to create a stub file:
+以下是创建存根文件的概述：
 
-* Write a stub file for the library (or an arbitrary module) and store it as
-  a ``.pyi`` file in the same directory as the library module.
-* Alternatively, put your stubs (``.pyi`` files) in a directory
-  reserved for stubs (e.g., :file:`myproject/stubs`). In this case you
-  have to set the environment variable ``MYPYPATH`` to refer to the
-  directory.  For example::
+* 为库（或任意模块）编写存根文件，并将其存储为 ``.pyi`` 文件，放在库模块的同一目录中。
+* 或者，将您的存根（ ``.pyi`` 文件）放在专门用于存根的目录中（例如：:file:`myproject/stubs` ）。在这种情况下，您需要将环境变量 ``MYPYPATH`` 设置为指向该目录。例如::
 
     $ export MYPYPATH=~/work/myproject/stubs
 
-Use the normal Python file name conventions for modules, e.g. :file:`csv.pyi`
-for module ``csv``. Use a subdirectory with :file:`__init__.pyi` for packages. Note
-that :pep:`561` stub-only packages must be installed, and may not be pointed
-at through the ``MYPYPATH`` (see :ref:`PEP 561 support <installed-packages>`).
+使用普通的 Python 文件命名约定来命名模块，例如： :file:`csv.pyi` 对于模块 ``csv``。对于包，使用子目录和 :file:`__init__.pyi` 文件。请注意，:pep:`561` 存根-only 包必须已安装，并且不能通过 ``MYPYPATH`` 指向（见 :ref:`PEP 561 support <installed-packages>` ）。
 
-If a directory contains both a ``.py`` and a ``.pyi`` file for the
-same module, the ``.pyi`` file takes precedence. This way you can
-easily add annotations for a module even if you don't want to modify
-the source code. This can be useful, for example, if you use 3rd party
-open source libraries in your program (and there are no stubs in
-typeshed yet).
+如果一个目录同时包含 ``.py`` 和 ``.pyi`` 文件，则 ``.pyi`` 文件优先。这种方式可以让您轻松地为模块添加注释，即使您不想修改源代码。例如，如果您在程序中使用第三方开源库（而 typeshed 中尚未有存根），这将非常有用。
 
-That's it!
+就这样！
 
-Now you can access the module in mypy programs and type check
-code that uses the library. If you write a stub for a library module,
-consider making it available for other programmers that use mypy
-by contributing it back to the typeshed repo.
+现在您可以在 mypy 程序中访问该模块，并对使用该库的代码进行类型检查。如果您为某个库模块编写了存根，考虑将其贡献回 typeshed 仓库，以便其他使用 mypy 的程序员也能使用。
 
-Mypy also ships with two tools for making it easier to create and maintain
-stubs: :ref:`stubgen` and :ref:`stubtest`.
+Mypy 还附带了两个工具，以便更轻松地创建和维护存根：:ref:`stubgen` 和 :ref:`stubtest`。
 
-The following sections explain the kinds of type annotations you can use
-in your programs and stub files.
+以下部分将解释您可以在程序和存根文件中使用的类型注释种类。
 
 .. note::
 
-   You may be tempted to point ``MYPYPATH`` to the standard library or
-   to the :file:`site-packages` directory where your 3rd party packages
-   are installed. This is almost always a bad idea -- you will likely
-   get tons of error messages about code you didn't write and that
-   mypy can't analyze all that well yet, and in the worst case
-   scenario mypy may crash due to some construct in a 3rd party
-   package that it didn't expect.
+   您可能会想将 ``MYPYPATH`` 指向标准库或安装了第三方包的 :file:`site-packages` 目录。这几乎总是个坏主意——您很可能会收到大量关于您未编写的代码的错误消息，而 mypy 对这些代码的分析效果并不好。在最坏的情况下，mypy 可能由于某个第三方包中意外的构造而崩溃。
 
-Stub file syntax
-****************
+存根文件语法(syntax)
+*********************
 
-Stub files are written in normal Python syntax, but generally
-leaving out runtime logic like variable initializers, function bodies,
-and default arguments.
+存根文件采用正常的 Python 语法编写，但通常省略运行时逻辑，如变量初始化、函数体和默认参数。
 
-If it is not possible to completely leave out some piece of runtime
-logic, the recommended convention is to replace or elide them with ellipsis
-expressions (``...``). Each ellipsis below is literally written in the
-stub file as three dots:
+如果无法完全省略某些运行时逻辑，建议使用省略号表达式（ ``...`` ）进行替代或省略。每个省略号在存根文件中字面上写作三个点：
 
 .. code-block:: python
 
-    # Variables with annotations do not need to be assigned a value.
-    # So by convention, we omit them in the stub file.
+    # 带注解的变量不需要赋值。
+    # 因此，按照惯例，我们在存根文件中省略它们。
     x: int
 
-    # Function bodies cannot be completely removed. By convention,
-    # we replace them with `...` instead of the `pass` statement.
+    # 函数体不能完全删除。按照惯例，
+    # 我们用 `...` 替代 `pass` 语句。
     def func_1(code: str) -> int: ...
 
-    # We can do the same with default arguments.
+    # 默认参数也可以这样处理。
     def func_2(a: int, b: int = ...) -> int: ...
 
 .. note::
 
-    The ellipsis ``...`` is also used with a different meaning in
-    :ref:`callable types <callable-types>` and :ref:`tuple types
-    <tuple-types>`.
+    省略号 ``...`` 在 :ref:`可调用类型 <callable-types>` 和 :ref:`元组类型 <tuple-types>` 中也有不同的含义。
 
-Using stub file syntax at runtime
+在运行时使用存根文件语法(runtime)
 *********************************
 
-You may also occasionally need to elide actual logic in regular
-Python code -- for example, when writing methods in
-:ref:`overload variants <function-overloading>` or
-:ref:`custom protocols <protocol-types>`.
+您可能偶尔需要在常规 Python 代码中省略实际逻辑，例如，在编写 :ref:`重载变体 <function-overloading>` 或 :ref:`自定义协议 <protocol-types>` 的方法时。
 
-The recommended style is to use ellipses to do so, just like in
-stub files. It is also considered stylistically acceptable to
-throw a :py:exc:`NotImplementedError` in cases where the user of the
-code may accidentally call functions with no actual logic.
+推荐的风格是使用省略号来实现这一点，和存根文件中的用法一样。对于可能意外调用没有实际逻辑的函数的代码用户，抛出 :py:exc:`NotImplementedError` 也是被认为在风格上可接受的做法。
 
-You can also elide default arguments as long as the function body
-also contains no runtime logic: the function body only contains
-a single ellipsis, the pass statement, or a ``raise NotImplementedError()``.
-It is also acceptable for the function body to contain a docstring.
-For example:
+只要函数体中没有运行时逻辑，您也可以省略默认参数: 函数体只包含一个省略号、pass 语句或 ``raise NotImplementedError()`` 。函数体包含文档字符串也是可以接受的。例如：
 
 .. code-block:: python
 
@@ -123,10 +77,9 @@ For example:
             raise NotImplementedError()
 
         def ok_3(self, foo: list[str] = ...) -> None:
-            """Some docstring"""
+            """一些文档字符串"""
             pass
 
-        # Error: Incompatible default for argument "foo" (default has
-        # type "ellipsis", argument has type "list[str]")
+        # 错误：参数 "foo" 的默认值不兼容（默认值类型为 "ellipsis"，参数类型为 "list[str]"）
         def not_ok(self, foo: list[str] = ...) -> None:
             print(foo)
