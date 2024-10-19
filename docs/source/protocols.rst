@@ -310,9 +310,9 @@ collections.abc.Iterable[T]
 
 :ref:`下面的例子 <predefined_protocols>` 定义了一个简单的 :py:meth:`__iter__ <object.__iter__>` 方法的实现：
 
-```python
-def __iter__(self) -> Iterator[T]
-```
+.. code-block:: python
+
+   def __iter__(self) -> Iterator[T]
 
 另请参见：:py:class:`collections.abc.Iterable`。
 
@@ -321,10 +321,10 @@ collections.abc.Iterator[T]
 
 `collections.abc.Iterator` 协议定义了以下方法：
 
-```python
-def __next__(self) -> T
-def __iter__(self) -> Iterator[T]
-```
+.. code-block:: python
+
+   def __next__(self) -> T
+   def __iter__(self) -> Iterator[T]
 
 另请参见：:py:class:`collections.abc.Iterator`。
 
