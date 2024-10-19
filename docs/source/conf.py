@@ -271,7 +271,7 @@ texinfo_documents = [
 rst_prolog = ".. |...| unicode:: U+2026   .. ellipsis\n"
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/zh-cn/3", None),  # :py:data: 标签的内容指定到中文版本
     "attrs": ("https://www.attrs.org/en/stable/", None),
     "cython": ("https://docs.cython.org/en/latest", None),
     "monkeytype": ("https://monkeytype.readthedocs.io/en/latest", None),

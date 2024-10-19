@@ -27,7 +27,7 @@ Mypy 使用存储在 `typeshed <https://github.com/python/typeshed>`_ 仓库中�
 
 Mypy 还附带了两个工具，以便更轻松地创建和维护存根：:ref:`stubgen` 和 :ref:`stubtest`。
 
-以下部分将解释您可以在程序和存根文件中使用的类型注释种类。
+以下部分将解释您可以在程序和存根文件中使用的类型注解种类。
 
 .. note::
 

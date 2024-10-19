@@ -163,7 +163,7 @@ Mypy 将要求在期望 ``UserId`` 的地方进行从 ``int`` 的显式转换，
 
 虽然这个函数签名是可行的，但它太宽松：它暗示 ``mouse_event`` 无论我们传入多少个参数都可能返回任意对象。它也不禁止调用者传入错误数量的整数；例如，mypy 会将 ``mouse_event(1, 2, 20)`` 视为有效。
 
-我们可以通过使用 :pep:`overloading <484#function-method-overloading>` 来改善这一点，它允许我们为同一函数提供多个类型注释（签名），以更准确地描述函数的行为：
+我们可以通过使用 :pep:`overloading <484#function-method-overloading>` 来改善这一点，它允许我们为同一函数提供多个类型注解（签名），以更准确地描述函数的行为：
 
 .. code-block:: python
 

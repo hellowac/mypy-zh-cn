@@ -31,7 +31,7 @@
 检查每个函数是否有注释 [no-untyped-def]
 ------------------------------------------------------------
 
-如果您使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`，mypy 要求所有函数都有注释（可以是 Python 3 注释或类型注释）。
+如果您使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`，mypy 要求所有函数都有注释（可以是 Python 3 注释或类型注解）。
 
 示例：
 
@@ -39,14 +39,14 @@
 
     # mypy: disallow-untyped-defs
 
-    def inc(x):  # 错误: 函数缺少类型注释  [no-untyped-def]
+    def inc(x):  # 错误: 函数缺少类型注解  [no-untyped-def]
         return x + 1
 
     def inc_ok(x: int) -> int:  # OK
         return x + 1
 
     class Counter:
-         # 错误: 函数缺少类型注释  [no-untyped-def]
+         # 错误: 函数缺少类型注解  [no-untyped-def]
          def __init__(self):
              self.value = 0
 
@@ -170,7 +170,7 @@
 
 如果您使用 :option:`--disallow-any-unimported <mypy --disallow-any-unimported>`，mypy 如果类型的某个组件变为 ``Any``，因为 mypy 无法解析导入，将生成错误。这些“隐形”的 ``Any`` 类型可能会令人惊讶，并意外导致不精确的类型检查。
 
-在此示例中，我们假设 mypy 无法找到模块 ``animals``，这意味着 ``Cat`` 在类型注释中回退为 ``Any``：
+在此示例中，我们假设 mypy 无法找到模块 ``animals``，这意味着 ``Cat`` 在类型注解中回退为 ``Any``：
 
 .. code-block:: python
 

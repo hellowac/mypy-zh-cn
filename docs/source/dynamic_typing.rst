@@ -4,7 +4,7 @@
 动态类型代码(Dynamically)
 ===========================
 
-在 :ref:`getting-started-dynamic-vs-static` 中，我们讨论了函数体内没有任何显式类型注释的情况被称为“动态类型(dynamically typed)”，并且 mypy 不会对其进行检查。在本节中，我们将更详细地讨论这意味着什么，以及如何在更细粒度的基础上启用动态类型。
+在 :ref:`getting-started-dynamic-vs-static` 中，我们讨论了函数体内没有任何显式类型注解的情况被称为“动态类型(dynamically typed)”，并且 mypy 不会对其进行检查。在本节中，我们将更详细地讨论这意味着什么，以及如何在更细粒度的基础上启用动态类型。
 
 在您的代码过于复杂以至于 mypy 无法理解的情况下，您可以通过显式地将变量或参数的类型设置为 ``Any`` 来使其动态类型。Mypy 将允许您对类型为 ``Any`` 的值进行基本上任何操作，包括将类型为 ``Any`` 的值赋给任何类型的变量（或反之亦然）。
 
@@ -59,7 +59,7 @@
         reveal_type(x)  # 显示的类型是 "Any"
         x.can.do["anything", x]("wants", 2)
 
-您可以使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>` 标志使 mypy 针对没有类型注释的函数参数发出警告。
+您可以使用 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>` 标志使 mypy 针对没有类型注解的函数参数发出警告。
 
 缺少类型参数的泛型类型将隐式地将这些参数视为 ``Any``：
 

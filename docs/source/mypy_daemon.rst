@@ -99,7 +99,7 @@ Mypy 守护进程 (mypy 服务)
 静态推断注解(Static inference of annotations)
 *******************************************************
 
-mypy 守护进程支持（作为实验性功能）静态推断草拟的函数和方法类型注释。使用 ``dmypy suggest FUNCTION`` 生成格式为 ``(param_type_1, param_type_2, ...) -> ret_type`` 的草拟签名（所有参数的类型均包括在内，包括仅限关键字的参数、``*args`` 和 ``**kwargs``）。
+mypy 守护进程支持（作为实验性功能）静态推断草拟的函数和方法类型注解。使用 ``dmypy suggest FUNCTION`` 生成格式为 ``(param_type_1, param_type_2, ...) -> ret_type`` 的草拟签名（所有参数的类型均包括在内，包括仅限关键字的参数、``*args`` 和 ``**kwargs``）。
 
 这是一个低级功能，旨在供编辑器集成、IDE 和其他工具使用（例如， `PyCharm 的 mypy 插件`_ ），以自动将注释添加到源文件中，或建议函数签名。
 

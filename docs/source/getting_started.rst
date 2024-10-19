@@ -236,7 +236,7 @@ Mypy 还可以理解您使用的库中的类型。
 
 * 阅读 :ref:`mypy cheatsheet <cheat-sheet-py3>`。
 
-* 如果您有一个没有很多类型注释的现有大型代码库，请阅读 :ref:`existing-code`。
+* 如果您有一个没有很多类型注解的现有大型代码库，请阅读 :ref:`existing-code`。
 
 * 阅读关于 Zulip 项目采用 mypy 经验的 `博客文章 <https://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy/>`_。
 

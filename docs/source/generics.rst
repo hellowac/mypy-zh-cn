@@ -104,8 +104,8 @@
 
     在继续之前，让我们澄清一些术语。
     在 ``class Stack[T]`` 或 ``class Stack(Generic[T])`` 中，名称 ``T`` 声明了一个 *类型参数(type parameter)* ``T`` （属于 ``Stack`` 类）。
-    ``T`` 也被称为 *类型变量(type variable)*，尤其是在类型注释中，例如上面 ``push`` 的签名。
-    当在类型注释中使用类型 ``Stack[...]`` 时，方括号中的类型被称为 *类型参数(type argument)*。
+    ``T`` 也被称为 *类型变量(type variable)*，尤其是在类型注解中，例如上面 ``push`` 的签名。
+    当在类型注解中使用类型 ``Stack[...]`` 时，方括号中的类型被称为 *类型参数(type argument)*。
     这类似于函数参数和实参之间的区别。
 
 .. _generic-subclasses:

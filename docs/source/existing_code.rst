@@ -3,7 +3,7 @@
 在现有代码库中使用 mypy
 ==========================
 
-本节说明如何在一个现有的、类型注释较少或没有类型注释的代码库中开始使用 mypy。如果您是初学者，可以跳过本节。
+本节说明如何在一个现有的、类型注解较少或没有类型注解的代码库中开始使用 mypy。如果您是初学者，可以跳过本节。
 
 从小处着手
 -----------
@@ -143,7 +143,7 @@ Mypy 提供了高度可配置的选项。一旦开始使用静态类型，您可
    disallow_untyped_decorators = True
    disallow_any_generics = True
 
-   # 以下选项是强制使用类型注释的不同级别
+   # 以下选项是强制使用类型注解的不同级别
    disallow_untyped_calls = True
    disallow_incomplete_defs = True
    disallow_untyped_defs = True

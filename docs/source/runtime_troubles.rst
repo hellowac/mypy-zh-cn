@@ -6,17 +6,17 @@
 惯用的类型注解使用有时会与特定 Python 版本所认为的合法代码相冲突。本节描述这些场景，并解释如何让代码重新运行。一般来说，我们有三种工具可供使用：
 
 * 使用 ``from __future__ import annotations`` (:pep:`563`)（这种行为可能在未来的 Python 版本中成为默认）。
-* 使用字符串字面量类型或类型注释。
+* 使用字符串字面量类型或类型注解。
 * 使用 ``typing.TYPE_CHECKING`` 。
 
 在讨论具体问题之前，我们先介绍这些工具的使用。
 
 .. _string-literal-types:
 
-字符串字面量类型和类型注释(literal)
+字符串字面量类型和类型注解(literal)
 --------------------------------------
 
-Mypy 允许使用已弃用的 ``# type:`` 类型注释语法添加类型注解。这在 Python 3.6 之前是必需的，因为早期版本不支持变量的类型注解。例如：
+Mypy 允许使用已弃用的 ``# type:`` 类型注解语法添加类型注解。这在 Python 3.6 之前是必需的，因为早期版本不支持变量的类型注解。例如：
 
 .. code-block:: python
 
@@ -25,7 +25,7 @@ Mypy 允许使用已弃用的 ``# type:`` 类型注释语法添加类型注解�
     def f(x):  # type: (int) -> int
         return x + 1
 
-    # 函数参数较多时的替代类型注释语法
+    # 函数参数较多时的替代类型注解语法
     def send_email(
         address,     # type: Union[str, List[str]]
         sender,      # type: str
@@ -35,7 +35,7 @@ Mypy 允许使用已弃用的 ``# type:`` 类型注释语法添加类型注解�
     ):
     # type: (...) -> bool
 
-类型注释不会引发运行时错误，因为注释不会被 Python 解释执行。
+类型注解不会引发运行时错误，因为注释不会被 Python 解释执行。
 
 类似地，使用字符串字面量类型可以避免导致运行时错误的注解问题。
 
@@ -111,7 +111,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
    def f(x: A) -> None: ...  # OK
    class A: ...
 
-对于 Python 3.6 及以下版本，你可以将类型作为字符串字面量或类型注释输入：
+对于 Python 3.6 及以下版本，你可以将类型作为字符串字面量或类型注解输入：
 
 .. code-block:: python
 
@@ -136,7 +136,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
 
    ImportError: cannot import name 'b' from partially initialized module 'A' (most likely due to a circular import)
 
-如果这些循环在运行程序时成为问题，可以使用一个技巧：如果导入仅用于类型注解，并且你使用了 a) :ref:`future annotations import<future-annotations>` 或 b) 用字符串字面量或类型注释来表示相关注解，你可以将导入放在 ``if TYPE_CHECKING:`` 块中，这样它们在运行时不会被执行。例如：
+如果这些循环在运行程序时成为问题，可以使用一个技巧：如果导入仅用于类型注解，并且你使用了 a) :ref:`future annotations import<future-annotations>` 或 b) 用字符串字面量或类型注解来表示相关注解，你可以将导入放在 ``if TYPE_CHECKING:`` 块中，这样它们在运行时不会被执行。例如：
 
 文件 ``foo.py``:
 
@@ -178,7 +178,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
 
    results: Queue[int] = Queue()  # TypeError: 'type' object is not subscriptable
 
-为避免在注解中使用这些泛型时产生错误，只需使用 :ref:`future annotations import <future-annotations>` （对于 Python 3.6 及以下版本可以使用字符串字面量或类型注释）。
+为避免在注解中使用这些泛型时产生错误，只需使用 :ref:`future annotations import <future-annotations>` （对于 Python 3.6 及以下版本可以使用字符串字面量或类型注解）。
 
 当从这些类继承时，要避免错误，情况稍微复杂些，需要使用 :ref:`typing.TYPE_CHECKING <typing-type-checking>` ：
 
@@ -255,7 +255,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
 
 从 Python 3.10 开始（:pep:`604`），你可以使用 ``x: int | str`` 来表示联合类型，而不是 ``x: typing.Union[int, str]``。
 
-在 Python 3.7 及更高版本中，也有限制地支持这种语法：如果你使用了 ``from __future__ import annotations`` ，mypy 会理解这种语法在注解、字符串字面量类型、类型注释和存根文件中的使用。然而，由于 Python 解释器在运行时不支持这种方式（如果运行时评估 ``int | str`` ，会引发 ``TypeError: unsupported operand type(s) for |: 'type' and 'type'``），请注意 :ref:`future annotations import <future-annotations>` 部分中提到的注意事项。
+在 Python 3.7 及更高版本中，也有限制地支持这种语法：如果你使用了 ``from __future__ import annotations`` ，mypy 会理解这种语法在注解、字符串字面量类型、类型注解和存根文件中的使用。然而，由于 Python 解释器在运行时不支持这种方式（如果运行时评估 ``int | str`` ，会引发 ``TypeError: unsupported operand type(s) for |: 'type' and 'type'``），请注意 :ref:`future annotations import <future-annotations>` 部分中提到的注意事项。
 
 使用 typing 模块的新特性
 -----------------------------

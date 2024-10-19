@@ -221,7 +221,7 @@ Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以
 
 .. option:: --disallow-any-expr
 
-    此标志禁止模块中所有类型为 ``Any`` 的表达式。如果类型为 ``Any`` 的表达式在模块中的任何地方出现，mypy 将输出错误，除非该表达式立即用作 :py:func:`~typing.cast` 的参数或赋值给具有显式类型注释的变量。
+    此标志禁止模块中所有类型为 ``Any`` 的表达式。如果类型为 ``Any`` 的表达式在模块中的任何地方出现，mypy 将输出错误，除非该表达式立即用作 :py:func:`~typing.cast` 的参数或赋值给具有显式类型注解的变量。
 
     此外，声明类型为 ``Any`` 的变量或转换为类型 ``Any`` 也是不允许的。请注意，调用参数类型为 ``Any`` 的函数仍然是允许的。
 
@@ -231,7 +231,7 @@ Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以
 
 .. option:: --disallow-any-explicit
 
-    此标志禁止在类型位置中显式使用 ``Any``，如类型注释和泛型类型参数。
+    此标志禁止在类型位置中显式使用 ``Any``，如类型注解和泛型类型参数。
 
 .. option:: --disallow-any-generics
 
@@ -440,11 +440,11 @@ None 和 Optional 处理(None and Optional handling)
 
     .. code-block:: python
 
-        a = None  # 如果使用 --local-partial-types，这里需要类型注释
+        a = None  # 如果使用 --local-partial-types，这里需要类型注解
         b: int | None = None
 
         class Foo:
-            bar = None  # 如果使用 --local-partial-types，这里需要类型注释
+            bar = None  # 如果使用 --local-partial-types，这里需要类型注解
             baz: int | None = None
 
             def __init__(self) -> None:
@@ -715,7 +715,7 @@ None 和 Optional 处理(None and Optional handling)
 .. option:: --warn-incomplete-stub
 
     此标志修改 :option:`--disallow-untyped-defs` 和
-    :option:`--disallow-incomplete-defs` 标志，以便在 typeshed 中缺少类型注释或具有不完整注释时也报告错误。如果两个标志都缺失，:option:`--warn-incomplete-stub` 也不会执行任何操作。
+    :option:`--disallow-incomplete-defs` 标志，以便在 typeshed 中缺少类型注解或具有不完整注释时也报告错误。如果两个标志都缺失，:option:`--warn-incomplete-stub` 也不会执行任何操作。
 
     此标志主要供希望贡献 typeshed 的人使用，以便方便地查找缺口和遗漏。
 

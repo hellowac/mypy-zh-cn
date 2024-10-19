@@ -114,8 +114,8 @@ Mypy 支持 :py:func:`~typing.dataclass_transform` 装饰器，如在 `PEP 681 <
 attrs 包(The attrs package)
 **********************************
 
-:doc:`attrs <attrs:index>` 是一个让你定义类而无需编写样板代码的包。Mypy 可以检测该包的使用，并将使用它找到的类型注释为装饰类生成必要的方法定义。
-类型注释可以如下添加：
+:doc:`attrs <attrs:index>` 是一个让你定义类而无需编写样板代码的包。Mypy 可以检测该包的使用，并将使用它找到的类型注解为装饰类生成必要的方法定义。
+类型注解可以如下添加：
 
 .. code-block:: python
 
@@ -168,7 +168,7 @@ Typeshed 有一些“白色谎言”注释以简化类型检查。:py:func:`attr
       class A:
           ...
 
-* 目前，``converter`` 仅支持命名函数。如果 mypy 找到其他内容，它将抱怨不理解该参数，且 :py:meth:`__init__ <object.__init__>` 中的类型注释将被替换为 ``Any``。
+* 目前，``converter`` 仅支持命名函数。如果 mypy 找到其他内容，它将抱怨不理解该参数，且 :py:meth:`__init__ <object.__init__>` 中的类型注解将被替换为 ``Any``。
 
 * :ref:`验证器装饰器 <attrs:examples-validators>` 和 `默认装饰器 <https://www.attrs.org/en/stable/examples.html#defaults>`_
   不会针对它们设置/验证的属性进行类型检查。

@@ -3,12 +3,12 @@
 类型提示备忘单
 ======================
 
-本文档是一个快速备忘单，展示了如何在 Python 中使用各种常见类型的类型注释。
+本文档是一个快速备忘单，展示了如何在 Python 中使用各种常见类型的类型注解。
 
 变量
 *********
 
-从技术上讲，下面展示的许多类型注释是多余的，因为 mypy 通常可以根据变量的值推断出类型。有关更多细节，请参见 :ref:`type-inference-and-annotations` 。
+从技术上讲，下面展示的许多类型注解是多余的，因为 mypy 通常可以根据变量的值推断出类型。有关更多细节，请参见 :ref:`type-inference-and-annotations` 。
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@
        return num1 + num2
 
    # 如果函数不返回值，使用 None 作为返回类型
-   # 默认参数值放在类型注释之后
+   # 默认参数值放在类型注解之后
    def show(value: str, excitement: int = 10) -> None:
        print(value + "!" * excitement)
 
@@ -217,7 +217,7 @@
    # Mypy 将打印出包含类型的错误消息；在运行代码之前请移除它。
    reveal_type(1)  # 揭示的类型是 "builtins.int"
 
-   # 如果你用一个空容器或 "None" 初始化一个变量，你可能需要通过提供显式类型注释来帮助 mypy。
+   # 如果你用一个空容器或 "None" 初始化一个变量，你可能需要通过提供显式类型注解来帮助 mypy。
    x: list[str] = []
    x: str | None = None
 
@@ -243,7 +243,7 @@
    else:
        import orjson as json  # mypy 不知道这一点
 
-在某些情况下，类型注释可能会导致运行时问题，详见 :ref:`runtime_troubles` 来处理这些问题。
+在某些情况下，类型注解可能会导致运行时问题，详见 :ref:`runtime_troubles` 来处理这些问题。
 
 请参见 :ref:`silencing-type-errors` 以获取有关如何静默错误的详细信息。
 
@@ -355,13 +355,13 @@
 协程与 asyncio
 **********************
 
-有关协程和异步代码类型注释的详细信息，请参见 :ref:`async-and-await`。
+有关协程和异步代码类型注解的详细信息，请参见 :ref:`async-and-await`。
 
 .. code-block:: python
 
    import asyncio
 
-   # 协程的类型注释与普通函数相同
+   # 协程的类型注解与普通函数相同
    async def countdown(tag: str, count: int) -> str:
        while count > 0:
            print(f'T-minus {count} ({tag})')

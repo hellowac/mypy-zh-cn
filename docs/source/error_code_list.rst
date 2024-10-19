@@ -532,7 +532,7 @@ Mypy 检查索引操作中索引值（如 ``x[y]``）是否支持索引，并且
        def set_y(self) -> None:
            self.y = self.x
 
-要解决此错误，可以为目标变量或属性添加显式类型注释。有时，您还可以重新组织代码，使变量的定义在源文件中早于对该变量的引用。解开循环导入也可能有帮助。
+要解决此错误，可以为目标变量或属性添加显式类型注解。有时，您还可以重新组织代码，使变量的定义在源文件中早于对该变量的引用。解开循环导入也可能有帮助。
 
 我们为 ``y`` 属性添加显式注释以解决此问题：
 
@@ -575,7 +575,7 @@ Mypy 检查索引操作中索引值（如 ``x[y]``）是否支持索引，并且
 检查导入目标是否可以找到 [import-untyped]
 --------------------------------------------------------
 
-如果 mypy 能找到导入模块的源代码，但该模块不提供类型注释（通过 :ref:`PEP 561 <installed-packages>`），则会生成错误。
+如果 mypy 能找到导入模块的源代码，但该模块不提供类型注解（通过 :ref:`PEP 561 <installed-packages>`），则会生成错误。
 
 示例：
 
@@ -1017,7 +1017,7 @@ Mypy 会检查 f-string、``str.format()`` 调用和 ``%`` 插值是否有效（
 通知未检查函数中的注释 [annotation-unchecked]
 --------------------------------------------------------------------------
 
-有时用户可能会不小心省略函数的注释，而 mypy 将不会检查该函数的主体（除非使用 :option:`--check-untyped-defs <mypy --check-untyped-defs>` 或 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`）。为了避免此类情况被忽视，mypy 将显示一条注释，如果未检查函数中有任何类型注释：
+有时用户可能会不小心省略函数的注释，而 mypy 将不会检查该函数的主体（除非使用 :option:`--check-untyped-defs <mypy --check-untyped-defs>` 或 :option:`--disallow-untyped-defs <mypy --disallow-untyped-defs>`）。为了避免此类情况被忽视，mypy 将显示一条注释，如果未检查函数中有任何类型注解：
 
 .. code-block:: python
 
