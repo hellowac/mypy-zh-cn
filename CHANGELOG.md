@@ -237,6 +237,15 @@ def func(n: str, y: int) -> {"name": str, "year": int}:
 * 修复与 `functools.partial` 相关的联合可调用对象（Jukka Lehtosalo，PR [17903](https://github.com/python/mypy/pull/17903)）
 * 改进与 `functools.partial` 相关的泛型函数处理（Ivan Levkivskyi，PR [17925](https://github.com/python/mypy/pull/17925)）
 
+
+### Mypy 1.12.1
+
+ * 修复在错误消息中显示部分已分析类型时的崩溃问题（Ivan Levkivskyi，PR [17961](https://github.com/python/mypy/pull/17961)）
+ * 修复在迭代联合类型时涉及 `self` 类型的问题（Shantanu，PR [17976](https://github.com/python/mypy/pull/17976)）
+ * 修复联合类型上下文中带有类型变量默认值的类型对象问题（Jukka Lehtosalo，PR [17991](https://github.com/python/mypy/pull/17991)）
+ * 回退对 `os.path` 存根的更改，该更改影响了 `os.PathLike[Any]` 的使用（Shantanu，PR [17995](https://github.com/python/mypy/pull/17995)）
+
+
 ### 类型仓库更新
 
 请查看 [git log](https://github.com/python/typeshed/commits/main?after=91a58b07cdd807b1d965e04ba85af2adab8bf924+0&branch=main&path=stdlib) 以获取标准库类型仓库 stub 变化的完整列表。
