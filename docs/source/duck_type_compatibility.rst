@@ -19,4 +19,4 @@
    n = 90  # 推断类型为 'int'
    print(degrees_to_radians(n))  # Okay!
 
-您还可以使用 :ref:`protocol-types` 来以更原则和可扩展的方式实现类似效果。协议不适用于 ``int`` 与 ``float`` 的兼容性，因为 ``float`` 不是协议类，而是常规的具体类，许多标准库函数期望具体的 ``float``（或 ``int``）实例。
+您还可以使用 :ref:`protocol-types` 来以更原则和可扩展的方式实现类似效果。协议不适用于 ``int`` 与 ``float`` 的兼容性，因为 ``float`` 不是协议类，而是常规的具体类，许多标准库函数期望具体的 ``float`` (或 ``int`` )实例。

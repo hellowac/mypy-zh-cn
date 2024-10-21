@@ -82,7 +82,7 @@ Mypy 允许您以几种不同的方式指定要进行类型检查的文件。
 
 - Mypy 将递归发现并检查提供的目录路径中以 ``.py`` 或 ``.pyi`` 结尾的所有文件，考虑到 :option:`--exclude <mypy --exclude>`。
 
-- 对于每个要检查的文件，mypy 将尝试将文件（例如 ``project/foo/bar/baz.py``）与完全合格的模块名称（例如 ``foo.bar.baz``）关联。包所在的目录（``project``）随后将添加到 mypy 的模块搜索路径中。
+- 对于每个要检查的文件，mypy 将尝试将文件（例如 ``project/foo/bar/baz.py`` )与完全合格的模块名称（例如 ``foo.bar.baz`` )关联。包所在的目录( ``project`` )随后将添加到 mypy 的模块搜索路径中。
 
 mypy 确定完全合格模块名称的方式取决于是否设置了选项 :option:`--no-namespace-packages <mypy --no-namespace-packages>` 和 :option:`--explicit-package-bases <mypy --explicit-package-bases>`。
 
@@ -166,7 +166,7 @@ Mypy 不会尝试推断您安装的任何第三方库的类型，除非它们已
 
 3.  :ref:`编写自己的存根文件 <stub-files>`，其中包含库的类型提示。您可以通过命令行传递、使用 :confval:`files` 或 :confval:`mypy_path` 配置文件选项，或通过将位置添加到 ``MYPYPATH`` 环境变量来指向您的类型提示。
 
-    这些存根文件不需要完整！一个好的策略是使用 :ref:`stubgen <stubgen>`，这是与 mypy 一起打包的程序，生成存根的初步草稿。然后，您可以仅在所需的库部分进行迭代。
+    这些存根文件不需要完整!一个好的策略是使用 :ref:`stubgen <stubgen>`，这是与 mypy 一起打包的程序，生成存根的初步草稿。然后，您可以仅在所需的库部分进行迭代。
 
     如果您想分享您的工作，可以尝试将您的存根贡献回库中——请参阅我们关于创建 :ref:`PEP 561 compliant packages <installed-packages>` 的文档。
 
@@ -239,7 +239,7 @@ Mypy 不会尝试推断您安装的任何第三方库的类型，除非它们已
 
 4.  通过使用 :confval:`mypy_path` 或 :confval:`files` 配置文件选项，或使用 ``MYPYPATH`` 环境变量，直接指定包含您要进行类型检查的模块的目录。
 
-    注意：如果您尝试导入的模块实际上是某个包的 *子模块*，则应指定包含 *整个* 包的目录。例如，假设您尝试添加的模块是 ``foo.bar.baz``，它位于 ``~/foo-project/src/foo/bar/baz.py``。在这种情况下，您必须运行 ``mypy ~/foo-project/src``（或将 ``MYPYPATH`` 设置为 ``~/foo-project/src``）。
+    注意：如果您尝试导入的模块实际上是某个包的 *子模块*，则应指定包含 *整个* 包的目录。例如，假设您尝试添加的模块是 ``foo.bar.baz``，它位于 ``~/foo-project/src/foo/bar/baz.py``。在这种情况下，您必须运行 ``mypy ~/foo-project/src`` (或将 ``MYPYPATH`` 设置为 ``~/foo-project/src`` )。
 
 .. _finding-imports:
 
@@ -263,7 +263,7 @@ Mypy 不会尝试推断您安装的任何第三方库的类型，除非它们已
 其次，mypy 在查找常规 Python 文件和包时，还会搜索存根文件。查找模块 ``foo`` 的规则如下：
 
 - 搜索会查看搜索路径中的每个目录（见上文），直到找到匹配项。
-- 如果找到名为 ``foo`` 的包（即一个包含 ``__init__.py`` 或 ``__init__.pyi`` 文件的目录 ``foo``），那么这是一个匹配。
+- 如果找到名为 ``foo`` 的包（即一个包含 ``__init__.py`` 或 ``__init__.pyi`` 文件的目录 ``foo`` )，那么这是一个匹配。
 - 如果找到名为 ``foo.pyi`` 的存根文件，那么这是一个匹配。
 - 如果找到名为 ``foo.py`` 的 Python 模块，那么这是一个匹配。
 

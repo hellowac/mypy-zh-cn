@@ -40,7 +40,7 @@
 
    x: int | str = 1
 
-如果没有类型注解，``x`` 的类型将只是 ``int``。我们使用注释将其类型指定为更一般的 ``int | str``（该类型表示值可以是 ``int`` 或 ``str``）。
+如果没有类型注解，``x`` 的类型将只是 ``int``。我们使用注释将其类型指定为更一般的 ``int | str`` (该类型表示值可以是 ``int`` 或 ``str`` )。
 
 最佳理解方式是类型注解设置的是变量的类型，而不是表达式的类型。例如，mypy 会对以下代码报错：
 
@@ -63,7 +63,7 @@
    # 供 mypy 推断 "cs" 的类型：
    a, b, *cs = 1, 2  # 错误：需要为 "cs" 提供类型注解
 
-   rs: list[int]  # 没有赋值！
+   rs: list[int]  # 没有赋值!
    p, q, *rs = 1, 2  # OK
 
 显式集合类型
@@ -84,7 +84,7 @@
 
 .. note::
 
-   对于像 :py:class:`list`、:py:class:`dict`、:py:class:`tuple` 和 :py:class:`set` 这样的内置集合使用类型参数（例如 ``list[int]``）仅适用于 Python 3.9 及以上版本。对于 Python 3.8 及更早版本，您必须使用 :py:class:`~typing.List` （例如 ``List[int]``）、:py:class:`~typing.Dict` 等。
+   对于像 :py:class:`list`、:py:class:`dict`、:py:class:`tuple` 和 :py:class:`set` 这样的内置集合使用类型参数（例如 ``list[int]`` )仅适用于 Python 3.9 及以上版本。对于 Python 3.8 及更早版本，您必须使用 :py:class:`~typing.List` （例如 ``List[int]`` )、:py:class:`~typing.Dict` 等。
 
 容器类型的兼容性
 *********************
@@ -195,7 +195,7 @@ Mypy 会考虑赋值语句左侧变量的类型，从而推断右侧表达式的
 
    error: "str" has no attribute "trim"  [attr-defined]
 
-可以在忽略注释中添加特定的错误代码（例如 ``# type: ignore[attr-defined]``），以澄清正在静默的内容。您可以在 :ref:`这里 <silence-error-codes>` 找到有关错误代码的更多信息。
+可以在忽略注释中添加特定的错误代码（例如 ``# type: ignore[attr-defined]`` )，以澄清正在静默的内容。您可以在 :ref:`这里 <silence-error-codes>` 找到有关错误代码的更多信息。
 
 静默错误的其他方法
 ----------------------------
@@ -243,4 +243,4 @@ Mypy 会考虑赋值语句左侧变量的类型，从而推断右侧表达式的
 
     @typing.no_type_check
     def foo() -> str:
-       return 12345  # 没有错误！
+       return 12345  # 没有错误!

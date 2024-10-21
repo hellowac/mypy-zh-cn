@@ -199,7 +199,7 @@ Mypy 将要求在期望 ``UserId`` 的地方进行从 ``int`` 的显式转换，
 
 这使得 mypy 可以更精确地理解对 ``mouse_event`` 的调用。例如，mypy 将理解 ``mouse_event(5, 25)`` 始终返回 ``ClickEvent`` 类型，并会对调用 ``mouse_event(5, 25, 2)`` 报告错误。
 
-作为另一个示例，假设我们想编写一个自定义容器类，该类实现 :py:meth:`__getitem__ <object.__getitem__>` 方法（``[]`` 括号索引）。如果该方法接收一个整数，我们返回一个单一项。如果它接收一个 ``slice`` ，我们返回一个 :py:class:`~collections.abc.Sequence` 的项。
+作为另一个示例，假设我们想编写一个自定义容器类，该类实现 :py:meth:`__getitem__ <object.__getitem__>` 方法( ``[]`` 括号索引）。如果该方法接收一个整数，我们返回一个单一项。如果它接收一个 ``slice`` ，我们返回一个 :py:class:`~collections.abc.Sequence` 的项。
 
 我们可以通过使用重载准确地编码参数与返回类型之间的关系，如下所示（Python 3.12 语法）：
 
@@ -276,13 +276,13 @@ Mypy 将要求在期望 ``UserId`` 的地方进行从 ``int`` 的显式转换，
 
 变体主体必须都是空的；只有实现允许包含代码。这是因为在运行时，变体会被完全忽略：它们被最终的实现函数覆盖。
 
-这意味着重载函数仍然是一个普通的 Python 函数！没有自动调度处理，您必须在实现中手动处理不同的类型（例如，通过使用 ``if`` 语句和 :py:func:`isinstance <isinstance>` 检查）。
+这意味着重载函数仍然是一个普通的 Python 函数!没有自动调度处理，您必须在实现中手动处理不同的类型（例如，通过使用 ``if`` 语句和 :py:func:`isinstance <isinstance>` 检查）。
 
 如果您在存根文件中添加重载，应该省略实现函数：存根不包含运行时逻辑。
 
 .. note::
 
-   虽然我们可以使用 ``pass`` 关键字留空变体主体，但更常见的约定是使用省略号（``...``）字面量。
+   虽然我们可以使用 ``pass`` 关键字留空变体主体，但更常见的约定是使用省略号( ``...`` )字面量。
 
 重载调用时的类型检查(Type checking)
 -----------------------------------------
@@ -359,7 +359,7 @@ Mypy 将对您的重载变体定义执行几项检查，以确保它们按预期
     class Literal(Expression):
         # ...snip...
 
-    # 警告 - 第一个重载变体遮蔽了第二个！
+    # 警告 - 第一个重载变体遮蔽了第二个!
 
     @overload
     def add(left: Expression, right: Expression) -> Expression: ...
@@ -370,7 +370,7 @@ Mypy 将对您的重载变体定义执行几项检查，以确保它们按预期
     def add(left: Expression, right: Expression) -> Expression:
         # ...snip...
 
-虽然这个代码片段在技术上是类型安全的，但它确实包含一种反模式：第二个变体永远不会被选择！如果我们尝试调用 ``add(Literal(3), Literal(4))``，mypy 将始终选择第一个变体，并将函数调用的类型评估为 ``Expression``，而不是 ``Literal``。这是因为 ``Literal`` 是 ``Expression`` 的子类型，这意味着“选择第一个匹配”规则在考虑第一个重载后总是会停止。
+虽然这个代码片段在技术上是类型安全的，但它确实包含一种反模式：第二个变体永远不会被选择!如果我们尝试调用 ``add(Literal(3), Literal(4))``，mypy 将始终选择第一个变体，并将函数调用的类型评估为 ``Expression``，而不是 ``Literal``。这是因为 ``Literal`` 是 ``Expression`` 的子类型，这意味着“选择第一个匹配”规则在考虑第一个重载后总是会停止。
 
 由于拥有一个永远无法匹配的重载变体几乎肯定是一个错误，mypy 将报告错误。要修复错误，我们可以 1) 删除第二个重载或 2) 交换重载的顺序：
 
@@ -410,9 +410,9 @@ Mypy 还将对不同的变体进行类型检查，并标记任何具有固有不
 .. code-block:: python
 
     some_obj: object = 42
-    unsafe_func(some_obj) + " danger danger"  # 类型检查通过，但在运行时崩溃！
+    unsafe_func(some_obj) + " danger danger"  # 类型检查通过，但在运行时崩溃!
 
-由于 ``some_obj`` 的类型为 :py:class:`object`，mypy 将决定 ``unsafe_func`` 必须返回某种类型为 ``str`` 的值，从而得出上述将通过类型检查的结论。但实际上，``unsafe_func`` 将返回一个整数，导致代码在运行时崩溃！
+由于 ``some_obj`` 的类型为 :py:class:`object`，mypy 将决定 ``unsafe_func`` 必须返回某种类型为 ``str`` 的值，从而得出上述将通过类型检查的结论。但实际上，``unsafe_func`` 将返回一个整数，导致代码在运行时崩溃!
 
 为了防止这些类型的问题，mypy 将检测并禁止固有不安全重叠的重载，尽可能地进行努力。当以下两个条件都为真时，两个变体被视为不安全重叠：
 
@@ -428,7 +428,7 @@ Mypy 还将对不同的变体进行类型检查，并标记任何具有固有不
 .. code-block:: python
 
     some_list: list[str] = []
-    summarize(some_list) + "danger danger"  # 类型安全，但在运行时崩溃！
+    summarize(some_list) + "danger danger"  # 类型安全，但在运行时崩溃!
 
 我们在这里遇到了类似的问题。如果我们只查看重载上的注解，这个程序会通过类型检查。但由于 ``summarize(...)`` 设计为在接收到空列表时偏向返回浮点数，因此这个程序实际上会在运行时崩溃。
 
@@ -532,7 +532,7 @@ mypy 不会将像 ``summarize`` 这样的定义标记为潜在不安全的原因
     :option:`--python-version 3.10 <mypy --python-version>` 执行的。
     因此，条件 ``sys.version_info >= (3, 10)`` 将匹配，
     并且 ``B`` 的重载将被添加。
-    对 ``A`` 和 ``C`` 的重载会被忽略！
+    对 ``A`` 和 ``C`` 的重载会被忽略!
     对 ``D`` 的重载并不是条件定义的，因此也会被添加。
 
 当 mypy 无法推断某个条件始终为 ``True`` 或始终为 ``False`` 时，会发出错误。

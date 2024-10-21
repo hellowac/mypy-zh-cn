@@ -15,7 +15,7 @@
 
 .. note::
 
-   新版本的存根包通常使用不被较旧甚至最近版本的 mypy 支持的类型系统功能。如果你将 mypy 固定为较旧版本（例如使用 ``requirements.txt``），建议你也将所有存根包依赖项的版本固定。
+   新版本的存根包通常使用不被较旧甚至最近版本的 mypy 支持的类型系统功能。如果你将 mypy 固定为较旧版本（例如使用 ``requirements.txt`` )，建议你也将所有存根包依赖项的版本固定。
 
 .. note::
 
@@ -32,7 +32,7 @@
 
 如果你不想使用任何提供类型信息的已安装包，可以使用 :option:`--no-site-packages <mypy --no-site-packages>` 选项禁用搜索已安装包。
 
-注意，仅存根包不能与 ``MYPYPATH`` 一起使用。如果你希望 mypy 找到该包，则必须安装它。对于包 ``foo``，仅存根包的名称（``foo-stubs``）不是合法的包名称，因此 mypy 不会找到它，除非它已被安装（有关更多信息，请参阅 :pep:`PEP 561: Stub-only Packages <561#stub-only-packages>`）。
+注意，仅存根包不能与 ``MYPYPATH`` 一起使用。如果你希望 mypy 找到该包，则必须安装它。对于包 ``foo``，仅存根包的名称( ``foo-stubs`` )不是合法的包名称，因此 mypy 不会找到它，除非它已被安装（有关更多信息，请参阅 :pep:`PEP 561: Stub-only Packages <561#stub-only-packages>`）。
 
 创建符合 PEP 561 的包(Creating PEP 561 compatible packages)
 ************************************************************************
@@ -125,7 +125,7 @@
         packages=["package_c-stubs"]
     )
 
-上述指令足以确保生成的 wheels 包含适当的文件。然而，为了确保包含在 ``sdist``（``.tar.gz`` 压缩包）中，你还可能需要修改 ``MANIFEST.in`` 中的包含规则：
+上述指令足以确保生成的 wheels 包含适当的文件。然而，为了确保包含在 ``sdist`` (``.tar.gz`` 压缩包）中，你还可能需要修改 ``MANIFEST.in`` 中的包含规则：
 
 .. code-block:: text
 

@@ -212,7 +212,7 @@ CI 构建将运行常规的 mypy 构建，并创建一个包含构建生成的 `
 
 * 从 ``.mypy_cache`` 目录创建一个 tarball。
 
-* 确定当前 git 主分支的提交 ID（例如，使用 ``git rev-parse HEAD``）。
+* 确定当前 git 主分支的提交 ID（例如，使用 ``git rev-parse HEAD`` )。
 
 * 将 tarball 以从提交 ID 派生的名称上传到共享存储库。
 
@@ -227,7 +227,7 @@ Mypy 包装脚本(Mypy wrapper script)
 
     git merge-base HEAD origin/master
 
-下一步是根据上述 git 命令生成的合并基础的提交 ID 从共享存储库下载缓存数据（``.mypy_cache`` 目录的内容）。该脚本将解压缩数据，以便 mypy 从一个全新的 ``.mypy_cache`` 开始。最后，脚本正常运行 mypy。这就是全部！
+下一步是根据上述 git 命令生成的合并基础的提交 ID 从共享存储库下载缓存数据( ``.mypy_cache`` 目录的内容）。该脚本将解压缩数据，以便 mypy 从一个全新的 ``.mypy_cache`` 开始。最后，脚本正常运行 mypy。这就是全部!
 
 使用 mypy 守护进程进行缓存(Caching with mypy daemon)
 ====================================================
@@ -341,7 +341,7 @@ mypy 守护进程在缓存文件中需要额外的细粒度依赖数据，而这
        # 一个 **kwargs 风格的变长关键字参数。
        # 单个 KwArg() 说明符表示所有其余的关键字参数。
 
-在所有情况下，``type`` 参数默认为 ``Any``，如果省略 ``name`` 参数，则该参数没有名称（``NamedArg`` 和 ``DefaultNamedArg`` 需要名称）。一个基本的 :py:class:`~collections.abc.Callable` 如下所示：
+在所有情况下，``type`` 参数默认为 ``Any``，如果省略 ``name`` 参数，则该参数没有名称( ``NamedArg`` 和 ``DefaultNamedArg`` 需要名称）。一个基本的 :py:class:`~collections.abc.Callable` 如下所示：
 
 .. code-block:: python
 

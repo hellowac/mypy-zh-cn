@@ -315,7 +315,7 @@ None 和 Optional 处理(None and Optional handling)
 
 .. option:: --implicit-optional
 
-    此标志使 mypy 将默认值为 ``None`` 的参数视为具有隐式可选类型（``T | None``）。
+    此标志使 mypy 将默认值为 ``None`` 的参数视为具有隐式可选类型( ``T | None`` )。
 
     例如，如果设置了此标志，mypy 将假定下面代码片段中的 ``x`` 参数实际上是类型 ``int | None``，因为默认参数为 ``None``：
 
@@ -480,11 +480,11 @@ None 和 Optional 处理(None and Optional handling)
     .. code-block:: python
 
        items: list[int]
-       if 'some string' in items:  # 错误：非重叠容器检查！
+       if 'some string' in items:  # 错误：非重叠容器检查!
            ...
 
        text: str
-       if text != b'other bytes':  # 错误：非重叠相等检查！
+       if text != b'other bytes':  # 错误：非重叠相等检查!
            ...
 
        assert text is not None  # OK，检查 None 被允许作为特殊情况。
@@ -727,7 +727,7 @@ None 和 Optional 处理(None and Optional handling)
 
     当请求 mypy 对 ``SOURCE_FILE`` 进行类型检查时，此标志使 mypy 从 ``SHADOW_FILE`` 读取并进行类型检查。然而，诊断仍将引用 ``SOURCE_FILE``。
 
-    多次指定此参数（``--shadow-file X1 Y1 --shadow-file X2 Y2``）将允许 mypy 执行多个替换。
+    多次指定此参数( ``--shadow-file X1 Y1 --shadow-file X2 Y2`` )将允许 mypy 执行多个替换。
 
     这允许工具创建临时文件并进行有用的修改，而不必直接更改源文件。例如，假设我们有一个管道为某些变量添加 ``reveal_type``。这个管道在 ``original.py`` 上运行以生成 ``temp.py``。运行 ``mypy --shadow-file original.py temp.py original.py`` 将导致 mypy 对 ``temp.py`` 的内容进行类型检查，而不是 ``original.py``，但错误消息仍将引用 ``original.py``。
 

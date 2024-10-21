@@ -132,7 +132,7 @@
        def __str__(self) -> str:
            return f'StrDict({super().__str__()})'
 
-   data: StrDict[int, int]  # 错误！StrDict 不是泛型
+   data: StrDict[int, int]  # 错误!StrDict 不是泛型
    data2: StrDict  # 正确
 
    # 这是一个用户定义的泛型类
@@ -164,7 +164,7 @@
        def __str__(self) -> str:
            return f'StrDict({super().__str__()})'
 
-   data: StrDict[int, int]  # 错误！StrDict 不是泛型
+   data: StrDict[int, int]  # 错误!StrDict 不是泛型
    data2: StrDict  # 正确
 
    # 这是一个用户定义的泛型类
@@ -215,7 +215,7 @@
 
    from collections.abc import Sequence
 
-   # 一个泛型函数！
+   # 一个泛型函数!
    def first[T](seq: Sequence[T]) -> T:
        return seq[0]
 
@@ -227,7 +227,7 @@
 
    T = TypeVar('T')
 
-   # 一个泛型函数！
+   # 一个泛型函数!
    def first(seq: Sequence[T]) -> T:
        return seq[0]
 
@@ -238,7 +238,7 @@
    reveal_type(first([1, 2, 3]))   # 显示的类型是 "builtins.int"
    reveal_type(first(('a', 'b')))  # 显示的类型是 "builtins.str"
 
-在使用遗留语法时，类型变量的单个定义（例如上面的 ``T``）可以在多个泛型函数或类中使用。在这个示例中，我们在两个泛型函数中使用相同的类型变量来声明类型参数：
+在使用遗留语法时，类型变量的单个定义（例如上面的 ``T`` )可以在多个泛型函数或类中使用。在这个示例中，我们在两个泛型函数中使用相同的类型变量来声明类型参数：
 
 .. code-block:: python
 
@@ -426,7 +426,7 @@
 使用 typing.Self 自动注解 self 类型
 **************************************
 
-由于上述模式相当常见，mypy 支持了一种更简单的语法，这在 :pep:`673` 中引入，旨在使它们更易于使用。您可以导入特殊类型 ``typing.Self`` ，它会自动转换为具有当前类作为上界的方法级类型参数，并且您无需为 ``self``（或类方法中的 ``cls``）提供显式注解。使用 ``Self`` 可以简化前一节中的示例：
+由于上述模式相当常见，mypy 支持了一种更简单的语法，这在 :pep:`673` 中引入，旨在使它们更易于使用。您可以导入特殊类型 ``typing.Self`` ，它会自动转换为具有当前类作为上界的方法级类型参数，并且您无需为 ``self`` (或类方法中的 ``cls`` )提供显式注解。使用 ``Self`` 可以简化前一节中的示例：
 
 .. code-block:: python
 
@@ -504,7 +504,7 @@
     def area_of_triangle(triangle: Triangle) -> float: ...
     cost_of_paint_required(triangle, area_of_triangle)  # OK
 
-    # 但这也可以工作！
+    # 但这也可以工作!
     def area_of_any_shape(shape: Shape) -> float: ...
     cost_of_paint_required(triangle, area_of_any_shape)  # OK
 
@@ -590,7 +590,7 @@
 
    concat('a', 'b')    # 正确
    concat(b'a', b'b')  # 正确
-   concat(1, 2)        # 错误！
+   concat(1, 2)        # 错误!
 
 使用遗留语法（Python 3.11 或更早版本）也可以实现相同的功能：
 
@@ -607,9 +607,9 @@
 
 .. code-block:: python
 
-   concat('string', b'bytes')   # 错误！
+   concat('string', b'bytes')   # 错误!
 
-在这种情况下，这正是我们想要的，因为无法连接字符串和字节对象！如果尝试使用联合类型，类型检查器将抱怨这种可能性：
+在这种情况下，这正是我们想要的，因为无法连接字符串和字节对象!如果尝试使用联合类型，类型检查器将抱怨这种可能性：
 
 .. code-block:: python
 
@@ -627,7 +627,7 @@
 
 你可能会期望 ``ss`` 的类型是 ``S``，但实际上类型是 ``str``：子类型被提升为类型变量的有效值，在这种情况下是 ``str``。
 
-因此，这与使用 ``str | bytes`` 作为上界有所不同，在那种情况下返回类型将是 ``S``（见：:ref:`type-variable-upper-bound` ）。使用值限制对 ``concat`` 是正确的，因为 ``concat`` 在上面的示例中实际上返回一个 ``str`` 实例：
+因此，这与使用 ``str | bytes`` 作为上界有所不同，在那种情况下返回类型将是 ``S`` (见：:ref:`type-variable-upper-bound` ）。使用值限制对 ``concat`` 是正确的，因为 ``concat`` 在上面的示例中实际上返回一个 ``str`` 实例：
 
 .. code-block:: python
 
@@ -672,7 +672,7 @@
    reveal_type(a)        # 显示的类型是 "Any"
    add_forty_two('foo')  # 没有类型检查错误 :(
 
-这是一个糟糕的状态！如果使用 ``--strict``，mypy 甚至会提醒你这一点：
+这是一个糟糕的状态!如果使用 ``--strict``，mypy 甚至会提醒你这一点：
 ``Untyped decorator makes function "add_forty_two" untyped``
 
 对于类装饰器，mypy 处理方式不同：装饰类不会抹去其类型，即使装饰器的类型注解不完整。
@@ -1021,7 +1021,7 @@ Mypy 支持泛型协议（参见 :ref:`protocol-types`）。多个 :ref:`预定�
 
     v1: Vec[int] = []      # 同样等于 Iterable[tuple[int, int]]
     v2: Vec = []           # 同样等于 Iterable[tuple[Any, Any]]
-    v3: Vec[int, int] = [] # 错误: 无效的别名，类型参数过多！
+    v3: Vec[int, int] = [] # 错误: 无效的别名，类型参数过多!
 
 还有一种遗留语法，依赖于 ``TypeVar``。在这里，类型参数的数量必须与泛型类型别名定义中的自由类型变量数量匹配。自由类型变量是指不属于周围类或函数的类型参数。例如（遵循 :pep:`PEP 484: Type aliases <484#type-aliases>`，Python 3.11 及更早版本）：
 
@@ -1053,7 +1053,7 @@ Mypy 支持泛型协议（参见 :ref:`protocol-types`）。多个 :ref:`预定�
 
     v1: Vec[int] = []      # 同样等于 Iterable[tuple[int, int]]
     v2: Vec = []           # 同样等于 Iterable[tuple[Any, Any]]
-    v3: Vec[int, int] = [] # 错误: 无效的别名，类型参数过多！
+    v3: Vec[int, int] = [] # 错误: 无效的别名，类型参数过多!
 
 类型别名可以像其他名称一样从模块中导入。一个别名还可以指向另一个别名，尽管不建议构建复杂的别名链，因为这会影响代码的可读性，从而削弱使用别名的目的。示例（Python 3.12 语法）：
 

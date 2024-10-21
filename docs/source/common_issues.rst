@@ -15,16 +15,16 @@
 
 **包含错误的函数没有添加注解。**
 
-没有任何注解的函数（既没有参数注解，也没有返回类型注解）不会进行类型检查，甚至最明显的类型错误（例如 ``2 + 'a'``）也会静默通过。解决方案是添加注解。如果无法添加注解，可以使用 :option:`--check-untyped-defs <mypy --check-untyped-defs>` 来检查没有注解的函数。
+没有任何注解的函数（既没有参数注解，也没有返回类型注解）不会进行类型检查，甚至最明显的类型错误（例如 ``2 + 'a'`` )也会静默通过。解决方案是添加注解。如果无法添加注解，可以使用 :option:`--check-untyped-defs <mypy --check-untyped-defs>` 来检查没有注解的函数。
 
 示例：
 
 .. code-block:: python
 
     def foo(a):
-        return '(' + a.split() + ')'  # 无错误！
+        return '(' + a.split() + ')'  # 无错误!
 
-即使 ``a.split()`` 是一个“显然”的列表（作者可能本意是 ``a.strip()``），但这里不会报错。一旦你添加了注解，错误就会被报告：
+即使 ``a.split()`` 是一个“显然”的列表（作者可能本意是 ``a.strip()`` )，但这里不会报错。一旦你添加了注解，错误就会被报告：
 
 .. code-block:: python
 
@@ -41,7 +41,7 @@
 .. code-block:: python
 
     def foo(a) -> str:
-        return '(' + a.split() + ')'  # 无错误！
+        return '(' + a.split() + ')'  # 无错误!
 
 原因是如果 ``a`` 的类型未知，那么 ``a.split()`` 的类型也未知，因此被推断为 ``Any`` 类型，将字符串与 ``Any`` 相加不会报错。
 
@@ -58,10 +58,10 @@
     class Bad:
         def __init__(self):
             self.value = "asdf"
-            1 + "asdf"  # 无错误！
+            1 + "asdf"  # 无错误!
 
     bad = Bad()
-    bad.value + 1           # 无错误！
+    bad.value + 1           # 无错误!
     reveal_type(bad)        # 显示类型为 "__main__.Bad"
     reveal_type(bad.value)  # 显示类型为 "Any"
 
@@ -89,7 +89,7 @@
 .. code-block:: python
 
     def foo() -> str:
-        return None  # 无错误！
+        return None  # 无错误!
 
 你可能禁用了严格的可选类型检查（详见 :ref:`--no-strict-optional <no_strict_optional>`）。
 
@@ -110,7 +110,7 @@
 .. code-block:: python
 
     import frobnicate  # type: ignore
-    frobnicate.start()  # 没问题！
+    frobnicate.start()  # 没问题!
 
 现在第二行是可以的，因为忽略注释使得名称 ``frobnicate`` 获得了隐式 ``Any`` 类型。
 
@@ -131,7 +131,7 @@
        def __getattr__(self, a: str) -> Any:
            return getattr(self._wrapped, a)
 
-最后，你可以为生成冗余错误的文件创建一个存根文件（``.pyi``）。Mypy 只会查看存根文件并忽略实现，因为存根文件优先于 ``.py`` 文件。
+最后，你可以为生成冗余错误的文件创建一个存根文件( ``.pyi`` )。Mypy 只会查看存根文件并忽略实现，因为存根文件优先于 ``.py`` 文件。
 
 忽略整个文件(Ignoring a whole file)
 ------------------------------------------
@@ -171,7 +171,7 @@ Mypy 运行速度慢(Mypy runs are slow)
 
 没有注释的话，mypy 并不总能确定 ``a`` 的确切类型。
 
-在动态类型函数中，你可以使用简单的空列表字面量（因为 ``a`` 的类型将隐式为 ``Any``，并不需要推断），如果该变量的类型在之前已经声明或推断，或者你在同一作用域中执行简单的修改操作（例如列表的 ``append``）：
+在动态类型函数中，你可以使用简单的空列表字面量（因为 ``a`` 的类型将隐式为 ``Any``，并不需要推断），如果该变量的类型在之前已经声明或推断，或者你在同一作用域中执行简单的修改操作（例如列表的 ``append`` )：
 
 .. code-block:: python
 
@@ -179,7 +179,7 @@ Mypy 运行速度慢(Mypy runs are slow)
    for i in range(n):
        a.append(i * i)
 
-然而，在更复杂的情况下，可能需要显式的类型注解（mypy 会告诉你这一点）。通常，注释可以使代码更易于理解，因此它不仅帮助 mypy，也帮助每个阅读代码的人！
+然而，在更复杂的情况下，可能需要显式的类型注解（mypy 会告诉你这一点）。通常，注释可以使代码更易于理解，因此它不仅帮助 mypy，也帮助每个阅读代码的人!
 
 不兼容类型的重新定义(Redefinitions with incompatible types)
 --------------------------------------------------------------------------
@@ -205,7 +205,7 @@ Mypy 运行速度慢(Mypy runs are slow)
         # 这里 x 的类型为 Sequence[int]；我们不知道具体类型。
         x = list(x)
         # 这里 x 的类型为 list[int]。
-        x.sort()  # 没问题！
+        x.sort()  # 没问题!
 
 有关更多信息，请参见 :ref:`type-narrowing`。
 
@@ -354,7 +354,7 @@ Mypy 支持执行 Python 版本检查和平台检查（例如，Windows 与 Posi
    # 此文件的其余部分不适用于 Windows。
 
 其他一些表达式也表现出类似的行为；特别是，:py:data:`~typing.TYPE_CHECKING`、命名为 ``MYPY`` 的变量，以及任何传递给 :option:`--always-true <mypy --always-true>` 或 :option:`--always-false <mypy --always-false>` 的变量名。
-（不过，``True`` 和 ``False`` 并未被特殊处理！）
+（不过，``True`` 和 ``False`` 并未被特殊处理!）
 
 .. note::
 
@@ -434,7 +434,7 @@ Mypy 拒绝这种情况，因为这可能不安全。
        x = 42
    c = C()
    fun(c)  # 这不是安全的
-   c.x << 5  # 因为这会失败！
+   c.x << 5  # 因为这会失败!
 
 要解决这个问题，请考虑 “突变(mutating)” 是否实际上是协议的一部分。如果不是，则可以在协议定义中使用 :py:class:`@property <property>`：
 

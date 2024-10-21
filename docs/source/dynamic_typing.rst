@@ -31,7 +31,7 @@
 .. code-block:: python
 
     def f(x: Any) -> int:
-        # 所有这些都是有效的！
+        # 所有这些都是有效的!
         x.foobar(1, y=2)
         print(x[3] + 'f')
         if x:
@@ -78,7 +78,7 @@ Any 与 object
 --------------
 
 类型 :py:class:`object` 是另一种可以具有任意类型实例作为值的类型。
-与 ``Any`` 不同，:py:class:`object` 是一种普通的静态类型（类似于 Java 中的 ``Object``），并且仅接受对 *所有* 类型有效的操作。
+与 ``Any`` 不同，:py:class:`object` 是一种普通的静态类型（类似于 Java 中的 ``Object`` )，并且仅接受对 *所有* 类型有效的操作。
 以下都是有效的操作：
 
 .. code-block:: python
@@ -95,11 +95,11 @@ Any 与 object
 .. code-block:: python
 
     def f(o: object) -> None:
-        o.foo()       # 错误！
-        o + 2         # 错误！
-        open(o)       # 错误！
+        o.foo()       # 错误!
+        o + 2         # 错误!
+        open(o)       # 错误!
         n: int = 1
-        n = o         # 错误！
+        n = o         # 错误!
 
 如果您不确定是使用 :py:class:`object` 还是 ``Any``，请使用 :py:class:`object` —— 仅在出现类型检查器警告时才切换到使用 ``Any``。
 

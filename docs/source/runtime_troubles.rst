@@ -130,7 +130,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
 导入循环(Import cycles)
 -------------------------------
 
-当模块 A 导入模块 B，而模块 B 又导入模块 A 时（可能是间接的，例如：``A -> B -> C -> A``），就会发生导入循环。有时为了添加类型注解，你需要在模块中添加额外的导入，而这些导入可能会导致之前不存在的循环。这可能会在运行时引发以下错误：
+当模块 A 导入模块 B，而模块 B 又导入模块 A 时（可能是间接的，例如：``A -> B -> C -> A`` )，就会发生导入循环。有时为了添加类型注解，你需要在模块中添加额外的导入，而这些导入可能会导致之前不存在的循环。这可能会在运行时引发以下错误：
 
 .. code-block:: text
 
@@ -255,7 +255,7 @@ Python 不允许在类未定义之前就引用该类对象（即前向引用）�
 
 从 Python 3.10 开始（:pep:`604`），你可以使用 ``x: int | str`` 来表示联合类型，而不是 ``x: typing.Union[int, str]``。
 
-在 Python 3.7 及更高版本中，也有限制地支持这种语法：如果你使用了 ``from __future__ import annotations`` ，mypy 会理解这种语法在注解、字符串字面量类型、类型注解和存根文件中的使用。然而，由于 Python 解释器在运行时不支持这种方式（如果运行时评估 ``int | str`` ，会引发 ``TypeError: unsupported operand type(s) for |: 'type' and 'type'``），请注意 :ref:`future annotations import <future-annotations>` 部分中提到的注意事项。
+在 Python 3.7 及更高版本中，也有限制地支持这种语法：如果你使用了 ``from __future__ import annotations`` ，mypy 会理解这种语法在注解、字符串字面量类型、类型注解和存根文件中的使用。然而，由于 Python 解释器在运行时不支持这种方式（如果运行时评估 ``int | str`` ，会引发 ``TypeError: unsupported operand type(s) for |: 'type' and 'type'`` )，请注意 :ref:`future annotations import <future-annotations>` 部分中提到的注意事项。
 
 使用 typing 模块的新特性
 -----------------------------

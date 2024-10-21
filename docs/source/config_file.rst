@@ -28,21 +28,21 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
 - 必须存在名为 ``[mypy]`` 的部分。这指定了全局标志。
 
-- 还可以存在名为 ``[mypy-PATTERN1,PATTERN2,...]`` 的附加部分，其中 ``PATTERN1``、``PATTERN2`` 等是完全限定模块名称的逗号分隔模式，某些组件可以用 '*' 字符替代（例如 ``foo.bar``、``foo.bar.*``、``foo.*.baz``）。这些部分指定仅适用于模块名称匹配至少一个模式的附加标志。
+- 还可以存在名为 ``[mypy-PATTERN1,PATTERN2,...]`` 的附加部分，其中 ``PATTERN1``、``PATTERN2`` 等是完全限定模块名称的逗号分隔模式，某些组件可以用 '*' 字符替代（例如 ``foo.bar``、``foo.bar.*``、``foo.*.baz`` )。这些部分指定仅适用于模块名称匹配至少一个模式的附加标志。
 
-  形式为 ``qualified_module_name`` 的模式仅匹配命名模块，而 ``dotted_module_name.*`` 匹配 ``dotted_module_name`` 和任何子模块（因此 ``foo.bar.*`` 会匹配 ``foo.bar``、``foo.bar.baz`` 和 ``foo.bar.baz.quux``）。
+  形式为 ``qualified_module_name`` 的模式仅匹配命名模块，而 ``dotted_module_name.*`` 匹配 ``dotted_module_name`` 和任何子模块（因此 ``foo.bar.*`` 会匹配 ``foo.bar``、``foo.bar.baz`` 和 ``foo.bar.baz.quux`` )。
 
-  模式也可以是“非结构化”的通配符，其中星号可以出现在名称的中间（例如 ``site.*.migrations.*``）。星号匹配零个或多个模块组件（因此 ``site.*.migrations.*`` 可以匹配 ``site.migrations``）。
+  模式也可以是“非结构化”的通配符，其中星号可以出现在名称的中间（例如 ``site.*.migrations.*`` )。星号匹配零个或多个模块组件（因此 ``site.*.migrations.*`` 可以匹配 ``site.migrations`` )。
 
   .. _config-precedence:
 
   当选项冲突时，配置的优先顺序为：
 
     1. 在源文件中的 :ref:`内联配置 <inline-config>` 
-    2. 具有具体模块名称的部分（``foo.bar``）
-    3. 具有“非结构化”通配符模式的部分（``foo.*.baz``），
+    2. 具有具体模块名称的部分( ``foo.bar`` )
+    3. 具有“非结构化”通配符模式的部分( ``foo.*.baz`` )，
        在配置文件中后面的部分覆盖前面的部分。
-    4. 具有“结构化”通配符模式的部分（``foo.bar.*``），
+    4. 具有“结构化”通配符模式的部分( ``foo.bar.*`` )，
        更具体的部分覆盖更一般的部分。
     5. 命令行选项。
     6. 顶层配置文件选项。
@@ -65,7 +65,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
 如果您同时为全局和特定模块设置了选项，模块配置选项将具有优先权。这使您能够设置全局默认值并在逐模块的基础上覆盖它们。如果多个模式部分与某个模块匹配，:ref:`将使用最具体部分的选项 <config-precedence>`，以解决不一致的地方。
 
-一些其他选项，如其描述中所述，仅能在全局部分（``[mypy]``）中设置。
+一些其他选项，如其描述中所述，仅能在全局部分( ``[mypy]`` )中设置。
 
 
 反转选项值(Inverting option values)
@@ -127,9 +127,9 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
     指定在尝试 ``MYPYPATH`` 环境变量中的路径后要使用的路径。如果您希望在代码库中保留存根以及配置文件，这非常有用。多个路径始终用 ``:`` 或 `,` 分隔，无论平台如何。用户主目录和环境变量将被扩展。
 
     相对路径相对于 mypy 命令的工作目录处理，而不是配置文件。
-    使用 ``MYPY_CONFIG_FILE_DIR`` 环境变量来引用相对于配置文件的路径（例如 ``mypy_path = $MYPY_CONFIG_FILE_DIR/src``）。
+    使用 ``MYPY_CONFIG_FILE_DIR`` 环境变量来引用相对于配置文件的路径（例如 ``mypy_path = $MYPY_CONFIG_FILE_DIR/src`` )。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
     **注意：** 在 Windows 上，使用 UNC 路径以避免使用 ``:`` （例如 ``\\127.0.0.1\X$\MyDir`` ，其中 ``X`` 是驱动器字母）。
 
@@ -137,9 +137,9 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     :type: 逗号隔开的字符串列表(comma-separated list of strings)
 
-    如果在命令行上未给出，则应由 mypy 检查的路径的以逗号分隔的列表。支持使用 :py:mod:`glob` 进行递归文件匹配，其中 ``*`` （例如 ``*.py``）匹配当前目录中的文件，而 ``**/`` （例如 ``**/*.py``）匹配当前目录以下的任何目录中的文件。用户主目录和环境变量将被扩展。
+    如果在命令行上未给出，则应由 mypy 检查的路径的以逗号分隔的列表。支持使用 :py:mod:`glob` 进行递归文件匹配，其中 ``*`` （例如 ``*.py`` )匹配当前目录中的文件，而 ``**/`` （例如 ``**/*.py`` )匹配当前目录以下的任何目录中的文件。用户主目录和环境变量将被扩展。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: modules
 
@@ -147,7 +147,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     如果在命令行上未给出，则应由 mypy 检查的包的以逗号分隔的列表。Mypy *将不会* 递归类型检查提供模块的任何子模块。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 
 .. confval:: packages
@@ -156,13 +156,13 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     如果在命令行上未给出，则应由 mypy 检查的包的以逗号分隔的列表。Mypy *将(will)* 递归类型检查提供包的任何子模块。此标志与 :confval:`modules` 相同，除了此行为。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: exclude
 
     :type: regular expression
 
-    匹配文件名、目录名和路径的正则表达式，mypy 应在递归发现要检查的文件时忽略这些文件。所有平台上使用正斜杠（``/``）作为目录分隔符。
+    匹配文件名、目录名和路径的正则表达式，mypy 应在递归发现要检查的文件时忽略这些文件。所有平台上使用正斜杠( ``/`` )作为目录分隔符。
 
     .. code-block:: ini
 
@@ -180,7 +180,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     有关更多详细信息，请参见 :option:`--exclude <mypy --exclude>`。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
     .. note::
 
@@ -217,7 +217,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     启用 :pep:`420` 风格的命名空间包。有关更多信息，请参见相应的标志 :option:`--no-namespace-packages <mypy --no-namespace-packages>`。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: explicit_package_bases
 
@@ -226,7 +226,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     此标志告诉 mypy 顶级包将基于当前目录或 ``MYPYPATH`` 环境变量或 :confval:`mypy_path` 配置选项中的某个成员。此选项仅在缺少 `__init__.py` 时有用。有关详细信息，请参见 :ref:`将文件路径映射到模块 <mapping-paths-to-modules>`。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: ignore_missing_imports
 
@@ -255,7 +255,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
     :type: boolean
     :default: False
 
-    决定是否即使对于存根（``.pyi``）文件也遵循 :confval:`follow_imports` 设置。
+    决定是否即使对于存根( ``.pyi`` )文件也遵循 :confval:`follow_imports` 设置。
 
     与 :confval:`follow_imports=skip <follow_imports>` 一起使用时，这可以用于抑制对来自 ``typeshed`` 的模块的导入，将其替换为 ``Any``。
 
@@ -271,7 +271,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     指定要检查的 Python 可执行文件的路径，以收集可用的 :ref:`PEP 561 包 <installed-packages>` 列表。用户主目录和环境变量将被扩展。默认为用于运行 mypy 的可执行文件。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: no_site_packages
 
@@ -299,7 +299,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     指定用于解析和检查目标程序的 Python 版本。字符串应为 ``MAJOR.MINOR`` 格式——例如 ``2.7``。默认值为用于运行 mypy 的 Python 解释器的版本。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: platform
 
@@ -307,7 +307,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
 
     指定目标程序的操作系统平台，例如 ``darwin`` 或 ``win32`` （分别表示 OS X 或 Windows）。默认值为 Python 的 :py:data:`sys.platform` 变量所揭示的当前平台。
 
-    此选项只能在全局部分（``[mypy]``）中设置。
+    此选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: always_true
 
@@ -332,7 +332,7 @@ Mypy 支持从文件读取配置设置，优先顺序如下：
     :type: boolean
     :default: False
 
-    禁止使用来自未跟踪导入的类型（来自未跟踪导入的任何内容自动被赋予类型 ``Any``）。
+    禁止使用来自未跟踪导入的类型（来自未跟踪导入的任何内容自动被赋予类型 ``Any`` )。
 
 .. confval:: disallow_any_expr
 
@@ -449,7 +449,7 @@ None 和 Optional 处理(None and Optional handling)
     :type: boolean
     :default: False
 
-    使 mypy 将具有 ``None`` 默认值的参数视为具有隐式可选类型（``T | None``）。
+    使 mypy 将具有 ``None`` 默认值的参数视为具有隐式可选类型( ``T | None`` )。
 
     **注意：** 在 mypy 版本 0.980 及之前版本中，这一选项默认为 True。
 
@@ -477,7 +477,7 @@ None 和 Optional 处理(None and Optional handling)
 
     针对将表达式转换为其推断类型的情况发出警告。
 
-    此选项仅可在全局部分（``[mypy]``）中设置。
+    此选项仅可在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: warn_unused_ignores
 
@@ -628,7 +628,7 @@ None 和 Optional 处理(None and Optional handling)
 
 有关更多信息，请参见命令行文档的 :ref:`配置错误消息 <configuring-error-messages>` 部分。
 
-这些选项只能在全局部分（``[mypy]``）中设置。
+这些选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: show_error_context
 
@@ -705,7 +705,7 @@ None 和 Optional 处理(None and Optional handling)
 增量模式(Incremental mode)
 ********************************
 
-这些选项只能在全局部分（``[mypy]``）中设置。
+这些选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: incremental
 
@@ -760,7 +760,7 @@ None 和 Optional 处理(None and Optional handling)
 高级选项(Advanced options)
 ********************************
 
-这些选项只能在全局部分（``[mypy]``）中设置。
+这些选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: plugins
 
@@ -888,7 +888,7 @@ None 和 Optional 处理(None and Optional handling)
 其他(Miscellaneous)
 **************************
 
-这些选项只能在全局部分（``[mypy]``）中设置。
+这些选项只能在全局部分( ``[mypy]`` )中设置。
 
 .. confval:: junit_xml
 

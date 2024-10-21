@@ -96,9 +96,9 @@ Final详情(Details)
 
 .. code-block:: python
 
-   x: list[Final[int]] = []  # 错误！
+   x: list[Final[int]] = []  # 错误!
 
-   def fun(x: Final[list[int]]) -> None:  # 错误！
+   def fun(x: Final[list[int]]) -> None:  # 错误!
        ...
 
 ``Final`` 和 :py:data:`~typing.ClassVar` 不应一起使用。Mypy 将根据最终声明是否在类体中或在 :py:meth:`__init__ <object.__init__>` 中初始化，自动推断最终声明的作用域。

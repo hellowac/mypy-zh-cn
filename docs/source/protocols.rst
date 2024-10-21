@@ -63,7 +63,7 @@ Python 的类型系统支持两种方式来判断两个对象是否兼容： **�
        # 空方法体（显式 '...'）
        def close(self) -> None: ...
 
-   class Resource:  # 没有继承 SupportsClose 基类！
+   class Resource:  # 没有继承 SupportsClose 基类!
 
        def close(self) -> None:
           self.resource.release()
@@ -118,7 +118,7 @@ Python 的类型系统支持两种方式来判断两个对象是否兼容： **�
           ...
 
    # 错误：默认使用名义子类型
-   x: NotAProtocol = Concrete()  # 错误！
+   x: NotAProtocol = Concrete()  # 错误!
 
 你还可以在协议中包含方法的默认实现。如果你显式地子类化这些协议，你可以继承这些默认实现。
 
@@ -170,7 +170,7 @@ Python 的类型系统支持两种方式来判断两个对象是否兼容： **�
 
    my_int_box = IntBox()
    takes_box_evil(my_int_box)
-   my_int_box.content + 1  # 哦，TypeError！
+   my_int_box.content + 1  # 哦，TypeError!
 
 可以通过在 ``Box`` 协议中使用 ``@property`` 声明 ``content`` 为只读来解决此问题：
 
@@ -235,7 +235,7 @@ Python 的类型系统支持两种方式来判断两个对象是否兼容： **�
    def use(handles: int) -> None: ...
 
    mug = Mug()
-   if isinstance(mug, Portable):  # 在运行时有效！
+   if isinstance(mug, Portable):  # 在运行时有效!
       use(mug.handles)
 
 :py:func:`isinstance` 也适用于 :py:mod:`typing` 模块中的 :ref:`预定义协议 <predefined_protocols>` ，例如 :py:class:`~typing.Iterable` 。
@@ -274,7 +274,7 @@ Python 的类型系统支持两种方式来判断两个对象是否兼容： **�
        ...
 
    batch_proc([], good_cb)  # OK
-   batch_proc([], bad_cb)   # 错误！参数 2 的类型不兼容，因为回调中的名称和类型不同
+   batch_proc([], bad_cb)   # 错误!参数 2 的类型不兼容，因为回调中的名称和类型不同
 
 回调协议和 :py:class:`collections.abc.Callable` 类型在大多数情况下可以互换使用。:py:meth:`__call__` 方法中的参数名称必须相同，除非参数是位置参数。示例（使用旧的泛型函数语法）：
 

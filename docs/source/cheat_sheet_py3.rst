@@ -169,7 +169,7 @@
        src.withdraw(amount)
        dst.deposit(amount)
 
-   # 接受 BankAccount 的函数也接受任何 BankAccount 的子类！
+   # 接受 BankAccount 的函数也接受任何 BankAccount 的子类!
    class AuditedBankAccount(BankAccount):
        # 可以选择在类体中声明实例变量
        audit_log: list[str]
@@ -187,7 +187,7 @@
            self.balance -= amount
 
    audited = AuditedBankAccount("Bob", 300)
-   transfer(audited, account, 100)  # 类型检查通过！
+   transfer(audited, account, 100)  # 类型检查通过!
 
    # 可以使用 ClassVar 注释来声明类变量
    class Car:
@@ -223,7 +223,7 @@
 
    # 如果你不知道某个东西的类型，或者它太动态以至于无法写出类型，则使用 Any。
    x: Any = mystery_function()
-   # Mypy 将允许你对 x 做任何事情！
+   # Mypy 将允许你对 x 做任何事情!
    x.whatever() * x["you"] + x("want") - any(x) and all(x) is super  # 没有错误
 
    # 使用 "type: ignore" 注释来抑制给定行的错误，当你的代码让 mypy 感到困惑或遇到 mypy 的明显错误时。

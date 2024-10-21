@@ -66,7 +66,7 @@
 
     def paint(color: AllowedColors) -> None: ...
 
-    paint("red")        # 类型检查通过！
+    paint("red")        # 类型检查通过!
     paint("turquoise")  # 类型检查不通过
 
 字面量不能包含其他任何类型或表达式。这意味着 ``Literal[my_instance]``、 ``Literal[Any]``、 ``Literal[3.14]`` 或 ``Literal[{"foo": 2, "bar": 5}]`` 都是非法的。

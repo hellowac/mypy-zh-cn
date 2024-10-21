@@ -29,7 +29,7 @@ Mypy 需要 Python 3.8 或更高版本才能运行。您可以使用 pip 安装 
 
 这也意味着，如果您愿意，可以随时忽略 mypy 报告的错误。即使 mypy 报告错误，您仍然可以使用 Python 解释器运行代码。
 
-然而，如果您尝试直接在现有 Python 代码上运行 mypy，可能会报告几乎没有错误。这是一个特性！它使得逐步采用 mypy 变得容易。
+然而，如果您尝试直接在现有 Python 代码上运行 mypy，可能会报告几乎没有错误。这是一个特性!它使得逐步采用 mypy 变得容易。
 
 为了从 mypy 获得有用的诊断信息，您必须在代码中添加 *类型注解*。请参阅下面的部分以获取详细信息。
 
@@ -47,7 +47,7 @@ Mypy 需要 Python 3.8 或更高版本才能运行。您可以使用 pip 安装 
 
 默认情况下，mypy **不** 会对动态类型的函数进行类型检查。这意味着，除了少数例外，mypy 不会对常规未注解的 Python 报告任何错误。
 
-即使您错误地使用该函数，也会如此！
+即使您错误地使用该函数，也会如此!
 
 .. code-block:: python
 
@@ -115,7 +115,7 @@ Mypy 的配置非常灵活，因此您可以先使用 ``--strict``，再逐个�
     names = ["Alice", "Bob", "Charlie"]
     ages = [10, 20, 30]
 
-    greet_all(names)   # 没问题！
+    greet_all(names)   # 没问题!
     greet_all(ages)    # 因为类型不兼容而出错
 
 
@@ -159,7 +159,7 @@ Mypy 的配置非常灵活，因此您可以先使用 ``--strict``，再逐个�
 
 .. note::
 
-   在添加类型时，约定是使用 ``from typing import <name>`` 形式导入类型（而不是仅仅 ``import typing`` 或 ``import typing as t``，或 ``from typing import *``）。
+   在添加类型时，约定是使用 ``from typing import <name>`` 形式导入类型（而不是仅仅 ``import typing`` 或 ``import typing as t``，或 ``from typing import *`` )。
 
    为了简洁，我们在代码示例中通常省略 :py:mod:`typing` 或 :py:mod:`collections.abc` 的导入，但如果您在未导入的情况下使用如 :py:class:`~collections.abc.Iterable` 这样的类型，mypy 会给出错误。
 

@@ -11,7 +11,7 @@ Python 程序经常使用字符串键的字典来表示对象。``TypedDict`` �
 
    movie = {'name': 'Blade Runner', 'year': 1982}
 
-只期望一组固定的字符串键（上面的 ``'name'`` 和 ``'year'``），每个键都有独立的值类型（上面的 ``'name'`` 为 ``str``，而 ``'year'`` 为 ``int``）。我们之前见过 ``dict[K, V]`` 类型，它让你声明统一的字典类型，其中每个值具有相同的类型，并且支持任意键。这显然不适合上面的 ``movie``。相反，你可以使用 ``TypedDict`` 为像 ``movie`` 这样的对象提供精确的类型，其中每个字典值的类型取决于键：
+只期望一组固定的字符串键（上面的 ``'name'`` 和 ``'year'`` )，每个键都有独立的值类型（上面的 ``'name'`` 为 ``str``，而 ``'year'`` 为 ``int`` )。我们之前见过 ``dict[K, V]`` 类型，它让你声明统一的字典类型，其中每个值具有相同的类型，并且支持任意键。这显然不适合上面的 ``movie``。相反，你可以使用 ``TypedDict`` 为像 ``movie`` 这样的对象提供精确的类型，其中每个字典值的类型取决于键：
 
 .. code-block:: python
 
@@ -21,7 +21,7 @@ Python 程序经常使用字符串键的字典来表示对象。``TypedDict`` �
 
    movie: Movie = {'name': 'Blade Runner', 'year': 1982}
 
-``Movie`` 是一个 ``TypedDict`` 类型，包含两个项目：``'name'``（类型为 ``str``）和 ``'year'``（类型为 ``int``）。注意我们为 ``movie`` 变量使用了显式类型注解。这个类型注解很重要——如果没有它，mypy 会尝试推断 ``movie`` 为一个常规的、统一的 :py:class:`dict` 类型，这不是我们想要的。
+``Movie`` 是一个 ``TypedDict`` 类型，包含两个项目：``'name'`` (类型为 ``str`` )和 ``'year'`` (类型为 ``int`` )。注意我们为 ``movie`` 变量使用了显式类型注解。这个类型注解很重要——如果没有它，mypy 会尝试推断 ``movie`` 为一个常规的、统一的 :py:class:`dict` 类型，这不是我们想要的。
 
 .. note::
 
@@ -64,7 +64,7 @@ Mypy 还会拒绝将运行时计算的表达式作为键，因为它无法验证
 
 .. note::
 
-   除非你使用的是 Python 3.8 或更高版本（在标准库 :py:mod:`typing` 模块中提供 ``TypedDict``），否则你需要使用 pip 安装 ``typing_extensions`` 来使用 ``TypedDict``：
+   除非你使用的是 Python 3.8 或更高版本（在标准库 :py:mod:`typing` 模块中提供 ``TypedDict`` )，否则你需要使用 pip 安装 ``typing_extensions`` 来使用 ``TypedDict``：
 
    .. code-block:: text
 
@@ -192,8 +192,8 @@ of supported operations:
 * :py:meth:`d.copy() <dict.copy>`
 * :py:meth:`d.setdefault(key, default) <dict.setdefault>`
 * :py:meth:`d1.update(d2) <dict.update>`
-* :py:meth:`d.pop(key[, default]) <dict.pop>`（仅适用于部分(partial) ``TypedDict``）
-* ``del d[key]``（仅适用于部分(partial) ``TypedDict``）
+* :py:meth:`d.pop(key[, default]) <dict.pop>`（仅适用于部分(partial) ``TypedDict`` )
+* ``del d[key]`` (仅适用于部分(partial) ``TypedDict`` )
 
 .. note::
 
@@ -228,7 +228,7 @@ of supported operations:
 混合必须和非必须项(Mixing)
 --------------------------------------
 
-除了允许在 ``TypedDict`` 类型之间重用外，继承还允许你在单个 ``TypedDict`` 中混合必需项和非必需项（使用 ``total=False``）。示例：
+除了允许在 ``TypedDict`` 类型之间重用外，继承还允许你在单个 ``TypedDict`` 中混合必需项和非必需项（使用 ``total=False`` )。示例：
 
 .. code-block:: python
 
@@ -239,7 +239,7 @@ of supported operations:
    class Movie(MovieBase, total=False):
        based_on: str
 
-现在 ``Movie`` 具有必需键 ``name`` 和 ``year``, 而 ``based_on`` 在构造对象时可以省略。具有必需键和非必需键混合的 ``TypedDict``（如上面的 ``Movie``）仅在另一个 ``TypedDict`` 中所有必需键都是第一个 ``TypedDict`` 中的必需键，并且另一个 ``TypedDict`` 的所有非必需键也是第一个 ``TypedDict`` 的非必需键时，才会兼容。
+现在 ``Movie`` 具有必需键 ``name`` 和 ``year``, 而 ``based_on`` 在构造对象时可以省略。具有必需键和非必需键混合的 ``TypedDict`` (如上面的 ``Movie`` )仅在另一个 ``TypedDict`` 中所有必需键都是第一个 ``TypedDict`` 中的必需键，并且另一个 ``TypedDict`` 的所有非必需键也是第一个 ``TypedDict`` 的非必需键时，才会兼容。
 
 只读项(Read-only)
 ------------------------------
