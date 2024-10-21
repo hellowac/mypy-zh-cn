@@ -1,0 +1,840 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="动态类型代码(Dynamically)" href="dynamic_typing.html" /><link rel="prev" title="运行时的注解问题(Annotation issues)" href="runtime_troubles.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>协议(Protocol)与结构化子类型 - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/protocols.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/protocols.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="protocol">
+<span id="protocol-types"></span><h1>协议(Protocol)与结构化子类型<a class="headerlink" href="#protocol" title="Link to this heading">¶</a></h1>
+<p>Python 的类型系统支持两种方式来判断两个对象是否兼容： <strong>名义子类型(nominal subtyping)</strong> 和 <strong>结构化子类型(structural subtyping)</strong> 。</p>
+<p><strong>名义（Nominal）</strong> 子类型是严格基于类的继承层次结构。如果类 <code class="docutils literal notranslate"><span class="pre">Dog</span></code> 继承自类 <code class="docutils literal notranslate"><span class="pre">Animal</span></code>，它就是 <code class="docutils literal notranslate"><span class="pre">Animal</span></code> 的子类型。当需要 <code class="docutils literal notranslate"><span class="pre">Animal</span></code> 实例时，可以使用 <code class="docutils literal notranslate"><span class="pre">Dog</span></code> 实例。这种子类型是 Python 类型系统主要使用的方式：它易于理解，能够生成清晰简明的错误信息，并且与原生的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance</span></code></a> 检查方式匹配——基于类的继承层次。</p>
+<p><strong>结构化（Structural）</strong> 子类型则是基于可以对对象执行的操作。如果类 <code class="docutils literal notranslate"><span class="pre">Dog</span></code> 具有类 <code class="docutils literal notranslate"><span class="pre">Animal</span></code> 的所有属性和方法，并且类型兼容，那么 <code class="docutils literal notranslate"><span class="pre">Dog</span></code> 就是 <code class="docutils literal notranslate"><span class="pre">Animal</span></code> 的结构化子类型。</p>
+<p>结构化子类型可以看作是鸭子类型的静态等价物，Python 程序员对鸭子类型应该都很熟悉。详见 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0544/"><strong>PEP 544</strong></a> ，其中详细说明了 Python 中协议与结构化子类型的规范。</p>
+<section id="protocols">
+<span id="predefined-protocols"></span><h2>预定义协议(protocols)<a class="headerlink" href="#protocols" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#module-collections.abc" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections.abc</span></code></a> 、<a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 以及其他标准库模块定义了各种协议类，这些协议类对应于常见的 Python 协议，例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable[T]</span></code></a>。如果一个类定义了合适的 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__</span></code></a> 方法，mypy 会理解该类实现了可迭代协议，并且与 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable[T]</span></code></a> 兼容。比如，下面的 <code class="docutils literal notranslate"><span class="pre">IntList</span></code> 是一个可迭代的类，迭代结果是 <code class="docutils literal notranslate"><span class="pre">int</span></code> 值：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="k">class</span> <span class="nc">IntList</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">next</span><span class="p">:</span> <span class="n">IntList</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">while</span> <span class="n">current</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">current</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span>
+
+<span class="k">def</span> <span class="nf">print_numbered</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">IntList</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">IntList</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="n">print_numbered</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">print_numbered</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>  <span class="c1"># 也 OK</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#predefined-protocols-reference"><span class="std std-ref">预定义协议参考(Predefined protocols)</span></a> 列出了 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#module-collections.abc" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections.abc</span></code></a> 和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 中定义的各种协议，以及你需要实现每个协议所需定义的方法签名。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p><code class="docutils literal notranslate"><span class="pre">typing</span></code> 还包含一些过时的协议和抽象基类（ABC）的别名，这些别名在 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#module-collections.abc" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections.abc</span></code></a> 中定义，例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable[T]</span></code></a>。这些别名仅在 Python 3.8 及更早版本中是必需的，因为 <code class="docutils literal notranslate"><span class="pre">collections.abc</span></code> 中的协议在 Python 3.8 中尚不支持下标操作（ <code class="docutils literal notranslate"><span class="pre">[]</span></code> ），但 <code class="docutils literal notranslate"><span class="pre">typing</span></code> 中的别名一直支持下标操作。在 Python 3.9 及更新版本中，<code class="docutils literal notranslate"><span class="pre">typing</span></code> 中的别名不提供额外的功能。</p>
+</div>
+</section>
+<section id="id1">
+<h2>简单的用户自定义协议(protocols)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>你可以通过继承特殊的 <code class="docutils literal notranslate"><span class="pre">Protocol</span></code> 类来定义自己的协议类：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">SupportsClose</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="c1"># 空方法体（显式 &#39;...&#39;）</span>
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Resource</span><span class="p">:</span>  <span class="c1"># 没有继承 SupportsClose 基类!</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+       <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="c1"># ... 其他方法 ...</span>
+
+<span class="k">def</span> <span class="nf">close_all</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">SupportsClose</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">close_all</span><span class="p">([</span><span class="n">Resource</span><span class="p">(),</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;some/file&#39;</span><span class="p">)])</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Resource</span></code> 是 <code class="docutils literal notranslate"><span class="pre">SupportsClose</span></code> 协议的子类型，因为它定义了兼容的 <code class="docutils literal notranslate"><span class="pre">close</span></code> 方法。由 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#open" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> 返回的常规文件对象同样兼容该协议，因为它们支持 <code class="docutils literal notranslate"><span class="pre">close()</span></code> 方法。</p>
+</section>
+<section id="id2">
+<h2>定义子协议和协议子类<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>你还可以定义子协议。现有协议可以通过多重继承进行扩展和合并。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ... 继续之前的示例</span>
+
+<span class="k">class</span> <span class="nc">SupportsRead</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">TaggedReadableResource</span><span class="p">(</span><span class="n">SupportsClose</span><span class="p">,</span> <span class="n">SupportsRead</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span> <span class="nc">AdvancedResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="c1"># 一些实现</span>
+        <span class="o">...</span>
+
+<span class="n">resource</span><span class="p">:</span> <span class="n">TaggedReadableResource</span>
+<span class="n">resource</span> <span class="o">=</span> <span class="n">AdvancedResource</span><span class="p">(</span><span class="s1">&#39;小心处理&#39;</span><span class="p">)</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p>注意，从现有协议继承并不会自动将子类变为协议——它只是创建了一个实现给定协议（或协议组）的常规（非协议）类或抽象基类（ABC）。如果你要定义协议， <code class="docutils literal notranslate"><span class="pre">Protocol</span></code> 基类必须始终显式存在：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NotAProtocol</span><span class="p">(</span><span class="n">SupportsClose</span><span class="p">):</span>  <span class="c1"># 这不是一个协议</span>
+    <span class="n">new_attr</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">class</span> <span class="nc">Concrete</span><span class="p">:</span>
+   <span class="n">new_attr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+   <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+       <span class="o">...</span>
+
+<span class="c1"># 错误：默认使用名义子类型</span>
+<span class="n">x</span><span class="p">:</span> <span class="n">NotAProtocol</span> <span class="o">=</span> <span class="n">Concrete</span><span class="p">()</span>  <span class="c1"># 错误!</span>
+</pre></div>
+</div>
+<p>你还可以在协议中包含方法的默认实现。如果你显式地子类化这些协议，你可以继承这些默认实现。</p>
+<p>显式将协议作为基类包括在内也是一种记录你的类实现特定协议的方法，并强制 mypy 验证你的类实现是否与该协议兼容。特别地，省略属性的值或方法体将使其隐式为抽象：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SomeProto</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">attr</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># 注意，没有右侧内容</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>  <span class="c1"># 这里确实只是 ...</span>
+
+<span class="k">class</span> <span class="nc">ExplicitSubclass</span><span class="p">(</span><span class="n">SomeProto</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">ExplicitSubclass</span><span class="p">()</span>  <span class="c1"># 错误：无法实例化抽象类 &#39;ExplicitSubclass&#39;</span>
+                    <span class="c1"># 因为缺少抽象属性 &#39;attr&#39; 和 &#39;method&#39;</span>
+</pre></div>
+</div>
+<p>同样，显式赋值给协议实例可以要求类型检查器验证你的类是否实现了该协议：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_proto</span><span class="p">:</span> <span class="n">SomeProto</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ExplicitSubclass</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="invariance">
+<h2>协议属性的不变性(Invariance)<a class="headerlink" href="#invariance" title="Link to this heading">¶</a></h2>
+<p>协议的一个常见问题是，协议属性是不变的。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+      <span class="n">content</span><span class="p">:</span> <span class="nb">object</span>
+
+<span class="k">class</span> <span class="nc">IntBox</span><span class="p">:</span>
+      <span class="n">content</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">takes_box</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">takes_box</span><span class="p">(</span><span class="n">IntBox</span><span class="p">())</span>  <span class="c1"># 错误：参数 1 类型 &quot;IntBox&quot; 不兼容；预期为 &quot;Box&quot;</span>
+                     <span class="c1"># 注意： &quot;IntBox&quot; 的以下成员存在冲突：</span>
+                     <span class="c1"># 注意：      content: 预期为 &quot;object&quot;，实际为 &quot;int&quot;</span>
+</pre></div>
+</div>
+<p>这是因为 <code class="docutils literal notranslate"><span class="pre">Box</span></code> 将 <code class="docutils literal notranslate"><span class="pre">content</span></code> 定义为可变属性。原因如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">takes_box_evil</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">box</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;asdf&quot;</span>  <span class="c1"># 这很糟糕，因为 box.content 应该是一个对象</span>
+
+<span class="n">my_int_box</span> <span class="o">=</span> <span class="n">IntBox</span><span class="p">()</span>
+<span class="n">takes_box_evil</span><span class="p">(</span><span class="n">my_int_box</span><span class="p">)</span>
+<span class="n">my_int_box</span><span class="o">.</span><span class="n">content</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 哦，TypeError!</span>
+</pre></div>
+</div>
+<p>可以通过在 <code class="docutils literal notranslate"><span class="pre">Box</span></code> 协议中使用 <code class="docutils literal notranslate"><span class="pre">&#64;property</span></code> 声明 <code class="docutils literal notranslate"><span class="pre">content</span></code> 为只读来解决此问题：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">IntBox</span><span class="p">:</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">takes_box</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">takes_box</span><span class="p">(</span><span class="n">IntBox</span><span class="p">(</span><span class="mi">42</span><span class="p">))</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+</section>
+<section id="recursive">
+<h2>递归协议(Recursive)<a class="headerlink" href="#recursive" title="Link to this heading">¶</a></h2>
+<p>协议可以是递归的（自我引用的）和互递归的。这对于声明抽象的递归集合，如树和链表，非常有用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">TreeLike</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeLike</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeLike</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">SimpleTree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">:</span> <span class="n">SimpleTree</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">:</span> <span class="n">SimpleTree</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">root</span><span class="p">:</span> <span class="n">TreeLike</span> <span class="o">=</span> <span class="n">SimpleTree</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+</section>
+<section id="isinstance">
+<h2>使用 isinstance() 与协议<a class="headerlink" href="#isinstance" title="Link to this heading">¶</a></h2>
+<p>如果你用 <code class="docutils literal notranslate"><span class="pre">&#64;runtime_checkable</span></code> 类装饰器装饰协议类，就可以在 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 中使用它。该装饰器为运行时结构检查添加了基本支持：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span> <span class="nc">Portable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">handles</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">class</span> <span class="nc">Mug</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="n">handles</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">mug</span> <span class="o">=</span> <span class="n">Mug</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mug</span><span class="p">,</span> <span class="n">Portable</span><span class="p">):</span>  <span class="c1"># 在运行时有效!</span>
+   <span class="n">use</span><span class="p">(</span><span class="n">mug</span><span class="o">.</span><span class="n">handles</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 也适用于 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 模块中的 <a class="reference internal" href="#predefined-protocols"><span class="std std-ref">预定义协议</span></a> ，例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> 。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>使用协议的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 在运行时并不是完全安全的。
+例如，方法的签名不会被检查。运行时实现只检查所有协议成员是否存在，
+而不是它们是否具有正确的类型。使用协议的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#issubclass" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">issubclass()</span></code></a> 也只会检查方法的存在性。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>使用协议的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 可能会意外地慢。
+在许多情况下，使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#hasattr" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">hasattr()</span></code></a> 检查属性的存在性会更合适。</p>
+</div>
+</section>
+<section id="callback">
+<span id="callback-protocols"></span><h2>回调协议(Callback)<a class="headerlink" href="#callback" title="Link to this heading">¶</a></h2>
+<p>协议可以用于定义灵活的回调类型，这些类型很难（甚至不可能）使用 <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable[...]</span></code> 语法来表达，例如可变参数、重载和复杂的泛型回调。它们通过特殊的 <code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code> 成员定义：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">Combiner</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">vals</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">batch_proc</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">bytes</span><span class="p">],</span> <span class="n">cb_results</span><span class="p">:</span> <span class="n">Combiner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">good_cb</span><span class="p">(</span><span class="o">*</span><span class="n">vals</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">bad_cb</span><span class="p">(</span><span class="o">*</span><span class="n">vals</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">maxitems</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+<span class="n">batch_proc</span><span class="p">([],</span> <span class="n">good_cb</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">batch_proc</span><span class="p">([],</span> <span class="n">bad_cb</span><span class="p">)</span>   <span class="c1"># 错误!参数 2 的类型不兼容，因为回调中的名称和类型不同</span>
+</pre></div>
+</div>
+<p>回调协议和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Callable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a> 类型在大多数情况下可以互换使用。<code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code> 方法中的参数名称必须相同，除非参数是位置参数。示例（使用旧的泛型函数语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Copy</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="c1"># &#39;/&#39; 标记位置参数的结束</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">copy_a</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">T</span><span class="p">]</span>
+<span class="n">copy_b</span><span class="p">:</span> <span class="n">Copy</span>
+
+<span class="n">copy_a</span> <span class="o">=</span> <span class="n">copy_b</span>  <span class="c1"># OK</span>
+<span class="n">copy_b</span> <span class="o">=</span> <span class="n">copy_a</span>  <span class="c1"># 也 OK</span>
+</pre></div>
+</div>
+</section>
+<section id="predefined-protocols-reference">
+<span id="id3"></span><h2>预定义协议参考(Predefined protocols)<a class="headerlink" href="#predefined-protocols-reference" title="Link to this heading">¶</a></h2>
+<section id="id4">
+<h3>迭代协议<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>迭代协议在许多上下文中非常有用。例如，它们允许在 for 循环中对对象进行迭代。</p>
+<section id="collections-abc-iterable-t">
+<h4>collections.abc.Iterable[T]<a class="headerlink" href="#collections-abc-iterable-t" title="Link to this heading">¶</a></h4>
+<p><a class="reference internal" href="#predefined-protocols"><span class="std std-ref">下面的例子</span></a> 定义了一个简单的 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__</span></code></a> 方法的实现：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见：<a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Iterable</span></code></a>。</p>
+</section>
+<section id="collections-abc-iterator-t">
+<h4>collections.abc.Iterator[T]<a class="headerlink" href="#collections-abc-iterator-t" title="Link to this heading">¶</a></h4>
+<p><cite>collections.abc.Iterator</cite> 协议定义了以下方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span>
+<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见：<a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterator" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Iterator</span></code></a>。</p>
+</section>
+</section>
+<section id="collection">
+<h3>集合协议(Collection)<a class="headerlink" href="#collection" title="Link to this heading">¶</a></h3>
+<p>许多集合协议由内置容器类型（如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> 和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#dict" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>）实现，这些协议对用户定义的集合对象也很有用。</p>
+<section id="collections-abc-sized">
+<h4>collections.abc.Sized<a class="headerlink" href="#collections-abc-sized" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#len" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">len(x)</span></code></a> 的对象类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Sized" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sized</span></code></a>.</p>
+</section>
+<section id="collections-abc-container-t">
+<h4>collections.abc.Container[T]<a class="headerlink" href="#collections-abc-container-t" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <code class="docutils literal notranslate"><span class="pre">in</span></code> 操作的对象类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Container" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a>.</p>
+</section>
+<section id="collections-abc-collection-t">
+<h4>collections.abc.Collection[T]<a class="headerlink" href="#collections-abc-collection-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+<span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Collection" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a>.</p>
+</section>
+</section>
+<section id="one-off-protocols">
+<h3>One-off protocols<a class="headerlink" href="#one-off-protocols" title="Link to this heading">¶</a></h3>
+<p>这些协议通常仅在与单个标准库函数或类一起使用时才有用。</p>
+<section id="collections-abc-reversible-t">
+<h4>collections.abc.Reversible[T]<a class="headerlink" href="#collections-abc-reversible-t" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#reversed" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed(x)</span></code></a> 的对象类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__reversed__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Reversible" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reversible</span></code></a>.</p>
+</section>
+<section id="typing-supportsabs-t">
+<h4>typing.SupportsAbs[T]<a class="headerlink" href="#typing-supportsabs-t" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#abs" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">abs(x)</span></code></a> 的对象类型。 <code class="docutils literal notranslate"><span class="pre">T</span></code> 是 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#abs" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">abs(x)</span></code></a> 返回值的类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsAbs" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsAbs</span></code></a>.</p>
+</section>
+<section id="typing-supportsbytes">
+<h4>typing.SupportsBytes<a class="headerlink" href="#typing-supportsbytes" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#bytes" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes(x)</span></code></a> 的对象类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__bytes__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsBytes" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsBytes</span></code></a>.</p>
+</section>
+<section id="typing-supportscomplex">
+<span id="supports-int-etc"></span><h4>typing.SupportsComplex<a class="headerlink" href="#typing-supportscomplex" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#complex" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">complex(x)</span></code></a> 的对象类型。请注意，不支持任何算术运算。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__complex__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">complex</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsComplex" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsComplex</span></code></a>.</p>
+</section>
+<section id="typing-supportsfloat">
+<h4>typing.SupportsFloat<a class="headerlink" href="#typing-supportsfloat" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#float" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">float(x)</span></code></a> 的对象类型。请注意，不支持任何算术运算。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsFloat" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsFloat</span></code></a>.</p>
+</section>
+<section id="typing-supportsint">
+<h4>typing.SupportsInt<a class="headerlink" href="#typing-supportsint" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#int" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int(x)</span></code></a> 的对象类型。请注意，不支持任何算术运算。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsInt" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsInt</span></code></a>.</p>
+</section>
+<section id="typing-supportsround-t">
+<h4>typing.SupportsRound[T]<a class="headerlink" href="#typing-supportsround-t" title="Link to this heading">¶</a></h4>
+<p>这是一个支持 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#round" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">round(x)</span></code></a> 的对象类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__round__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.SupportsRound" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupportsRound</span></code></a>.</p>
+</section>
+</section>
+<section id="async-protocols">
+<h3>Async protocols<a class="headerlink" href="#async-protocols" title="Link to this heading">¶</a></h3>
+<p>这些协议在异步代码中可能会很有用。有关更多信息，请参阅 <a class="reference internal" href="more_types.html#async-and-await"><span class="std std-ref">async/await 注解(Typing)</span></a> 。</p>
+<section id="collections-abc-awaitable-t">
+<h4>collections.abc.Awaitable[T]<a class="headerlink" href="#collections-abc-awaitable-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__await__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Awaitable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>.</p>
+</section>
+<section id="collections-abc-asynciterable-t">
+<h4>collections.abc.AsyncIterable[T]<a class="headerlink" href="#collections-abc-asynciterable-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.AsyncIterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncIterable</span></code></a>.</p>
+</section>
+<section id="collections-abc-asynciterator-t">
+<h4>collections.abc.AsyncIterator[T]<a class="headerlink" href="#collections-abc-asynciterator-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+<span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.AsyncIterator" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncIterator</span></code></a>.</p>
+</section>
+</section>
+<section id="context-manager">
+<h3>上下文管理器协议(Context manager)<a class="headerlink" href="#context-manager" title="Link to this heading">¶</a></h3>
+<p>上下文管理器有两种协议 —— 一种用于常规上下文管理器，另一种用于异步上下文管理器。这些协议允许定义可以在 <code class="docutils literal notranslate"><span class="pre">with</span></code> 和 <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">with</span></code> 语句中使用的对象。</p>
+<section id="contextlib-abstractcontextmanager-t">
+<h4>contextlib.AbstractContextManager[T]<a class="headerlink" href="#contextlib-abstractcontextmanager-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span>
+<span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+             <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">traceback</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/contextlib.html#contextlib.AbstractContextManager" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractContextManager</span></code></a>.</p>
+</section>
+<section id="contextlib-abstractasynccontextmanager-t">
+<h4>contextlib.AbstractAsyncContextManager[T]<a class="headerlink" href="#contextlib-abstractasynccontextmanager-t" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+<span class="k">def</span> <span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">traceback</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>另请参见： <a class="reference external" href="https://docs.python.org/zh-cn/3/library/contextlib.html#contextlib.AbstractAsyncContextManager" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractAsyncContextManager</span></code></a>.</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="dynamic_typing.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">动态类型代码(Dynamically)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="runtime_troubles.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">运行时的注解问题(Annotation issues)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">协议(Protocol)与结构化子类型</a><ul>
+<li><a class="reference internal" href="#protocols">预定义协议(protocols)</a></li>
+<li><a class="reference internal" href="#id1">简单的用户自定义协议(protocols)</a></li>
+<li><a class="reference internal" href="#id2">定义子协议和协议子类</a></li>
+<li><a class="reference internal" href="#invariance">协议属性的不变性(Invariance)</a></li>
+<li><a class="reference internal" href="#recursive">递归协议(Recursive)</a></li>
+<li><a class="reference internal" href="#isinstance">使用 isinstance() 与协议</a></li>
+<li><a class="reference internal" href="#callback">回调协议(Callback)</a></li>
+<li><a class="reference internal" href="#predefined-protocols-reference">预定义协议参考(Predefined protocols)</a><ul>
+<li><a class="reference internal" href="#id4">迭代协议</a><ul>
+<li><a class="reference internal" href="#collections-abc-iterable-t">collections.abc.Iterable[T]</a></li>
+<li><a class="reference internal" href="#collections-abc-iterator-t">collections.abc.Iterator[T]</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#collection">集合协议(Collection)</a><ul>
+<li><a class="reference internal" href="#collections-abc-sized">collections.abc.Sized</a></li>
+<li><a class="reference internal" href="#collections-abc-container-t">collections.abc.Container[T]</a></li>
+<li><a class="reference internal" href="#collections-abc-collection-t">collections.abc.Collection[T]</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#one-off-protocols">One-off protocols</a><ul>
+<li><a class="reference internal" href="#collections-abc-reversible-t">collections.abc.Reversible[T]</a></li>
+<li><a class="reference internal" href="#typing-supportsabs-t">typing.SupportsAbs[T]</a></li>
+<li><a class="reference internal" href="#typing-supportsbytes">typing.SupportsBytes</a></li>
+<li><a class="reference internal" href="#typing-supportscomplex">typing.SupportsComplex</a></li>
+<li><a class="reference internal" href="#typing-supportsfloat">typing.SupportsFloat</a></li>
+<li><a class="reference internal" href="#typing-supportsint">typing.SupportsInt</a></li>
+<li><a class="reference internal" href="#typing-supportsround-t">typing.SupportsRound[T]</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#async-protocols">Async protocols</a><ul>
+<li><a class="reference internal" href="#collections-abc-awaitable-t">collections.abc.Awaitable[T]</a></li>
+<li><a class="reference internal" href="#collections-abc-asynciterable-t">collections.abc.AsyncIterable[T]</a></li>
+<li><a class="reference internal" href="#collections-abc-asynciterator-t">collections.abc.AsyncIterator[T]</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#context-manager">上下文管理器协议(Context manager)</a><ul>
+<li><a class="reference internal" href="#contextlib-abstractcontextmanager-t">contextlib.AbstractContextManager[T]</a></li>
+<li><a class="reference internal" href="#contextlib-abstractasynccontextmanager-t">contextlib.AbstractAsyncContextManager[T]</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

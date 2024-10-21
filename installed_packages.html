@@ -1,0 +1,482 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="扩展和集成 mypy(Extending and integrating mypy)" href="extending_mypy.html" /><link rel="prev" title="Mypy 守护进程 (mypy 服务)" href="mypy_daemon.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>使用已安装的包(Using installed packages) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/installed_packages.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/installed_packages.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="using-installed-packages">
+<span id="installed-packages"></span><h1>使用已安装的包(Using installed packages)<a class="headerlink" href="#using-installed-packages" title="Link to this heading">¶</a></h1>
+<p>通过 pip 安装的包可以声明它们支持类型检查。例如， <a class="reference external" href="https://docs.aiohttp.org/en/stable/">aiohttp</a> 包内置支持类型检查。</p>
+<p>包也可以为库提供存根。例如， <code class="docutils literal notranslate"><span class="pre">types-requests</span></code> 是一个仅提供存根的包，它为 <a class="reference external" href="https://requests.readthedocs.io/en/master/">requests</a> 包提供存根。存根包通常从 <a class="reference external" href="https://github.com/python/typeshed">typeshed</a> 发布，这是一个共享的 Python 库存根仓库，存根包的命名格式通常为 <code class="docutils literal notranslate"><span class="pre">types-&lt;library&gt;</span></code>。注意，许多存根包并非由原包的维护者维护。</p>
+<p>以下部分解释了 mypy 如何使用这些包，以及如何创建此类包。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p><span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 规定了一个包如何声明它支持类型检查。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>新版本的存根包通常使用不被较旧甚至最近版本的 mypy 支持的类型系统功能。如果你将 mypy 固定为较旧版本（例如使用 <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> )，建议你也将所有存根包依赖项的版本固定。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>从 mypy 0.900 开始，大多数第三方包存根必须显式安装。这将 mypy 与存根版本进行解耦，使得存根可以独立更新而不需要更新 mypy。这也允许安装最初未包含在 mypy 中的存根。早期版本的 mypy 包含了一组固定的第三方包存根。</p>
+</div>
+<section id="mypy-pep-561">
+<h2>在 mypy 中使用已安装的包(PEP 561)<a class="headerlink" href="#mypy-pep-561" title="Link to this heading">¶</a></h2>
+<p>通常，mypy 会自动找到并使用支持类型检查或提供存根的已安装包。这要求你在运行 mypy 的 Python 环境中安装这些包。由于许多包尚不支持类型检查，你可能还需要安装一个单独的存根包，通常命名为 <code class="docutils literal notranslate"><span class="pre">types-&lt;library&gt;</span></code>。 （有关如何处理不支持类型检查且缺少存根的库，请参阅 <a class="reference internal" href="running_mypy.html#fix-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a>）。</p>
+<p>如果你在另一个 Python 安装或环境中安装了已键入的包，mypy 不会自动找到它们。一个选项是将这些包的副本安装在你安装了 mypy 的环境中。或者，你可以使用 <a class="reference internal" href="command_line.html#cmdoption-mypy-python-executable"><code class="xref std std-option docutils literal notranslate"><span class="pre">--python-executable</span></code></a> 选项指向另一个环境的 Python 可执行文件，mypy 将找到为该 Python 可执行文件安装的包。</p>
+<p>请注意，mypy 不支持一些更高级的导入功能，如 zip 导入和自定义导入钩子。</p>
+<p>如果你不想使用任何提供类型信息的已安装包，可以使用 <a class="reference internal" href="command_line.html#cmdoption-mypy-no-site-packages"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-site-packages</span></code></a> 选项禁用搜索已安装包。</p>
+<p>注意，仅存根包不能与 <code class="docutils literal notranslate"><span class="pre">MYPYPATH</span></code> 一起使用。如果你希望 mypy 找到该包，则必须安装它。对于包 <code class="docutils literal notranslate"><span class="pre">foo</span></code>，仅存根包的名称( <code class="docutils literal notranslate"><span class="pre">foo-stubs</span></code> )不是合法的包名称，因此 mypy 不会找到它，除非它已被安装（有关更多信息，请参阅 <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/#stub-only-packages"><strong>PEP 561: Stub-only Packages</strong></a>）。</p>
+</section>
+<section id="pep-561-creating-pep-561-compatible-packages">
+<h2>创建符合 PEP 561 的包(Creating PEP 561 compatible packages)<a class="headerlink" href="#pep-561-creating-pep-561-compatible-packages" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>除非你维护一个在 PyPI 上的包，或者想为现有的 PyPI 包发布类型信息，否则你通常可以忽略此部分。</p>
+</div>
+<p><span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 描述了分发类型信息的三种主要方式：</p>
+<ol class="arabic simple">
+<li><p>包在 Python 实现中包含内联类型注解。</p></li>
+<li><p>包随 Python 实现一起提供带有类型信息的 <a class="reference internal" href="stubs.html#stub-files"><span class="std std-ref">存根文件</span></a>。</p></li>
+<li><p>包将类型信息作为存根文件单独分发给另一个包（也称为“仅存根包”）。</p></li>
+</ol>
+<p>如果你想为现有的库创建仅存根包，最简单的方法是向 <a class="reference external" href="https://github.com/python/typeshed">typeshed</a> 仓库贡献存根文件，存根包将自动上传到 PyPI。</p>
+<p>如果你想将库包发布到包仓库（例如 PyPI）用于内部或外部类型检查，提供类型信息的包应在代码中的类型注解或类型标注旁边放置一个 <code class="docutils literal notranslate"><span class="pre">py.typed</span></code> 文件在包目录中。例如，下面是一个典型的目录结构：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>setup.py
+package_a/
+    __init__.py
+    lib.py
+    py.typed
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> 文件可以是这样的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SuperPackageA&quot;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Me&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">,</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;package_a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;py.typed&quot;</span><span class="p">]},</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;package_a&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>有些包包含存根文件和运行时文件的混合。这些包也需要一个 <code class="docutils literal notranslate"><span class="pre">py.typed</span></code> 文件。下面是一个示例：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>setup.py
+package_b/
+    __init__.py
+    lib.py
+    lib.pyi
+    py.typed
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> 文件可能是这样的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SuperPackageB&quot;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Me&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">,</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;package_b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;py.typed&quot;</span><span class="p">,</span> <span class="s2">&quot;lib.pyi&quot;</span><span class="p">]},</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;package_b&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>在这个示例中，<code class="docutils literal notranslate"><span class="pre">lib.py</span></code> 和 <code class="docutils literal notranslate"><span class="pre">lib.pyi</span></code> 存根文件都存在。运行时，Python 解释器将使用 <code class="docutils literal notranslate"><span class="pre">lib.py</span></code>，但 mypy 会使用 <code class="docutils literal notranslate"><span class="pre">lib.pyi</span></code>。</p>
+<p>如果包是仅存根包（运行时不导入），该包的前缀应为运行时包名，后缀为 <code class="docutils literal notranslate"><span class="pre">-stubs</span></code> 。仅存根包不需要 <code class="docutils literal notranslate"><span class="pre">py.typed</span></code> 文件。例如，如果我们有 <code class="docutils literal notranslate"><span class="pre">package_c</span></code> 的存根，我们可以这样做：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>setup.py
+package_c-stubs/
+    __init__.pyi
+    lib.pyi
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> 可能是这样的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SuperPackageC&quot;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Me&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">,</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;package_c-stubs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;__init__.pyi&quot;</span><span class="p">,</span> <span class="s2">&quot;lib.pyi&quot;</span><span class="p">]},</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;package_c-stubs&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>上述指令足以确保生成的 wheels 包含适当的文件。然而，为了确保包含在 <code class="docutils literal notranslate"><span class="pre">sdist</span></code> (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> 压缩包）中，你还可能需要修改 <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> 中的包含规则：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>global-include *.pyi
+global-include *.typed
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="extending_mypy.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">扩展和集成 mypy(Extending and integrating mypy)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="mypy_daemon.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Mypy 守护进程 (mypy 服务)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">使用已安装的包(Using installed packages)</a><ul>
+<li><a class="reference internal" href="#mypy-pep-561">在 mypy 中使用已安装的包(PEP 561)</a></li>
+<li><a class="reference internal" href="#pep-561-creating-pep-561-compatible-packages">创建符合 PEP 561 的包(Creating PEP 561 compatible packages)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

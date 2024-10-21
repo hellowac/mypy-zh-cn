@@ -1,0 +1,847 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="鸭子类型兼容性" href="duck_type_compatibility.html" /><link rel="prev" title="动态类型代码(Dynamically)" href="dynamic_typing.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>类型缩小(narrowing) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/type_narrowing.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/type_narrowing.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="narrowing">
+<span id="type-narrowing"></span><h1>类型缩小(narrowing)<a class="headerlink" href="#narrowing" title="Link to this heading">¶</a></h1>
+<p>本节专门介绍几种 mypy 支持的类型缩小技巧。</p>
+<p>类型缩小是指您说服类型检查器相信一个更广泛的类型实际上是更具体的类型，例如，类型为 <code class="docutils literal notranslate"><span class="pre">Shape</span></code> 的对象实际上是更窄的类型 <code class="docutils literal notranslate"><span class="pre">Square</span></code>。</p>
+<section id="expressions">
+<h2>类型缩小表达式(expressions)<a class="headerlink" href="#expressions" title="Link to this heading">¶</a></h2>
+<p>缩小类型的最简单方法是使用支持的表达式之一：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a>，例如 <code class="code docutils literal notranslate"><span class="pre">isinstance(obj,</span> <span class="pre">float)</span></code> 将把 <code class="docutils literal notranslate"><span class="pre">obj</span></code> 缩小为 <code class="docutils literal notranslate"><span class="pre">float</span></code> 类型。</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#issubclass" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">issubclass()</span></code></a>，例如 <code class="code docutils literal notranslate"><span class="pre">issubclass(cls,</span> <span class="pre">MyClass)</span></code> 将把 <code class="docutils literal notranslate"><span class="pre">cls</span></code> 缩小为 <code class="docutils literal notranslate"><span class="pre">Type[MyClass]</span></code>。</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#type" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>，例如 <code class="code docutils literal notranslate"><span class="pre">type(obj)</span> <span class="pre">is</span> <span class="pre">int</span></code> 将把 <code class="docutils literal notranslate"><span class="pre">obj</span></code> 缩小为 <code class="docutils literal notranslate"><span class="pre">int</span></code> 类型。</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#callable" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>，例如 <code class="code docutils literal notranslate"><span class="pre">callable(obj)</span></code> 将把对象缩小为可调用类型。</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">obj</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code> 将对象缩小为其 <a class="reference internal" href="kinds_of_types.html#strict-optional"><span class="std std-ref">非可选形式</span></a> 。</p></li>
+</ul>
+<p>类型缩小是上下文相关的。例如，基于条件，mypy 只会在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 分支中缩小表达式的类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># 类型仅在 ``if`` 分支中缩小</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.int&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="c1"># 在此 ``elif`` 分支中，类型以不同方式缩小：</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.str | builtins.bool&quot;</span>
+
+        <span class="c1"># 后续的缩小操作将进一步缩小类型</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.bool&quot;</span>
+
+    <span class="c1"># 回到 ``if`` 语句外，类型没有缩小：</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.object&quot;</span>
+</pre></div>
+</div>
+<p>Mypy 理解 <code class="docutils literal notranslate"><span class="pre">return</span></code> 或抛出异常可能对对象的类型产生的影响：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># 此时 `arg` 不能是 `int`：</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.str&quot;</span>
+</pre></div>
+</div>
+<p>我们还可以使用 <code class="docutils literal notranslate"><span class="pre">assert</span></code> 在相同上下文中缩小类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># 显示的类型: &quot;builtins.int&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>使用 <a class="reference internal" href="command_line.html#cmdoption-mypy-warn-unreachable"><code class="xref std std-option docutils literal notranslate"><span class="pre">--warn-unreachable</span></code></a> 时，将类型缩小到某个不可能的状态将被视为错误。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="c1"># 错误：无法存在 &quot;int&quot; 和 &quot;str&quot; 的子类：</span>
+    <span class="c1"># 方法签名不兼容</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="c1"># 错误：语句不可达</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;所以 mypy 认为 assert 将始终触发&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>在没有 <code class="docutils literal notranslate"><span class="pre">--warn-unreachable</span></code> 的情况下，mypy 只会不检查它认为不可达的代码。有关更多信息，请参见 <a class="reference internal" href="common_issues.html#unreachable"><span class="std std-ref">不可达代码(Unreachable code)</span></a> 。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 显示的类型是 &quot;builtins.int&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;!&#39;</span><span class="p">)</span>  <span class="c1"># `mypy` 类型检查通过，但在运行时失败。</span>
+</pre></div>
+</div>
+</div>
+<section id="issubclass">
+<h3>issubclass<a class="headerlink" href="#issubclass" title="Link to this heading">¶</a></h3>
+<p>Mypy 还可以使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#issubclass" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">issubclass()</span></code></a> 来改善与类型和 metaclass 一起工作时的类型推断：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCalcMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>  <span class="c1"># 我们必须在这里使用一个变量</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># 显示的类型是 &quot;builtins.type&quot;</span>
+
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">MyCalcMeta</span><span class="p">):</span>  <span class="c1"># `issubclass(type(o), MyCalcMeta)` 不会工作</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># 显示的类型是 &quot;Type[MyCalcMeta]&quot;</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">calc</span><span class="p">()</span>  <span class="c1"># 可以</span>
+</pre></div>
+</div>
+</section>
+<section id="callable">
+<h3>callable<a class="headerlink" href="#callable" title="Link to this heading">¶</a></h3>
+<p>Mypy 知道在类型检查期间哪些类型是可调用的，哪些类型不是。因此，我们知道 <cite>callable()</cite> 将返回什么。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="n">x</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">int</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># N: 显示的类型是 &quot;def () -&gt; builtins.int&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="o">...</span>  <span class="c1"># 将永远不会执行，并且在使用 `--warn-unreachable` 时会引发错误</span>
+</pre></div>
+</div>
+<p><cite>callable</cite> 函数甚至可以将联合类型分成可调用和不可调用的部分：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">int</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># N: 显示的类型是 &quot;def () -&gt; builtins.int&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># N: 显示的类型是 &quot;builtins.int&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="casts">
+<span id="id1"></span><h2>Casts<a class="headerlink" href="#casts" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持类型转换，通常用于将静态类型值强制转换为子类型。然而，与 Java 或 C# 等语言不同，mypy 的转换仅用于为类型检查器提供提示，并不会执行运行时类型检查。使用函数 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.cast" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing.cast()</span></code></a> 来执行类型转换：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+
+<span class="n">o</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">o</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">o</span><span class="p">)</span>  <span class="c1"># OK (cast 不执行实际的运行时检查)</span>
+</pre></div>
+</div>
+<p>要支持像上面那样的运行时检查，我们需要检查列表中所有项的类型，对于大型列表来说，这将非常低效。类型转换用于消除虚假的类型检查器警告，并在类型检查器无法完全理解发生了什么时提供一点帮助。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>如果您想执行实际的运行时检查，可以使用断言：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">o</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># 错误：无法将 &#39;object&#39; 与 &#39;int&#39; 相加</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">o</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># OK：此时 &#39;o&#39; 的类型是 &#39;int&#39;</span>
+</pre></div>
+</div>
+</div>
+<p>对于类型为 <cite>Any</cite> 的表达式或将值分配给类型为 <cite>Any</cite> 的变量，您不需要进行类型转换，如前所述。您还可以将 <cite>Any</cite> 用作转换目标类型——这使您能够对结果执行任何操作。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x</span><span class="o">.</span><span class="n">whatever</span><span class="p">()</span>  <span class="c1"># 类型检查错误</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">y</span><span class="o">.</span><span class="n">whatever</span><span class="p">()</span>  <span class="c1"># 类型检查 OK（运行时错误）</span>
+</pre></div>
+</div>
+</section>
+<section id="user-defined-type-guards">
+<span id="type-guards"></span><h2>User-Defined Type Guards<a class="headerlink" href="#user-defined-type-guards" title="Link to this heading">¶</a></h2>
+<p>Mypy supports User-Defined Type Guards (<span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0647/"><strong>PEP 647</strong></a>).</p>
+<p>A type guard is a way for programs to influence conditional
+type narrowing employed by a type checker based on runtime checks.</p>
+<p>Basically, a <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> is a &quot;smart&quot; alias for a <code class="docutils literal notranslate"><span class="pre">bool</span></code> type.
+Let's have a look at the regular <code class="docutils literal notranslate"><span class="pre">bool</span></code> example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Determines whether all objects in the list are strings&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1"># Reveals list[object]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">))</span> <span class="c1"># Error: incompatible type</span>
+</pre></div>
+</div>
+<p>The same example with <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span>  <span class="c1"># use `typing_extensions` for Python 3.9 and below</span>
+
+<span class="k">def</span> <span class="nf">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines whether all objects in the list are strings&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1"># list[str]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">))</span> <span class="c1"># ok</span>
+</pre></div>
+</div>
+<p>How does it work? <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> narrows the first function argument (<code class="docutils literal notranslate"><span class="pre">val</span></code>)
+to the type specified as the first type parameter (<code class="docutils literal notranslate"><span class="pre">list[str]</span></code>).</p>
+</section>
+<section id="id2">
+<h2>用户定义的类型保护(Type Guards)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持用户定义的类型保护 (<span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0647/"><strong>PEP 647</strong></a>).</p>
+<p>类型保护是一种方法，允许程序根据运行时检查影响类型检查器采用的条件类型缩小。</p>
+<p>基本上， <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> 是对 <code class="docutils literal notranslate"><span class="pre">bool</span></code> 类型的一个“智能”别名。我们先来看一个常规的 <code class="docutils literal notranslate"><span class="pre">bool</span></code> 示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;确定列表中的所有对象是否都是字符串&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1"># 显示类型为 list[object]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>  <span class="c1"># 错误：类型不兼容</span>
+</pre></div>
+</div>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> 的相同示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span>  <span class="c1"># 对于 Python 3.9 及以下版本使用 `typing_extensions`</span>
+
+<span class="k">def</span> <span class="nf">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;确定列表中的所有对象是否都是字符串&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str_list</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1"># list[str]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>  <span class="c1"># 正确</span>
+</pre></div>
+</div>
+<p>这是如何工作的？ <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> 将第一个函数参数（ <code class="docutils literal notranslate"><span class="pre">val</span></code> ）缩小到作为第一个类型参数指定的类型（ <code class="docutils literal notranslate"><span class="pre">list[str]</span></code> ）。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>类型缩小 <a class="reference external" href="https://www.python.org/dev/peps/pep-0647/#enforcing-strict-narrowing">并不严格</a> . 例如，你可以将 <cite>str</cite> 缩小为 <cite>int</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>注意：由于没有强制执行严格的缩小，因此很容易破坏类型安全。</p>
+<p>然而，决心或缺乏信息的开发者有许多方法可以颠覆类型安全，最常见的方式是使用 <code class="docutils literal notranslate"><span class="pre">cast</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 。
+如果一个 Python 开发者花时间学习并在其代码中实现用户定义的类型保护，那么可以安全地假设他们对类型安全感兴趣，并且不会以破坏类型安全或产生无意义结果的方式编写他们的类型保护函数。</p>
+</div>
+<section id="typeguards">
+<h3>泛型 TypeGuards<a class="headerlink" href="#typeguards" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> 还可以与泛型类型一起使用（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span>  <span class="c1"># use `typing_extensions` for `python&lt;3.10`</span>
+
+<span class="k">def</span> <span class="nf">is_two_element_tuple</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">val</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">is_two_element_tuple</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>  <span class="c1"># tuple[str, str]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>  <span class="c1"># tuple[str, ...]</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>参数 TypeGuards<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>类型保护(Type guard)函数可以接受额外的参数（Python 3.12 语法）：</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span>  <span class="c1"># 对于 `python&lt;3.10` 使用 `typing_extensions`</span>
+
+<span class="k">def</span> <span class="nf">is_set_of</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">val</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="n">items</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">is_set_of</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>  <span class="c1"># set[str]</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>方法 TypeGuards<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>方法也可以作为 <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StrValidator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">to_validate</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">StrValidator</span><span class="p">()</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">to_validate</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">to_validate</span><span class="p">)</span>  <span class="c1"># Revealed type is &quot;builtins.str&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>请注意， <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> <a class="reference external" href="https://www.python.org/dev/peps/pep-0647/#narrowing-of-implicit-self-and-cls-parameters">不会缩小</a>  <code class="docutils literal notranslate"><span class="pre">self</span></code> 或 <code class="docutils literal notranslate"><span class="pre">cls</span></code> 隐式参数的类型。如果需要缩小 <code class="docutils literal notranslate"><span class="pre">self</span></code> 或 <code class="docutils literal notranslate"><span class="pre">cls</span></code> 的类型，可以将值作为显式参数传递给类型保护函数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Parent</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Revealed type is &quot;Parent&quot;</span>
+        <span class="k">if</span> <span class="n">is_child</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">reveal_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Revealed type is &quot;Child&quot;</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Parent</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">is_child</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">Parent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="n">Child</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">Child</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h3>赋值表达式 TypeGuards<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>有时你可能需要创建一个新变量，并同时将其缩小到某个特定类型。这可以通过将 <code class="docutils literal notranslate"><span class="pre">TypeGuard</span></code> 与 <a class="reference external" href="https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions">:= operator</a> 运算符结合使用来实现。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span>  <span class="c1"># 使用 `typing_extensions` 适用于 `python&lt;3.10`</span>
+
+<span class="k">def</span> <span class="nf">is_float</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_float</span><span class="p">(</span><span class="n">x</span> <span class="o">:=</span> <span class="n">a</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># N: Revealed type is &#39;builtins.float&#39;</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>  <span class="c1"># N: Revealed type is &#39;builtins.object&#39;</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># N: Revealed type is &#39;builtins.object&#39;</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>  <span class="c1"># N: Revealed type is &#39;builtins.object&#39;</span>
+</pre></div>
+</div>
+<p>这里发生了什么？</p>
+<ol class="arabic simple">
+<li><p>我们创建了一个新变量 <code class="docutils literal notranslate"><span class="pre">x</span></code> ，并将 <code class="docutils literal notranslate"><span class="pre">a</span></code> 的值赋给它。</p></li>
+<li><p>我们在 <code class="docutils literal notranslate"><span class="pre">x</span></code> 上运行 <code class="docutils literal notranslate"><span class="pre">is_float()</span></code> 类型保护。</p></li>
+<li><p>它在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 上下文中将 <code class="docutils literal notranslate"><span class="pre">x</span></code> 缩小为 <code class="docutils literal notranslate"><span class="pre">float</span></code> ，而不影响 <code class="docutils literal notranslate"><span class="pre">a</span></code> 。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">isinstance(x</span> <span class="pre">:=</span> <span class="pre">a,</span> <span class="pre">float)</span></code> 也可以实现相同的效果。</p>
+</div>
+</section>
+</section>
+<section id="limitations">
+<h2>局限性(Limitations)<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<p>Mypy 的分析局限于单个符号，无法跟踪符号之间的关系。例如，在以下代码中，很容易推断出如果 <code class="code docutils literal notranslate"><span class="pre">a</span></code> 为 None，则 <code class="code docutils literal notranslate"><span class="pre">b</span></code> 不能为 None，因此 <code class="code docutils literal notranslate"><span class="pre">a</span> <span class="pre">or</span> <span class="pre">b</span></code> 将始终是 <code class="code docutils literal notranslate"><span class="pre">C</span></code> 的实例，但 Mypy 无法识别这一点：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">C</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">C</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="ow">or</span> <span class="n">b</span>  <span class="c1"># 返回值类型不兼容（获得 &quot;C | None&quot;，预期 &quot;C&quot;）</span>
+    <span class="k">return</span> <span class="n">C</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>在类型检查器中跟踪这种跨变量条件会增加显著的复杂性和性能开销。</p>
+<p>你可以使用 <code class="docutils literal notranslate"><span class="pre">assert</span></code> 来说服类型检查器，使用类型转换来覆盖它，或者稍微详细地重写函数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">C</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">C</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="k">elif</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">C</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="typeis">
+<span id="id8"></span><h2>TypeIs<a class="headerlink" href="#typeis" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持 TypeIs (<span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0742/"><strong>PEP 742</strong></a>).</p>
+<p><a class="reference external" href="https://typing.readthedocs.io/en/latest/spec/narrowing.html#typeis">TypeIs 窄化函数</a> 允许你定义自定义类型检查，
+这可以在条件的 <a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.TypeIs">if 和 else</a> 分支中缩小变量的类型，类似于内置的 <cite>isinstance()</cite> 函数的工作方式。</p>
+<p>TypeIs 是 Python 3.13 中的新特性；对于旧版 Python，可以使用来自 <a class="reference external" href="https://typing-extensions.readthedocs.io/en/latest/">typing_extensions</a> 的回溯。</p>
+<p>考虑以下使用 TypeIs 的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeIs</span>
+
+<span class="k">def</span> <span class="nf">is_str</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Revealed type is &#39;str&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>  <span class="c1"># Valid: x is str</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Revealed type is &#39;int&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Valid: x is int</span>
+</pre></div>
+</div>
+<p>在这个示例中，函数 <code class="docutils literal notranslate"><span class="pre">is_str</span></code> 是一个类型缩小函数，返回 <code class="docutils literal notranslate"><span class="pre">TypeIs[str]</span></code>。在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语句中使用时，<code class="docutils literal notranslate"><span class="pre">x</span></code> 在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 分支中被缩小为 <code class="docutils literal notranslate"><span class="pre">str</span></code>，在 <code class="docutils literal notranslate"><span class="pre">else</span></code> 分支中被缩小为 <code class="docutils literal notranslate"><span class="pre">int</span></code> 。</p>
+<p>关键点：</p>
+<ul class="simple">
+<li><p>函数必须接受至少一个位置参数。</p></li>
+<li><p>返回类型被注解为 <code class="docutils literal notranslate"><span class="pre">TypeIs[T]</span></code>，其中 <code class="docutils literal notranslate"><span class="pre">T</span></code> 是你希望缩小的类型。</p></li>
+<li><p>函数必须返回一个 <code class="docutils literal notranslate"><span class="pre">bool</span></code> 值。</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 分支（当函数返回 <code class="docutils literal notranslate"><span class="pre">True</span></code> ）中，参数的类型被缩小到其原始类型和 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的交集。</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">else</span></code> 分支（当函数返回 <code class="docutils literal notranslate"><span class="pre">False</span></code> ）中，参数的类型被缩小到其原始类型和 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的补集的交集。</p></li>
+</ul>
+<section id="typeis-vs-typeguard">
+<h3>TypeIs vs TypeGuard<a class="headerlink" href="#typeis-vs-typeguard" title="Link to this heading">¶</a></h3>
+<p>虽然 <cite>TypeIs</cite> 和 <cite>TypeGuard</cite> 都允许你定义自定义类型缩小函数，但它们在重要方面存在差异：</p>
+<ul class="simple">
+<li><p><strong>类型缩小行为</strong>: <cite>TypeIs</cite> 在 <cite>if</cite> 和 <cite>else</cite> 分支中都缩小类型，而 <cite>TypeGuard</cite> 仅在 <cite>if</cite> 分支中缩小类型。</p></li>
+<li><p><strong>兼容性要求</strong>: <cite>TypeIs</cite> 要求缩小后的类型 <cite>T</cite> 与函数的输入类型兼容。而 <cite>TypeGuard</cite> 没有这个限制。</p></li>
+<li><p><strong>类型推断</strong>: 使用 <cite>TypeIs</cite> ，类型检查器可能通过将现有类型信息与 <cite>T</cite> 结合，推断出更精确的类型。</p></li>
+</ul>
+<p>以下是一个演示 <cite>TypeGuard</cite> 行为的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeGuard</span><span class="p">,</span> <span class="n">reveal_type</span>
+
+<span class="k">def</span> <span class="nf">is_str</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Revealed type is &quot;builtins.str&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>  <span class="c1"># ok: x is str</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Revealed type is &quot;Union[builtins.int, builtins.str]&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># ERROR: Unsupported operand types for + (&quot;str&quot; and &quot;int&quot;)  [operator]</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3>泛型 TypeIs<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TypeIs</span></code> 函数同样可以和泛型一起使用:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">TypeIs</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">is_two_element_tuple</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_two_element_tuple</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>  <span class="c1"># Revealed type is &#39;tuple[str, str]&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>  <span class="c1"># Revealed type is &#39;tuple[str, ...]&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h3>TypeIs 带附加参数<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TypeIs</span></code> 函数可以接受除了第一个参数之外的附加参数。类型缩小仅适用于第一个参数。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">reveal_type</span><span class="p">,</span> <span class="n">TypeIs</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">is_instance_of</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_instance_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 显示类型为 &#39;int&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 正确</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 显示类型为 &#39;Any&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>方法中的 TypeIs<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>方法也可以作为 <code class="docutils literal notranslate"><span class="pre">TypeIs</span></code> 函数。请注意，在实例方法或类方法中，类型缩小适用于第二个参数（在 <code class="docutils literal notranslate"><span class="pre">self</span></code> 或 <code class="docutils literal notranslate"><span class="pre">cls</span></code> 之后）。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Validator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_validate</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">Validator</span><span class="p">()</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">to_validate</span><span class="p">):</span>
+            <span class="n">reveal_type</span><span class="p">(</span><span class="n">to_validate</span><span class="p">)</span>  <span class="c1"># 显示类型为 &#39;str&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">to_validate</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>  <span class="c1"># 正确: to_validate 是 str</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>赋值表达式中的 TypeIs<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>您可以将赋值表达式运算符 <code class="docutils literal notranslate"><span class="pre">:=</span></code> 与 <code class="docutils literal notranslate"><span class="pre">TypeIs</span></code> 一起使用，以同时创建新变量并缩小其类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeIs</span><span class="p">,</span> <span class="n">reveal_type</span>
+
+<span class="k">def</span> <span class="nf">is_float</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">is_float</span><span class="p">(</span><span class="n">x</span> <span class="o">:=</span> <span class="n">a</span><span class="p">):</span>
+        <span class="n">reveal_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 显示类型为 &#39;float&#39;</span>
+        <span class="c1"># x 在这个块中被缩小为 float</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="duck_type_compatibility.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">鸭子类型兼容性</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="dynamic_typing.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">动态类型代码(Dynamically)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">类型缩小(narrowing)</a><ul>
+<li><a class="reference internal" href="#expressions">类型缩小表达式(expressions)</a><ul>
+<li><a class="reference internal" href="#issubclass">issubclass</a></li>
+<li><a class="reference internal" href="#callable">callable</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#casts">Casts</a></li>
+<li><a class="reference internal" href="#user-defined-type-guards">User-Defined Type Guards</a></li>
+<li><a class="reference internal" href="#id2">用户定义的类型保护(Type Guards)</a><ul>
+<li><a class="reference internal" href="#typeguards">泛型 TypeGuards</a></li>
+<li><a class="reference internal" href="#id4">参数 TypeGuards</a></li>
+<li><a class="reference internal" href="#id5">方法 TypeGuards</a></li>
+<li><a class="reference internal" href="#id7">赋值表达式 TypeGuards</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitations">局限性(Limitations)</a></li>
+<li><a class="reference internal" href="#typeis">TypeIs</a><ul>
+<li><a class="reference internal" href="#typeis-vs-typeguard">TypeIs vs TypeGuard</a></li>
+<li><a class="reference internal" href="#id10">泛型 TypeIs</a></li>
+<li><a class="reference internal" href="#id11">TypeIs 带附加参数</a></li>
+<li><a class="reference internal" href="#id12">方法中的 TypeIs</a></li>
+<li><a class="reference internal" href="#id13">赋值表达式中的 TypeIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

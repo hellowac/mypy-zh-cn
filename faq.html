@@ -1,0 +1,467 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="Mypy 版本说明" href="changelog.html" /><link rel="prev" title="附加功能(Additional features)" href="additional_features.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>常见问题解答(Frequently Asked Questions) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/faq.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/faq.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="frequently-asked-questions">
+<h1>常见问题解答(Frequently Asked Questions)<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">¶</a></h1>
+<section id="why-have-both-dynamic-and-static-typing">
+<h2>为什么同时有动态和静态类型？(Why have both dynamic and static typing?)<a class="headerlink" href="#why-have-both-dynamic-and-static-typing" title="Link to this heading">¶</a></h2>
+<p>动态类型可以灵活、强大、方便且易于使用。但这并不总是最佳的方法；许多开发者选择使用静态类型语言或为 Python 使用静态类型是有充分理由的。</p>
+<p>以下是 mypy 风格静态类型的一些潜在好处：</p>
+<ul class="simple">
+<li><p>静态类型可以使程序更易于理解和维护。类型声明可以作为机器检查的文档。这一点很重要，因为代码通常被阅读的频率远高于修改的频率，尤其是对于大型和复杂的程序。</p></li>
+<li><p>静态类型可以帮助你更早、更少地进行测试和调试找到错误。特别是在大型和复杂的项目中，这可以节省大量时间。</p></li>
+<li><p>静态类型可以帮助你在代码投入生产之前找到难以发现的错误。这可以提高可靠性并减少安全问题的数量。</p></li>
+<li><p>静态类型使得构建非常有用的开发工具成为可能，这些工具可以提高编程生产力或软件质量，包括具有精确和可靠代码补全的 IDE、静态分析工具等。</p></li>
+<li><p>你可以在单一语言中同时获得动态和静态类型的好处。动态类型可能非常适合小项目或编写程序的 UI。例如，随着程序的增长，你可以将复杂的应用逻辑调整为静态类型以帮助维护。</p></li>
+</ul>
+<p>有关更多信息，请查看 mypy 网站的 <a class="reference external" href="https://www.mypy-lang.org">首页</a>。</p>
+</section>
+<section id="would-my-project-benefit-from-static-typing">
+<h2>我的项目会受益于静态类型吗？(Would my project benefit from static typing?)<a class="headerlink" href="#would-my-project-benefit-from-static-typing" title="Link to this heading">¶</a></h2>
+<p>对于许多项目，动态类型完全可以接受（我们认为 Python 是一门很棒的语言）。但有时你的项目需要更强大的工具，这时 mypy 可能会派上用场。</p>
+<p>如果你的项目符合以下一些条件，mypy（和静态类型）可能会很有用：</p>
+<ul class="simple">
+<li><p>你的项目较大或较复杂。</p></li>
+<li><p>你的代码库必须维护很长时间。</p></li>
+<li><p>多位开发者在同一代码上工作。</p></li>
+<li><p>运行测试需要耗费大量时间或工作（类型检查帮助你在开发早期快速找到错误，从而减少测试迭代次数）。</p></li>
+<li><p>一些项目成员（开发人员或管理层）不喜欢动态类型，但其他人更喜欢动态类型和 Python 语法。Mypy 可能是一个大家都容易接受的解决方案。</p></li>
+<li><p>你想为项目的未来做好准备，即使目前上述情况都不适用。越早开始，采用静态类型就越容易。</p></li>
+</ul>
+</section>
+<section id="mypy-python-can-i-use-mypy-to-type-check-my-existing-python-code">
+<h2>我可以使用 mypy 来检查我现有的 Python 代码吗？(Can I use mypy to type check my existing Python code?)<a class="headerlink" href="#mypy-python-can-i-use-mypy-to-type-check-my-existing-python-code" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持大多数 Python 特性和习惯用法，许多大型 Python 项目正在成功使用 mypy。使用复杂的 introspection 或元编程的代码可能难以进行类型检查，但在代码库中较少动态的其他部分使用静态类型仍然是可能的。</p>
+</section>
+<section id="will-static-typing-make-my-programs-run-faster">
+<h2>静态类型会使我的程序运行得更快吗？(Will static typing make my programs run faster)<a class="headerlink" href="#will-static-typing-make-my-programs-run-faster" title="Link to this heading">¶</a></h2>
+<p>Mypy 仅执行静态类型检查，并不提高性能。它对性能的影响很小。未来可能会有其他工具能够将静态类型的 mypy 代码编译为 C 模块或高效的 JVM 字节码，但这超出了 mypy 项目的范围。</p>
+</section>
+<section id="mypy-is-mypy-free">
+<h2>mypy 是免费的吗？(Is mypy free?)<a class="headerlink" href="#mypy-is-mypy-free" title="Link to this heading">¶</a></h2>
+<p>是的。Mypy 是自由软件，也可以用于商业和专有项目。Mypy 在 MIT 许可证下提供。</p>
+</section>
+<section id="mypy-can-i-use-duck-typing-with-mypy">
+<h2>我可以在 mypy 中使用鸭子类型吗？(Can I use duck typing with mypy?)<a class="headerlink" href="#mypy-can-i-use-duck-typing-with-mypy" title="Link to this heading">¶</a></h2>
+<p>Mypy 同时支持 <a class="reference external" href="https://en.wikipedia.org/wiki/Nominative_type_system">名义子类型</a> 和 <a class="reference external" href="https://en.wikipedia.org/wiki/Structural_type_system">结构子类型</a>。
+结构子类型可以被视为“静态鸭子类型”。有人认为结构子类型更适合像 Python 这样的鸭子类型语言。然而，mypy 主要使用名义子类型，使结构子类型大多为可选（除了像 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> 这样的内置协议总是支持结构子类型）。原因如下：</p>
+<ol class="arabic simple">
+<li><p>使用名义类型系统时，生成简短且有信息量的错误消息很容易。这在使用类型推断时尤为重要。</p></li>
+<li><p>Python 提供了对名义 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 测试的内置支持，并且在程序中被广泛使用。仅提供有限的结构 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 支持，并且其类型安全性低于名义类型测试。</p></li>
+<li><p>许多程序员已经熟悉静态名义子类型，并且在 Java、C++ 和 C# 等语言中成功使用过。使用结构子类型的语言较少。</p></li>
+</ol>
+<p>然而，结构子类型也可能很有用。例如，使用协议类型的“公共 API”可能更灵活。此外，使用协议类型消除了明确声明 ABC 实现的必要性。作为经验法则，我们建议在可能的情况下使用名义类，在必要时使用协议。有关协议类型和结构子类型的更多详细信息，请参见 <a class="reference internal" href="protocols.html#protocol-types"><span class="std std-ref">协议(Protocol)与结构化子类型</span></a> 和 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0544/"><strong>PEP 544</strong></a>。</p>
+</section>
+<section id="python-i-like-python-and-i-have-no-need-for-static-typing">
+<h2>我喜欢 Python，但我不需要静态类型(I like Python and I have no need for static typing)<a class="headerlink" href="#python-i-like-python-and-i-have-no-need-for-static-typing" title="Link to this heading">¶</a></h2>
+<p>Mypy 的目标不是说服每个人编写静态类型的 Python——静态类型完全是可选的，无论是现在还是将来。目标是为 Python 程序员提供更多选择，使 Python 成为大型项目中与其他静态类型语言更具竞争力的替代方案，提高程序员的生产力，并改善软件质量。</p>
+</section>
+<section id="mypy-python-how-are-mypy-programs-different-from-normal-python">
+<h2>mypy 程序与普通 Python 程序有什么不同？(How are mypy programs different from normal Python?)<a class="headerlink" href="#mypy-python-how-are-mypy-programs-different-from-normal-python" title="Link to this heading">¶</a></h2>
+<p>由于你使用标准的 Python 实现来运行 mypy 程序，mypy 程序也是 Python 程序。类型检查器可能会对一些有效的 Python 代码发出警告，但代码始终是可以运行的。此外，mypy 仍然不支持一些 Python 特性，但这在逐渐改善。</p>
+<p>显而易见的区别是可用的静态类型检查。部分 <a class="reference internal" href="common_issues.html#common-issues"><span class="std std-ref">常见问题及解决方案(Common issues and solutions)</span></a> 提到了一些可能需要的对 Python 代码的修改，以使代码能够无错误地进行类型检查。此外，你的代码必须显式声明定义的属性。</p>
+<p>Mypy 支持模块化、高效的类型检查，这似乎排除了某些语言特性的类型检查，例如对方法的任意猴子补丁。</p>
+</section>
+<section id="mypy-cython-how-is-mypy-different-from-cython">
+<h2>mypy 与 Cython 有什么不同？(How is mypy different from Cython?)<a class="headerlink" href="#mypy-cython-how-is-mypy-different-from-cython" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://docs.cython.org/en/latest/index.html" title="（在 Cython v3.1）"><span class="xref std std-doc">Cython</span></a> 是一种 Python 的变体，支持编译为 CPython C 模块。与 CPython 相比，它可以大大加快某些类型程序的速度，并提供静态类型（尽管这与 mypy 不同）。Mypy 在以下方面有所不同：</p>
+<ul class="simple">
+<li><p>Cython 更加关注性能，而 mypy 仅关注静态类型检查，提升性能不是直接目标。</p></li>
+<li><p>对于静态类型代码，mypy 的语法可以说更简单、更“Pythonic”（没有 cdef/cpdef 等）。</p></li>
+<li><p>mypy 语法与 Python 兼容。Mypy 程序是可以使用任何 Python 实现运行的正常 Python 程序。Cython 对 Python 语法有许多不兼容的扩展，Cython 程序通常不能在不先将其编译为 CPython 扩展模块的情况下运行。Cython 还有一种纯 Python 模式，但似乎仅支持 Cython 功能的一个子集，且语法相当冗长。</p></li>
+<li><p>Mypy 拥有不同的类型系统特性。例如，mypy 具有泛型（参数多态）、函数类型和双向类型推断，而 Cython 不支持这些功能。（Cython 具有与 mypy 泛型不同但相关的融合类型。Mypy 也具有作为泛型扩展的类似特性。）</p></li>
+<li><p>Mypy 类型检查器了解许多 Python 标准库模块的静态类型，可以有效地对使用它们的代码进行类型检查。</p></li>
+<li><p>Cython 支持直接访问 C 函数，并且许多特性是通过将其转换为 C 或 C++ 定义的。Mypy 仅使用 Python 语义，并且不处理访问 C 库功能的问题。</p></li>
+</ul>
+</section>
+<section id="pypy-does-it-run-on-pypy">
+<h2>它在 PyPy 上运行吗？(Does it run on PyPy?)<a class="headerlink" href="#pypy-does-it-run-on-pypy" title="Link to this heading">¶</a></h2>
+<p>在一定程度上。使用 PyPy 3.8，mypy 至少能够对自身进行类型检查。对于旧版本的 PyPy，mypy 依赖于 <a class="reference external" href="https://github.com/python/typed_ast">typed-ast</a> ，该库使用了 PyPy 不支持的几个 API（包括一些内部 CPython API）。</p>
+</section>
+<section id="mypy-mypy-is-a-cool-project-can-i-help">
+<h2>mypy 是一个很棒的项目。我可以帮助吗？(Mypy is a cool project. Can I help?)<a class="headerlink" href="#mypy-mypy-is-a-cool-project-can-i-help" title="Link to this heading">¶</a></h2>
+<p>任何帮助都非常感谢!如果你想贡献，可以 <a class="reference external" href="https://www.mypy-lang.org/contact.html">联系</a> 开发者。与开发、设计、宣传、文档、测试、网站维护、融资等相关的任何帮助都是有益的。通过贡献你可以学到很多东西，任何人都可以帮助，即使是初学者!不过，如果你想参与 mypy 内部工作，掌握一些编译器和/或类型系统的知识是必不可少的。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="changelog.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Mypy 版本说明</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="additional_features.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">附加功能(Additional features)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">常见问题解答(Frequently Asked Questions)</a><ul>
+<li><a class="reference internal" href="#why-have-both-dynamic-and-static-typing">为什么同时有动态和静态类型？(Why have both dynamic and static typing?)</a></li>
+<li><a class="reference internal" href="#would-my-project-benefit-from-static-typing">我的项目会受益于静态类型吗？(Would my project benefit from static typing?)</a></li>
+<li><a class="reference internal" href="#mypy-python-can-i-use-mypy-to-type-check-my-existing-python-code">我可以使用 mypy 来检查我现有的 Python 代码吗？(Can I use mypy to type check my existing Python code?)</a></li>
+<li><a class="reference internal" href="#will-static-typing-make-my-programs-run-faster">静态类型会使我的程序运行得更快吗？(Will static typing make my programs run faster)</a></li>
+<li><a class="reference internal" href="#mypy-is-mypy-free">mypy 是免费的吗？(Is mypy free?)</a></li>
+<li><a class="reference internal" href="#mypy-can-i-use-duck-typing-with-mypy">我可以在 mypy 中使用鸭子类型吗？(Can I use duck typing with mypy?)</a></li>
+<li><a class="reference internal" href="#python-i-like-python-and-i-have-no-need-for-static-typing">我喜欢 Python，但我不需要静态类型(I like Python and I have no need for static typing)</a></li>
+<li><a class="reference internal" href="#mypy-python-how-are-mypy-programs-different-from-normal-python">mypy 程序与普通 Python 程序有什么不同？(How are mypy programs different from normal Python?)</a></li>
+<li><a class="reference internal" href="#mypy-cython-how-is-mypy-different-from-cython">mypy 与 Cython 有什么不同？(How is mypy different from Cython?)</a></li>
+<li><a class="reference internal" href="#pypy-does-it-run-on-pypy">它在 PyPy 上运行吗？(Does it run on PyPy?)</a></li>
+<li><a class="reference internal" href="#mypy-mypy-is-a-cool-project-can-i-help">mypy 是一个很棒的项目。我可以帮助吗？(Mypy is a cool project. Can I help?)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

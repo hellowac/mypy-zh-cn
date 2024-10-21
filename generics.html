@@ -1,0 +1,1399 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="更多类型" href="more_types.html" /><link rel="prev" title="存根文件(Stub)" href="stubs.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>泛型(Generics) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/generics.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/generics.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="generics">
+<h1>泛型(Generics)<a class="headerlink" href="#generics" title="Link to this heading">¶</a></h1>
+<p>本节解释如何定义自己的泛型类，这些类接受一个或多个类型参数，类似于内置类型如 <code class="docutils literal notranslate"><span class="pre">list[T]</span></code>。用户自定义泛型是一个中级高级特性，您可以在不使用它们的情况下取得很大进展——随意跳过本节，稍后再回来。</p>
+<section id="generic-classes">
+<span id="id1"></span><h2>定义泛型类(generic classes)<a class="headerlink" href="#generic-classes" title="Link to this heading">¶</a></h2>
+<p>内置集合类是泛型类。泛型类型在 <code class="docutils literal notranslate"><span class="pre">[...]</span></code> 中接受一个或多个类型参数，这些参数可以是任意类型。例如，类型 <code class="docutils literal notranslate"><span class="pre">dict[int,</span> <span class="pre">str]</span></code> 的类型参数是 <code class="docutils literal notranslate"><span class="pre">int</span></code> 和 <code class="docutils literal notranslate"><span class="pre">str</span></code>，而 <code class="docutils literal notranslate"><span class="pre">list[int]</span></code> 的类型参数是 <code class="docutils literal notranslate"><span class="pre">int</span></code> 。</p>
+<p>程序也可以定义新的泛型类。以下是一个非常简单的泛型类，它表示一个栈（使用 Python 3.12 引入的语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Stack</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># 创建一个空列表，元素类型为 T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+</pre></div>
+</div>
+<p>在 Python 中定义泛型类有两种语法变体。Python 3.12 引入了一种 <a class="reference external" href="https://docs.python.org/3/whatsnew/3.12.html#pep-695-type-parameter-syntax">新的专用语法</a> 来定义泛型类（以及函数和类型别名，稍后我们会讨论）。上述示例使用了新语法。大多数示例同时给出新旧（或遗留）语法变体。除非另有说明，它们的工作方式相同——但新语法更具可读性和便利性。</p>
+<p>以下是使用旧语法的相同示例（在 Python 3.11 及更早版本中需要，但在新版本中也支持）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>  <span class="c1"># 定义类型变量 &quot;T&quot;</span>
+
+<span class="k">class</span> <span class="nc">Stack</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># 创建一个空列表，元素类型为 T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>目前没有计划弃用遗留语法。
+您可以自由地混合使用新旧语法变体的代码，甚至在同一个文件中（但 <em>不能</em> 在同一个类中）。</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Stack</span></code> 类可以用来表示任何类型的栈：<code class="docutils literal notranslate"><span class="pre">Stack[int]</span></code>、<code class="docutils literal notranslate"><span class="pre">Stack[tuple[int,</span> <span class="pre">str]]</span></code> 等。您可以将 <code class="docutils literal notranslate"><span class="pre">Stack[int]</span></code> 理解为上面定义的 <code class="docutils literal notranslate"><span class="pre">Stack</span></code>，但将所有 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的实例替换为 <code class="docutils literal notranslate"><span class="pre">int</span></code>。</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">Stack</span></code> 类似于内置容器类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 构造一个空的 Stack[int] 实例</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+<span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+<span class="c1"># 错误：Stack 的 &quot;push&quot; 的参数 1 类型不兼容；预期为 &quot;int&quot;</span>
+<span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">stack2</span><span class="p">:</span> <span class="n">Stack</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<span class="n">stack2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>泛型类型的实例构造会进行类型检查（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Box</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+
+<span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>       <span class="c1"># 正确，推断类型为 Box[int]</span>
+<span class="n">Box</span>   <span class="c1"># 也是正确的</span>
+
+<span class="c1"># 错误：Box 的参数 1 类型不兼容；预期为 &quot;int&quot;</span>
+<span class="n">Box</span><span class="p">[</span><span class="nb">int</span><span class="p">](</span><span class="s1">&#39;some string&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>以下是使用遗留语法定义的 <code class="docutils literal notranslate"><span class="pre">Box</span></code> （Python 3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>在继续之前，让我们澄清一些术语。
+在 <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">Stack[T]</span></code> 或 <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">Stack(Generic[T])</span></code> 中，名称 <code class="docutils literal notranslate"><span class="pre">T</span></code> 声明了一个 <em>类型参数(type parameter)</em> <code class="docutils literal notranslate"><span class="pre">T</span></code> （属于 <code class="docutils literal notranslate"><span class="pre">Stack</span></code> 类）。
+<code class="docutils literal notranslate"><span class="pre">T</span></code> 也被称为 <em>类型变量(type variable)</em>，尤其是在类型注解中，例如上面 <code class="docutils literal notranslate"><span class="pre">push</span></code> 的签名。
+当在类型注解中使用类型 <code class="docutils literal notranslate"><span class="pre">Stack[...]</span></code> 时，方括号中的类型被称为 <em>类型参数(type argument)</em>。
+这类似于函数参数和实参之间的区别。</p>
+</div>
+</section>
+<section id="subclasses">
+<span id="generic-subclasses"></span><h2>定义泛型类的子类(subclasses)<a class="headerlink" href="#subclasses" title="Link to this heading">¶</a></h2>
+<p>用户定义的泛型类和在 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 中定义的泛型类可以作为另一个类（泛型或非泛型）的基类。例如（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterator</span>
+
+<span class="c1"># 这是 Mapping 的泛型子类</span>
+<span class="k">class</span> <span class="nc">MyMap</span><span class="p">[</span><span class="n">KT</span><span class="p">,</span> <span class="n">VT</span><span class="p">](</span><span class="n">Mapping</span><span class="p">[</span><span class="n">KT</span><span class="p">,</span> <span class="n">VT</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">KT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VT</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">KT</span><span class="p">]:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">items</span><span class="p">:</span> <span class="n">MyMap</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>  <span class="c1"># 正确</span>
+
+<span class="c1"># 这是 dict 的非泛型子类</span>
+<span class="k">class</span> <span class="nc">StrDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;StrDict(</span><span class="si">{</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+<span class="n">data</span><span class="p">:</span> <span class="n">StrDict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>  <span class="c1"># 错误!StrDict 不是泛型</span>
+<span class="n">data2</span><span class="p">:</span> <span class="n">StrDict</span>  <span class="c1"># 正确</span>
+
+<span class="c1"># 这是一个用户定义的泛型类</span>
+<span class="k">class</span> <span class="nc">Receiver</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="c1"># 这是 Receiver 的泛型子类</span>
+<span class="k">class</span> <span class="nc">AdvancedReceiver</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Receiver</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>以下是使用遗留语法的相同示例（Python 3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterator</span>
+
+<span class="n">KT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;KT&#39;</span><span class="p">)</span>
+<span class="n">VT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;VT&#39;</span><span class="p">)</span>
+
+<span class="c1"># 这是 Mapping 的泛型子类</span>
+<span class="k">class</span> <span class="nc">MyMap</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="n">KT</span><span class="p">,</span> <span class="n">VT</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">KT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VT</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">KT</span><span class="p">]:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">items</span><span class="p">:</span> <span class="n">MyMap</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>  <span class="c1"># 正确</span>
+
+<span class="c1"># 这是 dict 的非泛型子类</span>
+<span class="k">class</span> <span class="nc">StrDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;StrDict(</span><span class="si">{</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+<span class="n">data</span><span class="p">:</span> <span class="n">StrDict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>  <span class="c1"># 错误!StrDict 不是泛型</span>
+<span class="n">data2</span><span class="p">:</span> <span class="n">StrDict</span>  <span class="c1"># 正确</span>
+
+<span class="c1"># 这是一个用户定义的泛型类</span>
+<span class="k">class</span> <span class="nc">Receiver</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="c1"># 这是 Receiver 的泛型子类</span>
+<span class="k">class</span> <span class="nc">AdvancedReceiver</span><span class="p">(</span><span class="n">Receiver</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>如果您希望 mypy 将用户定义的类视为映射，您必须添加显式的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Mapping" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> 基类（序列使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Sequence" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> 等）。这是因为 mypy 对这些 ABC 不使用 <em>结构化子类型</em>，与使用 <a class="reference internal" href="protocols.html#protocol-types"><span class="std std-ref">结构化子类型</span></a> 的简单协议如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> 不同。</p>
+</div>
+<p>在使用遗留语法时，如果其他基类包含类型变量，如上述示例中的 <code class="docutils literal notranslate"><span class="pre">Mapping[KT,</span> <span class="pre">VT]</span></code>，则可以省略 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Generic" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a> 。如果在基类中包含 <code class="docutils literal notranslate"><span class="pre">Generic[...]</span></code>，则应列出所有其他基类中存在的类型变量（或更多，如果需要）。类型参数的顺序由以下规则定义：</p>
+<ul class="simple">
+<li><p>如果存在 <code class="docutils literal notranslate"><span class="pre">Generic[...]</span></code>，则参数的顺序始终由 <code class="docutils literal notranslate"><span class="pre">Generic[...]</span></code> 中的顺序决定。</p></li>
+<li><p>如果基类中没有 <code class="docutils literal notranslate"><span class="pre">Generic[...]</span></code>，则所有类型参数按字典序收集（即按首次出现顺序）。</p></li>
+</ul>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">One</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">Another</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">One</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">Another</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">Second</span><span class="p">(</span><span class="n">One</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">Another</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+
+<span class="n">x</span><span class="p">:</span> <span class="n">First</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>        <span class="c1"># 这里 T 绑定到 int，S 绑定到 str</span>
+<span class="n">y</span><span class="p">:</span> <span class="n">Second</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>  <span class="c1"># 这里 T 是 Any，S 是 int，U 是 str</span>
+</pre></div>
+</div>
+<p>使用 Python 3.12 语法时，所有类型参数必须始终在类名后立即在 <code class="docutils literal notranslate"><span class="pre">[...]</span></code> 中显式定义，并且从不使用 <code class="docutils literal notranslate"><span class="pre">Generic[...]</span></code> 基类。</p>
+</section>
+<section id="functions">
+<span id="generic-functions"></span><h2>泛型函数(functions)<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<p>函数也可以是泛型的，即它们可以具有类型参数（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="c1"># 一个泛型函数!</span>
+<span class="k">def</span> <span class="nf">first</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>以下是使用遗留语法的相同示例（Python 3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="c1"># 一个泛型函数!</span>
+<span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>与泛型类一样，类型参数 <code class="docutils literal notranslate"><span class="pre">T</span></code> 可以替换为任何类型。这意味着 <code class="docutils literal notranslate"><span class="pre">first</span></code> 可以接受任何序列类型的参数，返回类型则根据序列项的类型推导。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">reveal_type</span><span class="p">(</span><span class="n">first</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>   <span class="c1"># 显示的类型是 &quot;builtins.int&quot;</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">first</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)))</span>  <span class="c1"># 显示的类型是 &quot;builtins.str&quot;</span>
+</pre></div>
+</div>
+<p>在使用遗留语法时，类型变量的单个定义（例如上面的 <code class="docutils literal notranslate"><span class="pre">T</span></code> )可以在多个泛型函数或类中使用。在这个示例中，我们在两个泛型函数中使用相同的类型变量来声明类型参数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>      <span class="c1"># 定义类型变量</span>
+
+<span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>由于 Python 3.12 语法更简洁，它不需要（也没有）共享类型参数定义的等效方式。</p>
+<p>一个变量的类型不能包含类型变量，除非该类型变量在包含的泛型类或函数中被绑定。</p>
+<p>在调用泛型函数时，您不能显式地将类型参数的值作为类型参数传递。类型参数的值总是由 mypy 推断。这是无效的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">first</span><span class="p">[</span><span class="nb">int</span><span class="p">]([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># 错误：无法在泛型函数中使用 [...]</span>
+</pre></div>
+</div>
+<p>如果您确实需要这个功能，可以定义一个带有 <code class="docutils literal notranslate"><span class="pre">__call__</span></code> 方法的泛型类。</p>
+</section>
+<section id="type-variables">
+<span id="type-variable-upper-bound"></span><h2>具有上界的类型变量(Type variables)<a class="headerlink" href="#type-variables" title="Link to this heading">¶</a></h2>
+<p>类型变量还可以限制为具有特定类型的子类型的值。该类型称为类型变量的上界，并在使用 Python 3.12 语法时通过 <code class="docutils literal notranslate"><span class="pre">T:</span> <span class="pre">&lt;bound&gt;</span></code> 指定。在使用此类型变量 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的泛型函数或泛型类的定义中，表示 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的类型被假定为其上界的子类型，因此您可以在类型为 <code class="docutils literal notranslate"><span class="pre">T</span></code> 的值上使用上界的方法（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">SupportsAbs</span>
+
+<span class="k">def</span> <span class="nf">max_by_abs</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">SupportsAbs</span><span class="p">[</span><span class="nb">float</span><span class="p">]](</span><span class="o">*</span><span class="n">xs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="c1"># 我们可以使用 abs()，因为 T 是 SupportsAbs[float] 的子类型。</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>上界也可以通过向 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.TypeVar" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a> 使用 <code class="docutils literal notranslate"><span class="pre">bound=...</span></code> 关键字参数来指定。
+以下是使用遗留语法的示例（Python 3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">SupportsAbs</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SupportsAbs</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">max_by_abs</span><span class="p">(</span><span class="o">*</span><span class="n">xs</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>在对这样的函数的调用中，类型 <code class="docutils literal notranslate"><span class="pre">T</span></code> 必须被替换为其上界的子类型。继续上述示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">max_by_abs</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># 正确，类型为 &#39;float&#39;</span>
+<span class="n">max_by_abs</span><span class="p">(</span><span class="mi">5</span><span class="o">+</span><span class="mi">6</span><span class="n">j</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>   <span class="c1"># 正确，类型为 &#39;complex&#39;</span>
+<span class="n">max_by_abs</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>  <span class="c1"># 错误：&#39;str&#39; 不是 SupportsAbs[float] 的子类型</span>
+</pre></div>
+</div>
+<p>泛型类的类型参数(Type parameters)也可以具有上界，这以相同的方式限制类型参数的有效值。</p>
+</section>
+<section id="self">
+<span id="generic-methods-and-generic-self"></span><h2>泛型方法和泛型 self<a class="headerlink" href="#self" title="Link to this heading">¶</a></h2>
+<p>您还可以定义泛型方法。特别是， <code class="docutils literal notranslate"><span class="pre">self</span></code> 参数也可以是泛型的，从而允许方法在访问时返回已知的最精确类型。这样，您可以对一系列设置方法进行类型检查（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set_scale</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Shape</span><span class="p">](</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Circle&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">class</span> <span class="nc">Square</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Square&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="n">circle</span><span class="p">:</span> <span class="n">Circle</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">()</span><span class="o">.</span><span class="n">set_scale</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">set_radius</span><span class="p">(</span><span class="mf">2.7</span><span class="p">)</span>
+<span class="n">square</span><span class="p">:</span> <span class="n">Square</span> <span class="o">=</span> <span class="n">Square</span><span class="p">()</span><span class="o">.</span><span class="n">set_scale</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">set_width</span><span class="p">(</span><span class="mf">3.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如果不使用泛型 <code class="docutils literal notranslate"><span class="pre">self</span></code>，最后两行将无法正确进行类型检查，因为 <code class="docutils literal notranslate"><span class="pre">set_scale</span></code> 的返回类型将是 <code class="docutils literal notranslate"><span class="pre">Shape</span></code>，而 <code class="docutils literal notranslate"><span class="pre">Shape</span></code> 并未定义 <code class="docutils literal notranslate"><span class="pre">set_radius</span></code> 或 <code class="docutils literal notranslate"><span class="pre">set_width</span></code>。</p>
+<p>在使用遗留语法时，只需在方法签名中使用一个不同于 类类型参数(class type parameters)（如果定义了）的类型变量。以下是使用遗留语法的示例（3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">&#39;Shape&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Circle&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">class</span> <span class="nc">Square</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Square&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<span class="n">circle</span><span class="p">:</span> <span class="n">Circle</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">()</span><span class="o">.</span><span class="n">set_scale</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">set_radius</span><span class="p">(</span><span class="mf">2.7</span><span class="p">)</span>
+<span class="n">square</span><span class="p">:</span> <span class="n">Square</span> <span class="o">=</span> <span class="n">Square</span><span class="p">()</span><span class="o">.</span><span class="n">set_scale</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">set_width</span><span class="p">(</span><span class="mf">3.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>其他用法包括工厂方法，例如复制和反序列化方法。对于类方法，您还可以定义泛型 <code class="docutils literal notranslate"><span class="pre">cls</span></code> ，使用 <code class="docutils literal notranslate"><span class="pre">type[T]</span></code> 或 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Type" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type[T]</span></code></a> （Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Friend</span><span class="p">:</span>
+    <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;Friend | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_pair</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Friend</span><span class="p">](</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(),</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+
+<span class="k">class</span> <span class="nc">SuperFriend</span><span class="p">(</span><span class="n">Friend</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">SuperFriend</span><span class="o">.</span><span class="n">make_pair</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>以下是使用遗留语法的相同示例（3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">&#39;Friend&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Friend</span><span class="p">:</span>
+    <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;Friend | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_pair</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(),</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+
+<span class="k">class</span> <span class="nc">SuperFriend</span><span class="p">(</span><span class="n">Friend</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">SuperFriend</span><span class="o">.</span><span class="n">make_pair</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>请注意，当重写具有泛型 <code class="docutils literal notranslate"><span class="pre">self</span></code> 的方法时，您必须返回一个泛型 <code class="docutils literal notranslate"><span class="pre">self</span></code>，或者返回当前类的实例。在后一种情况下，您必须在所有未来的子类中实现此方法。</p>
+<p>还要注意，mypy 并不总是能够验证复制或反序列化方法的实现是否返回实际的 self 类型。因此，您可能需要在这些方法内部使 mypy 静默（而不是在调用位置），可能通过使用 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型或 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释。</p>
+<p>为了支持常见习惯用法，mypy 允许您以某些不安全的方式使用泛型 self 类型。例如，在参数类型中使用泛型 self 类型是被接受的，即使这不安全（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">compare</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Base</span><span class="p">](</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">Sub</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="c1"># 这是不安全的（见下文），但允许是因为它是一种常见模式，并且在实践中很少导致问题。</span>
+    <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;Sub&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
+
+<span class="n">b</span><span class="p">:</span> <span class="n">Base</span> <span class="o">=</span> <span class="n">Sub</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">Base</span><span class="p">())</span>  <span class="c1"># 运行时错误：&#39;Base&#39; 对象没有属性 &#39;x&#39;</span>
+</pre></div>
+</div>
+<p>有关 self 类型的某些高级用法，请参见 <a class="reference internal" href="more_types.html#advanced-self"><span class="std std-ref">其他示例</span></a>。</p>
+</section>
+<section id="typing-self-self">
+<h2>使用 typing.Self 自动注解 self 类型<a class="headerlink" href="#typing-self-self" title="Link to this heading">¶</a></h2>
+<p>由于上述模式相当常见，mypy 支持了一种更简单的语法，这在 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0673/"><strong>PEP 673</strong></a> 中引入，旨在使它们更易于使用。您可以导入特殊类型 <code class="docutils literal notranslate"><span class="pre">typing.Self</span></code> ，它会自动转换为具有当前类作为上界的方法级类型参数，并且您无需为 <code class="docutils literal notranslate"><span class="pre">self</span></code> (或类方法中的 <code class="docutils literal notranslate"><span class="pre">cls</span></code> )提供显式注解。使用 <code class="docutils literal notranslate"><span class="pre">Self</span></code> 可以简化前一节中的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span>
+
+<span class="k">class</span> <span class="nc">Friend</span><span class="p">:</span>
+    <span class="n">other</span><span class="p">:</span> <span class="n">Self</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_pair</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">Self</span><span class="p">]:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(),</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+
+<span class="k">class</span> <span class="nc">SuperFriend</span><span class="p">(</span><span class="n">Friend</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">SuperFriend</span><span class="o">.</span><span class="n">make_pair</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>这种方式比使用显式类型参数更简洁。此外，您可以在属性注解中使用 <code class="docutils literal notranslate"><span class="pre">Self</span></code> ，而不仅仅是在方法中。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>要在 Python 3.11 之前的版本中使用此功能，您需要从 <cite>typing_extensions</cite> 中导入 <code class="docutils literal notranslate"><span class="pre">Self</span></code> （版本 4.0 或更高）。</p>
+</div>
+</section>
+<section id="variance">
+<span id="variance-of-generics"></span><h2>泛型类型的变体(Variance)<a class="headerlink" href="#variance" title="Link to this heading">¶</a></h2>
+<p>在子类型关系中，有三种主要的泛型类型：不变(invariant)、协变(covariant)和逆变(contravariant)。假设我们有一对类型 <code class="docutils literal notranslate"><span class="pre">A</span></code> 和 <code class="docutils literal notranslate"><span class="pre">B</span></code>，其中 <code class="docutils literal notranslate"><span class="pre">B</span></code> 是 <code class="docutils literal notranslate"><span class="pre">A</span></code> 的子类型，定义如下：</p>
+<ul class="simple">
+<li><p>如果对于泛型类 <code class="docutils literal notranslate"><span class="pre">MyCovGen[T]</span></code>，<code class="docutils literal notranslate"><span class="pre">MyCovGen[B]</span></code> 总是为 <code class="docutils literal notranslate"><span class="pre">MyCovGen[A]</span></code> 的子类型，则称 <code class="docutils literal notranslate"><span class="pre">MyCovGen[T]</span></code> 在类型变量 <code class="docutils literal notranslate"><span class="pre">T</span></code> 上是协变(covariant)的。</p></li>
+<li><p>如果对于泛型类 <code class="docutils literal notranslate"><span class="pre">MyContraGen[T]</span></code>，<code class="docutils literal notranslate"><span class="pre">MyContraGen[A]</span></code> 总是为 <code class="docutils literal notranslate"><span class="pre">MyContraGen[B]</span></code> 的子类型，则称 <code class="docutils literal notranslate"><span class="pre">MyContraGen[T]</span></code> 在类型变量 <code class="docutils literal notranslate"><span class="pre">T</span></code> 上是逆变(contravariant)的。</p></li>
+<li><p>如果对于泛型类 <code class="docutils literal notranslate"><span class="pre">MyInvGen[T]</span></code> 以上都不成立，则称其在 <code class="docutils literal notranslate"><span class="pre">T</span></code> 上是不变(invariant)的。</p></li>
+</ul>
+<p>以下是一些简单的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 我们将在下面的示例中使用这些类</span>
+<span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">Triangle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">Square</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<ul>
+<li><p>大多数不可变容器类型，例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Sequence" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> 和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#frozenset" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> 是协变的。联合类型在所有联合项中也是协变的： <code class="docutils literal notranslate"><span class="pre">Triangle</span> <span class="pre">|</span> <span class="pre">int</span></code> 是 <code class="docutils literal notranslate"><span class="pre">Shape</span> <span class="pre">|</span> <span class="pre">int</span></code> 的子类型。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">count_lines</span><span class="p">(</span><span class="n">shapes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Shape</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">num_sides</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">)</span>
+
+<span class="n">triangles</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Triangle</span><span class="p">]</span>
+<span class="n">count_lines</span><span class="p">(</span><span class="n">triangles</span><span class="p">)</span>  <span class="c1"># OK</span>
+
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">triangle</span><span class="p">:</span> <span class="n">Triangle</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">shape_or_number</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Shape</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+    <span class="c1"># Triangle 是 Shape，而 Shape 是有效的 Union[Shape, int]</span>
+    <span class="n">shape_or_number</span> <span class="o">=</span> <span class="n">triangle</span>
+</pre></div>
+</div>
+<p>协变的概念相对直观，但逆变和不变可能更难以理解。</p>
+</li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Callable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a> 是一个在参数类型上表现为逆变的类型示例。也就是说， <code class="docutils literal notranslate"><span class="pre">Callable[[Shape],</span> <span class="pre">int]</span></code> 是 <code class="docutils literal notranslate"><span class="pre">Callable[[Triangle],</span> <span class="pre">int]</span></code> 的子类型，尽管 <code class="docutils literal notranslate"><span class="pre">Shape</span></code> 是 <code class="docutils literal notranslate"><span class="pre">Triangle</span></code> 的超类型。要理解这一点，请考虑：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cost_of_paint_required</span><span class="p">(</span>
+    <span class="n">triangle</span><span class="p">:</span> <span class="n">Triangle</span><span class="p">,</span>
+    <span class="n">area_calculator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Triangle</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">area_calculator</span><span class="p">(</span><span class="n">triangle</span><span class="p">)</span> <span class="o">*</span> <span class="n">DOLLAR_PER_SQ_FT</span>
+
+<span class="c1"># 这正常工作</span>
+<span class="k">def</span> <span class="nf">area_of_triangle</span><span class="p">(</span><span class="n">triangle</span><span class="p">:</span> <span class="n">Triangle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="o">...</span>
+<span class="n">cost_of_paint_required</span><span class="p">(</span><span class="n">triangle</span><span class="p">,</span> <span class="n">area_of_triangle</span><span class="p">)</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 但这也可以工作!</span>
+<span class="k">def</span> <span class="nf">area_of_any_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Shape</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="o">...</span>
+<span class="n">cost_of_paint_required</span><span class="p">(</span><span class="n">triangle</span><span class="p">,</span> <span class="n">area_of_any_shape</span><span class="p">)</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cost_of_paint_required</span></code> 需要一个可以计算三角形面积的可调用对象。如果我们给它一个可以计算任意形状（不仅仅是三角形）面积的可调用对象，依然可以正常工作。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">list</span></code> 是一种不变的泛型类型。直观地看，它似乎应该是协变的，就像上面的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Sequence" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>，但请考虑以下代码：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="c1"># rotate 方法仅在 Circle 中定义，而不在 Shape 中</span>
+    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="n">things</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Shape</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">things</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Shape</span><span class="p">())</span>
+
+<span class="n">my_circles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Circle</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">add_one</span><span class="p">(</span><span class="n">my_circles</span><span class="p">)</span>     <span class="c1"># 这似乎是安全的，但...</span>
+<span class="n">my_circles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rotate</span><span class="p">()</span>  <span class="c1"># ...这将失败，因为 my_circles[0] 现在是 Shape，而不是 Circle</span>
+</pre></div>
+</div>
+<p>另一个不变类型的示例是 <code class="docutils literal notranslate"><span class="pre">dict</span></code>。大多数可变容器都是不变的。</p>
+</li>
+</ul>
+<p>在使用 Python 3.12 语法进行泛型时，mypy 会自动推断每个 类类型变量(class type variable) 的最灵活变体(variance)。在此， <code class="docutils literal notranslate"><span class="pre">Box</span></code> 将被推断为协变：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Box</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>  <span class="c1"># 此类型隐式为协变</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">content</span>
+
+    <span class="k">def</span> <span class="nf">get_content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
+
+<span class="k">def</span> <span class="nf">look_into</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="n">Shape</span><span class="p">]):</span> <span class="o">...</span>
+
+<span class="n">my_box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Square</span><span class="p">())</span>
+<span class="n">look_into</span><span class="p">(</span><span class="n">my_box</span><span class="p">)</span>  <span class="c1"># OK，但如果是不可变类型，mypy 会抱怨</span>
+</pre></div>
+</div>
+<p>这里， <code class="docutils literal notranslate"><span class="pre">_content</span></code> 的下划线前缀很重要。如果没有下划线前缀，该类将是不可变的，因为该属性将被理解为公共的、可变的属性（在其他上下文中，单个下划线前缀对 mypy 没有特殊意义）。通过将属性声明为 <code class="docutils literal notranslate"><span class="pre">Final</span></code>，该类仍然可以被声明为协变：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Final</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>  <span class="c1"># 此类型隐式为协变</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="n">content</span>
+
+    <span class="k">def</span> <span class="nf">get_content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
+</pre></div>
+</div>
+<p>在使用遗留语法时，mypy 默认假定所有用户定义的泛型都是不变的。要将某个泛型类声明为协变或逆变，可以使用具有特殊关键字参数 <code class="docutils literal notranslate"><span class="pre">covariant</span></code> 或 <code class="docutils literal notranslate"><span class="pre">contravariant</span></code> 定义的类型变量。例如（Python 3.11 或更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T_co</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T_co&#39;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>  <span class="c1"># 此类型被声明为协变</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">content</span>
+
+    <span class="k">def</span> <span class="nf">get_content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
+
+<span class="k">def</span> <span class="nf">look_into</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="n">Shape</span><span class="p">]):</span> <span class="o">...</span>
+
+<span class="n">my_box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Square</span><span class="p">())</span>
+<span class="n">look_into</span><span class="p">(</span><span class="n">my_box</span><span class="p">)</span>  <span class="c1"># OK，但如果是不可变类型，mypy 会抱怨</span>
+</pre></div>
+</div>
+</section>
+<section id="type-variable-value-restriction">
+<span id="id3"></span><h2>带值限制的类型变量(Type variables)<a class="headerlink" href="#type-variable-value-restriction" title="Link to this heading">¶</a></h2>
+<p>默认情况下，类型变量可以替换为任何类型，或者任何其上界的子类型，默认上界为 <code class="docutils literal notranslate"><span class="pre">object</span></code>。然而，有时需要一个只能具有某些特定类型值的类型变量。典型的例子是只能具有 <code class="docutils literal notranslate"><span class="pre">str</span></code> 和 <code class="docutils literal notranslate"><span class="pre">bytes</span></code> 值的类型变量。这允许我们定义一个可以连接两个字符串或字节对象的函数，但不能用其他类型的参数调用（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">concat</span><span class="p">[</span><span class="n">S</span><span class="p">:</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)](</span><span class="n">x</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">concat</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>    <span class="c1"># 正确</span>
+<span class="n">concat</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>  <span class="c1"># 正确</span>
+<span class="n">concat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>        <span class="c1"># 错误!</span>
+</pre></div>
+</div>
+<p>使用遗留语法（Python 3.11 或更早版本）也可以实现相同的功能：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+
+<span class="n">AnyStr</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;AnyStr&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">AnyStr</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">AnyStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>无论使用哪种语法，这种类型变量称为具有值限制的类型变量。重要的是，这与联合类型不同，因为不接受 <code class="docutils literal notranslate"><span class="pre">str</span></code> 和 <code class="docutils literal notranslate"><span class="pre">bytes</span></code> 的组合：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">concat</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;bytes&#39;</span><span class="p">)</span>   <span class="c1"># 错误!</span>
+</pre></div>
+</div>
+<p>在这种情况下，这正是我们想要的，因为无法连接字符串和字节对象!如果尝试使用联合类型，类型检查器将抱怨这种可能性：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">union_concat</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>  <span class="c1"># 错误：无法连接 str 和 bytes</span>
+</pre></div>
+</div>
+<p>另一个有趣的特例是用 <code class="docutils literal notranslate"><span class="pre">str</span></code> 的子类型调用 <code class="docutils literal notranslate"><span class="pre">concat()</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">S</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="n">ss</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">S</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span> <span class="n">S</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">))</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>  <span class="c1"># 显示的类型是 &quot;builtins.str&quot;</span>
+</pre></div>
+</div>
+<p>你可能会期望 <code class="docutils literal notranslate"><span class="pre">ss</span></code> 的类型是 <code class="docutils literal notranslate"><span class="pre">S</span></code>，但实际上类型是 <code class="docutils literal notranslate"><span class="pre">str</span></code>：子类型被提升为类型变量的有效值，在这种情况下是 <code class="docutils literal notranslate"><span class="pre">str</span></code>。</p>
+<p>因此，这与使用 <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">bytes</span></code> 作为上界有所不同，在那种情况下返回类型将是 <code class="docutils literal notranslate"><span class="pre">S</span></code> (见：<a class="reference internal" href="#type-variable-upper-bound"><span class="std std-ref">具有上界的类型变量(Type variables)</span></a> ）。使用值限制对 <code class="docutils literal notranslate"><span class="pre">concat</span></code> 是正确的，因为 <code class="docutils literal notranslate"><span class="pre">concat</span></code> 在上面的示例中实际上返回一个 <code class="docutils literal notranslate"><span class="pre">str</span></code> 实例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ss</span><span class="p">))</span>
+<span class="go">&lt;class &#39;str&#39;&gt;</span>
+</pre></div>
+</div>
+<p>在定义泛型类时，你也可以使用具有限制值集的类型变量。例如，类型 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Pattern" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pattern[S]</span></code></a> 用于 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/re.html#re.compile" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">re.compile()</span></code></a> 的返回值，其中 <code class="docutils literal notranslate"><span class="pre">S</span></code> 可以是 <code class="docutils literal notranslate"><span class="pre">str</span></code> 或 <code class="docutils literal notranslate"><span class="pre">bytes</span></code>。正则表达式可以基于字符串或字节模式。</p>
+<p>注意，类型变量不能同时具有值限制和上界。</p>
+<p>你可能会遇到从 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 导入的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.AnyStr" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">AnyStr</span></code></a> 。这个特性现在已被弃用，但其含义与我们上面的 <code class="docutils literal notranslate"><span class="pre">AnyStr</span></code> 定义相同。</p>
+</section>
+<section id="decorators">
+<span id="declaring-decorators"></span><h2>声明装饰器(decorators)<a class="headerlink" href="#decorators" title="Link to this heading">¶</a></h2>
+<p>装饰器通常是接受一个函数作为参数并返回另一个函数的函数。用类型描述这种行为可能有点棘手；我们可以使用类型变量和一种称为 <em>参数规范(parameter specification)</em> 的特殊类型变量来实现。</p>
+<p>假设我们有以下未注解的装饰器，它保留原始函数的签名，并简单打印被装饰函数的名称：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+</div>
+<p>我们可以用它来装饰函数 <code class="docutils literal notranslate"><span class="pre">add_forty_two</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@printing_decorator</span>
+<span class="k">def</span> <span class="nf">add_forty_two</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">42</span>
+</pre></div>
+</div>
+<p>由于 <code class="docutils literal notranslate"><span class="pre">printing_decorator</span></code> 没有类型注解，以下代码将不会进行类型检查：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">reveal_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>        <span class="c1"># 显示的类型是 &quot;Any&quot;</span>
+<span class="n">add_forty_two</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>  <span class="c1"># 没有类型检查错误 :(</span>
+</pre></div>
+</div>
+<p>这是一个糟糕的状态!如果使用 <code class="docutils literal notranslate"><span class="pre">--strict</span></code>，mypy 甚至会提醒你这一点：
+<code class="docutils literal notranslate"><span class="pre">Untyped</span> <span class="pre">decorator</span> <span class="pre">makes</span> <span class="pre">function</span> <span class="pre">&quot;add_forty_two&quot;</span> <span class="pre">untyped</span></code></p>
+<p>对于类装饰器，mypy 处理方式不同：装饰类不会抹去其类型，即使装饰器的类型注解不完整。</p>
+<p>下面是如何注解装饰器（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">[</span><span class="n">F</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>使用遗留语法（Python 3.11 或更早版本）的例子如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这仍然存在一些不足之处。首先，我们需要使用不安全的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.cast" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">cast()</span></code></a> 来说服 mypy <code class="docutils literal notranslate"><span class="pre">wrapper()</span></code> 具有与 <code class="docutils literal notranslate"><span class="pre">func</span></code> 相同的签名 (见 <a class="reference internal" href="type_narrowing.html#casts"><span class="std std-ref">casts</span></a>)。</p>
+<p>其次，<code class="docutils literal notranslate"><span class="pre">wrapper()</span></code> 函数的类型检查不够严格，尽管包装函数通常足够小，这不是一个大问题。这也是 <code class="docutils literal notranslate"><span class="pre">printing_decorator()</span></code> 中 <code class="docutils literal notranslate"><span class="pre">return</span></code> 语句需要调用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.cast" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">cast()</span></code></a> 的原因。</p>
+<p>然而，我们可以使用参数规范，使用 <code class="docutils literal notranslate"><span class="pre">**P</span></code> 来实现更准确的类型注解（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">](</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+</div>
+<p>使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ParamSpec" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamSpec</span></code></a> 遗留语法（Python 3.11 或更早版本）的例子如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">ParamSpec</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+</div>
+<p>参数规范还允许你描述修改输入函数签名的装饰器（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="k">def</span> <span class="nf">stringify</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">](</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+ <span class="nd">@stringify</span>
+ <span class="k">def</span> <span class="nf">add_forty_two</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+     <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">42</span>
+
+ <span class="n">a</span> <span class="o">=</span> <span class="n">add_forty_two</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+ <span class="n">reveal_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>      <span class="c1"># 显示的类型是 &quot;builtins.str&quot;</span>
+ <span class="n">add_forty_two</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>  <span class="c1"># 错误：参数 1 的类型不兼容 &quot;str&quot;，期望 &quot;int&quot;</span>
+</pre></div>
+</div>
+<p>使用遗留语法的同样例子（Python 3.11 或更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">ParamSpec</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">stringify</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+</div>
+<p>你还可以在装饰器中插入一个参数（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Concatenate</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">](</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">Concatenate</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">P</span><span class="p">],</span> <span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@printing_decorator</span>
+<span class="k">def</span> <span class="nf">add_forty_two</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">42</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">add_forty_two</span><span class="p">(</span><span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>使用遗留语法的同样函数（Python 3.11 或更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Concatenate</span><span class="p">,</span> <span class="n">ParamSpec</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">printing_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">Concatenate</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">P</span><span class="p">],</span> <span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calling&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+</div>
+<section id="factories">
+<span id="decorator-factories"></span><h3>装饰器工厂(factories)<a class="headerlink" href="#factories" title="Link to this heading">¶</a></h3>
+<p>接受参数并返回装饰器的函数（也称为二阶装饰器）同样可以通过泛型来支持（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="k">def</span> <span class="nf">route</span><span class="p">[</span><span class="n">F</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+<span class="nd">@route</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello world&#39;</span>
+</pre></div>
+</div>
+<p>注意，mypy 推断 <code class="docutils literal notranslate"><span class="pre">F</span></code> 被用来使 <code class="docutils literal notranslate"><span class="pre">route</span></code> 的返回值成为泛型，而不是使 <code class="docutils literal notranslate"><span class="pre">route</span></code> 本身成为泛型，因为 <code class="docutils literal notranslate"><span class="pre">F</span></code> 仅用于返回类型。Python 没有显式的语法来标记 <code class="docutils literal notranslate"><span class="pre">F</span></code> 仅在返回值中绑定。</p>
+<p>使用遗留语法（Python 3.11 或更早版本）的示例如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+<span class="nd">@route</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello world&#39;</span>
+</pre></div>
+</div>
+<p>有时同一装饰器支持裸调用和带参数的调用。这可以通过结合使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.overload" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;overload</span></code></a> 来实现（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="c1"># 裸装饰器使用</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">[</span><span class="n">F</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+<span class="c1"># 带参数的装饰器</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">[</span><span class="n">F</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span><span class="o">*</span><span class="p">,</span> <span class="n">savepoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+
+<span class="c1"># 实现</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">savepoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="o">...</span>  <span class="c1"># 代码在此处</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">decorator</span>
+</pre></div>
+</div>
+<p>使用遗留语法的同样装饰器示例（Python 3.11 或更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+
+<span class="c1"># 裸装饰器使用</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+<span class="c1"># 带参数的装饰器</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">savepoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+
+<span class="c1"># 实现</span>
+<span class="k">def</span> <span class="nf">atomic</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">savepoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="o">...</span>  <span class="c1"># 与上面相同</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="protocols">
+<h2>泛型协议(protocols)<a class="headerlink" href="#protocols" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持泛型协议（参见 <a class="reference internal" href="protocols.html#protocol-types"><span class="std std-ref">协议(Protocol)与结构化子类型</span></a>）。多个 <a class="reference internal" href="protocols.html#predefined-protocols"><span class="std std-ref">预定义协议</span></a> 是泛型的，例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Iterable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable[T]</span></code></a>，您可以定义其他泛型协议。泛型协议主要遵循泛型类的常规规则。示例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">content</span><span class="p">:</span> <span class="n">T</span>
+
+<span class="k">def</span> <span class="nf">do_stuff</span><span class="p">(</span><span class="n">one</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">other</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">StringWrapper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+
+<span class="k">class</span> <span class="nc">BytesWrapper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+
+<span class="n">do_stuff</span><span class="p">(</span><span class="n">StringWrapper</span><span class="p">(</span><span class="s1">&#39;one&#39;</span><span class="p">),</span> <span class="n">BytesWrapper</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;other&#39;</span><span class="p">))</span>  <span class="c1"># OK</span>
+
+<span class="n">x</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">y</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span>  <span class="c1"># 错误 -- Box 是不变的</span>
+</pre></div>
+</div>
+<p>使用遗留语法（Python 3.11 或更早版本）定义 <code class="docutils literal notranslate"><span class="pre">Box</span></code> 的示例如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="n">content</span><span class="p">:</span> <span class="n">T</span>
+</pre></div>
+</div>
+<p>请注意，在使用遗留语法时， <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">ClassName(Protocol[T])</span></code> 被允许作为 <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">ClassName(Protocol,</span> <span class="pre">Generic[T])</span></code> 的简写，这符合 <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0544/#generic-protocols"><strong>PEP 544: Generic protocols</strong></a>。此形式仅在使用遗留语法时有效。</p>
+<p>使用遗留语法时，泛型协议与普通泛型类之间有一个重要区别：mypy 检查协议中声明的泛型类型变量的变异性是否与其在协议定义中的使用方式匹配。以下示例中的协议被拒绝，因为类型变量 <code class="docutils literal notranslate"><span class="pre">T</span></code> 在返回类型中协变使用，但该类型变量是不变的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ReadOnlyBox</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>  <span class="c1"># 错误: 不变的类型变量 &quot;T&quot; 在期望协变的协议中使用</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>以下示例正确使用了协变类型变量：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T_co</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T_co&#39;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ReadOnlyBox</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>  <span class="c1"># OK</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">ax</span><span class="p">:</span> <span class="n">ReadOnlyBox</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">ay</span><span class="p">:</span> <span class="n">ReadOnlyBox</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">ay</span>  <span class="c1"># OK -- ReadOnlyBox 是协变的</span>
+</pre></div>
+</div>
+<p>有关比变体(variance)方面的更多信息，请参见 <a class="reference internal" href="#variance-of-generics"><span class="std std-ref">泛型类型的变体(Variance)</span></a>。</p>
+<p>泛型协议也可以是递归的。示例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Linked</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">val</span><span class="p">:</span> <span class="n">T</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Linked[T]&#39;</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">L</span><span class="p">:</span>
+    <span class="n">val</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Linked</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">last</span><span class="p">(</span><span class="n">L</span><span class="p">())</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># 显示类型为 &quot;builtins.int&quot;</span>
+</pre></div>
+</div>
+<p>使用遗留语法（Python 3.11 或更早版本）定义 <code class="docutils literal notranslate"><span class="pre">Linked</span></code> 的示例如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Linked</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="n">val</span><span class="p">:</span> <span class="n">T</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Linked[T]&#39;</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="aliases">
+<span id="generic-type-aliases"></span><h2>泛型类型别名(aliases)<a class="headerlink" href="#aliases" title="Link to this heading">¶</a></h2>
+<p>类型别名(Type aliases)可以是泛型的。在这种情况下，它们可以以两种方式使用。首先，带下标的别名等同于替换类型变量的原始类型。其次，不带下标的别名被视为原始类型，其中类型参数被替换为 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。</p>
+<p>在 Python 3.12 中，引入的 <code class="docutils literal notranslate"><span class="pre">type</span></code> 语句用于定义泛型类型别名（它还支持非泛型类型别名）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="nb">type</span> <span class="n">TInt</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span>
+<span class="nb">type</span> <span class="n">UInt</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span> <span class="o">|</span> <span class="nb">int</span>
+<span class="nb">type</span> <span class="n">CBack</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UInt</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>  <span class="c1"># 同样等于 str | int</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">activate</span><span class="p">[</span><span class="n">S</span><span class="p">](</span><span class="n">cb</span><span class="p">:</span> <span class="n">CBack</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>        <span class="c1"># 同样等于 Callable[..., S]</span>
+    <span class="o">...</span>
+<span class="n">table_entry</span><span class="p">:</span> <span class="n">TInt</span>  <span class="c1"># 同样等于 tuple[int, Any]</span>
+
+<span class="nb">type</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">inproduct</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)](</span><span class="n">v</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dilate</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)](</span><span class="n">v</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">scale</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="n">v1</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># 同样等于 Iterable[tuple[int, int]]</span>
+<span class="n">v2</span><span class="p">:</span> <span class="n">Vec</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># 同样等于 Iterable[tuple[Any, Any]]</span>
+<span class="n">v3</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 错误: 无效的别名，类型参数过多!</span>
+</pre></div>
+</div>
+<p>还有一种遗留语法，依赖于 <code class="docutils literal notranslate"><span class="pre">TypeVar</span></code>。在这里，类型参数的数量必须与泛型类型别名定义中的自由类型变量数量匹配。自由类型变量是指不属于周围类或函数的类型参数。例如（遵循 <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/#type-aliases"><strong>PEP 484: Type aliases</strong></a>，Python 3.11 及更早版本）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+
+<span class="n">TInt</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span>  <span class="c1"># 1 个类型参数，因为只有 S 是自由的</span>
+<span class="n">UInt</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<span class="n">CBack</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UInt</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>  <span class="c1"># 同样等于 Union[str, int]</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="n">cb</span><span class="p">:</span> <span class="n">CBack</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>        <span class="c1"># 同样等于 Callable[..., S]</span>
+    <span class="o">...</span>
+<span class="n">table_entry</span><span class="p">:</span> <span class="n">TInt</span>  <span class="c1"># 同样等于 tuple[int, Any]</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+
+<span class="n">Vec</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">inproduct</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dilate</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">scale</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="n">v1</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># 同样等于 Iterable[tuple[int, int]]</span>
+<span class="n">v2</span><span class="p">:</span> <span class="n">Vec</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># 同样等于 Iterable[tuple[Any, Any]]</span>
+<span class="n">v3</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 错误: 无效的别名，类型参数过多!</span>
+</pre></div>
+</div>
+<p>类型别名可以像其他名称一样从模块中导入。一个别名还可以指向另一个别名，尽管不建议构建复杂的别名链，因为这会影响代码的可读性，从而削弱使用别名的目的。示例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">example1</span> <span class="kn">import</span> <span class="n">AliasType</span>
+<span class="kn">from</span> <span class="nn">example2</span> <span class="kn">import</span> <span class="n">Vec</span>
+
+<span class="c1"># AliasType 和 Vec 是类型别名（上面定义的 Vec）</span>
+
+<span class="k">def</span> <span class="nf">fun</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AliasType</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="nb">type</span> <span class="n">OIntVec</span> <span class="o">=</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">type</span></code> 语句定义的类型别名不能作为基类，也不能用于构造实例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">example1</span> <span class="kn">import</span> <span class="n">AliasType</span>
+<span class="kn">from</span> <span class="nn">example2</span> <span class="kn">import</span> <span class="n">Vec</span>
+
+<span class="c1"># AliasType 和 Vec 是类型别名（上面定义的 Vec）</span>
+
+<span class="k">class</span> <span class="nc">NewVec</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>  <span class="c1"># 错误: 不能作为基类</span>
+    <span class="o">...</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">AliasType</span><span class="p">()</span>  <span class="c1"># 错误: 不能用于创建实例</span>
+</pre></div>
+</div>
+<p>以下是使用遗留语法（Python 3.11 及更早版本）的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">example1</span> <span class="kn">import</span> <span class="n">AliasType</span>
+<span class="kn">from</span> <span class="nn">example2</span> <span class="kn">import</span> <span class="n">Vec</span>
+
+<span class="c1"># AliasType 和 Vec 是类型别名（上面定义的 Vec）</span>
+
+<span class="k">def</span> <span class="nf">fun</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AliasType</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">OIntVec</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="c1"># 旧式类型别名可以用作基类，您可以使用它们构造实例</span>
+
+<span class="k">class</span> <span class="nc">NewVec</span><span class="p">(</span><span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="o">...</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">AliasType</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">NewVec</span><span class="p">[</span><span class="nb">int</span><span class="p">]():</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>在泛型别名中使用类型变量的边界或值限制与在泛型类和函数中的效果相同。</p>
+</section>
+<section id="differences">
+<h2>新旧语法之间的差异(Differences)<a class="headerlink" href="#differences" title="Link to this heading">¶</a></h2>
+<p>在泛型类、函数和类型别名的新语法（Python 3.12 及更高版本）和旧语法之间，除了明显的语法差异外，还有一些显著的区别：</p>
+<ul class="simple">
+<li><p><strong>类型变量定义的作用域</strong>：使用旧语法定义的类型变量会在周围的命名空间中创建运行时定义，而使用新语法定义的类型变量仅在使用它们的类、函数或类型变量内定义。</p></li>
+<li><p><strong>类型变量的共享</strong>：在使用旧语法时，类型变量的定义可以被共享，但新语法不支持这一点。</p></li>
+<li><p><strong>类型变量的变异性推断</strong>：使用新语法时，类类型变量的变异性总是被推断。</p></li>
+<li><p><strong>前向引用和递归引用</strong>：使用新语法定义的类型别名可以包含前向引用和递归引用，而无需使用字符串文字转义。类型变量的边界和约束也是如此。</p></li>
+<li><p><strong>条件定义类型别名</strong>：新语法允许定义一个泛型别名，其中定义不包含对类型参数的引用。这在条件定义类型别名时偶尔会有用。</p></li>
+<li><p><strong>作为基类和实例化的限制</strong>：使用新语法定义的类型别名不能用作基类，也不能用于构造实例，而使用旧语法定义的别名则可以。</p></li>
+</ul>
+</section>
+<section id="internals">
+<h2>泛型类的内部机制(internals)<a class="headerlink" href="#internals" title="Link to this heading">¶</a></h2>
+<p>你可能想知道在运行时索引一个泛型类时会发生什么。索引返回一个 <em>泛型别名(generic alias)</em> ，该别名指向原始类，并在实例化时返回原始类的实例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Stack</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Stack</span>
+<span class="go">__main__.Stack</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="go">__main__.Stack[int]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span>
+<span class="go">__main__.Stack</span>
+</pre></div>
+</div>
+<p>以下是使用旧语法（Python 3.11 及更早版本）的相同示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Stack</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Stack</span>
+<span class="go">__main__.Stack</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="go">__main__.Stack[int]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span>
+<span class="go">__main__.Stack</span>
+</pre></div>
+</div>
+<p>泛型别名可以像真实类一样被实例化或子类化，但上述示例表明类型变量在运行时被擦除。泛型 <code class="docutils literal notranslate"><span class="pre">Stack</span></code> 实例只是普通的Python对象，除了 <code class="docutils literal notranslate"><span class="pre">Generic</span></code> 基类通过 <code class="docutils literal notranslate"><span class="pre">__class_getitem__</span></code> 重载索引运算符外，没有额外的运行时开销或魔法。即使使用新语法， <code class="docutils literal notranslate"><span class="pre">typing.Generic</span></code> 也作为隐式基类包含在内：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Stack</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Stack</span><span class="o">.</span><span class="n">mro</span><span class="p">()</span>
+<span class="go">[&lt;class &#39;__main__.Stack&#39;&gt;, &lt;class &#39;typing.Generic&#39;&gt;, &lt;class &#39;object&#39;&gt;]</span>
+</pre></div>
+</div>
+<p>需要注意的是，在Python 3.8及之前，内置类型如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> 、<a class="reference external" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#dict" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> 等不支持索引。这就是为什么我们在 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 模块中有别名 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.List" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> 、 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.Dict" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> 等。索引这些别名会给你一个泛型别名，其行为类似于在较新版本的Python中通过直接索引目标类构造的泛型别名：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># 仅适用于Python 3.8及以下</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 如果使用Python 3.9或更新版本，优先使用&#39;list[int]&#39;语法</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="go">typing.List[int]</span>
+</pre></div>
+</div>
+<p>注意， <code class="docutils literal notranslate"><span class="pre">typing</span></code> 中的泛型别名不支持实例化，与对应的内置类不同：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">Type List cannot be instantiated; use list() instead</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="more_types.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">更多类型</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="stubs.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">存根文件(Stub)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">泛型(Generics)</a><ul>
+<li><a class="reference internal" href="#generic-classes">定义泛型类(generic classes)</a></li>
+<li><a class="reference internal" href="#subclasses">定义泛型类的子类(subclasses)</a></li>
+<li><a class="reference internal" href="#functions">泛型函数(functions)</a></li>
+<li><a class="reference internal" href="#type-variables">具有上界的类型变量(Type variables)</a></li>
+<li><a class="reference internal" href="#self">泛型方法和泛型 self</a></li>
+<li><a class="reference internal" href="#typing-self-self">使用 typing.Self 自动注解 self 类型</a></li>
+<li><a class="reference internal" href="#variance">泛型类型的变体(Variance)</a></li>
+<li><a class="reference internal" href="#type-variable-value-restriction">带值限制的类型变量(Type variables)</a></li>
+<li><a class="reference internal" href="#decorators">声明装饰器(decorators)</a><ul>
+<li><a class="reference internal" href="#factories">装饰器工厂(factories)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protocols">泛型协议(protocols)</a></li>
+<li><a class="reference internal" href="#aliases">泛型类型别名(aliases)</a></li>
+<li><a class="reference internal" href="#differences">新旧语法之间的差异(Differences)</a></li>
+<li><a class="reference internal" href="#internals">泛型类的内部机制(internals)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

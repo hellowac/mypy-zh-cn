@@ -1,0 +1,632 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="使用已安装的包(Using installed packages)" href="installed_packages.html" /><link rel="prev" title="内联配置(Inline configuration)" href="inline_config.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>Mypy 守护进程 (mypy 服务) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/mypy_daemon.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/mypy_daemon.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="mypy-mypy">
+<span id="mypy-daemon"></span><h1>Mypy 守护进程 (mypy 服务)<a class="headerlink" href="#mypy-mypy" title="Link to this heading">¶</a></h1>
+<p>除了将 mypy 作为命令行工具运行外，您还可以将其作为一个长时间运行的守护进程（服务器）来运行，并使用命令行客户端向服务器发送类型检查请求。通过这种方式，mypy 可以更快地执行类型检查，因为之前运行时缓存的程序状态保留在内存中，而不必在每次运行时从文件系统读取。服务器还使用更细粒度的依赖追踪，以减少需要执行的工作量。</p>
+<p>如果您有一个大型代码库要检查，使用 mypy 守护进程运行 mypy 的速度可能比常规命令行 <code class="docutils literal notranslate"><span class="pre">mypy</span></code> 工具快 <em>10 倍或更多</em>，尤其是如果您的工作流涉及在小幅修改后重复运行 mypy——这通常是个好主意，因为这样您能更早发现错误。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>mypy 守护进程的命令行接口在未来的 mypy 版本中可能会发生变化。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>每个 mypy 守护进程支持一个用户和一组源文件，并且它一次只能处理一个类型检查请求。您可以运行多个 mypy 守护进程来检查多个代码库。</p>
+</div>
+<section id="basic-usage">
+<h2>基本用法(Basic usage)<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
+<p>客户端工具 <code class="docutils literal notranslate"><span class="pre">dmypy</span></code> 用于控制 mypy 守护进程。
+使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">run</span> <span class="pre">--</span> <span class="pre">&lt;flags&gt;</span> <span class="pre">&lt;files&gt;</span></code> 来检查一组文件（或目录）的类型。这将在守护进程未运行时启动它。您可以在 <code class="docutils literal notranslate"><span class="pre">--</span></code> 后使用几乎任意的 mypy 标志。守护进程将始终在当前主机上运行。示例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dmypy</span> <span class="n">run</span> <span class="o">--</span> <span class="n">prog</span><span class="o">.</span><span class="n">py</span> <span class="n">pkg</span><span class="o">/*.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">run</span></code> 会自动在配置或 mypy 版本更改时重启守护进程。</p>
+<p>初始运行将处理所有代码，可能需要一些时间才能完成，但后续运行将非常快速，尤其是在您只更改了少数文件的情况下。（您可以使用 <a class="reference internal" href="additional_features.html#remote-cache"><span class="std std-ref">remote caching</span></a> 来加速初始运行。如果您有一个大型代码库，速度提升可能会很显著。）</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Mypy 0.780 添加了对 dmypy 中的 following imports 的支持（默认启用）。此功能仍在实验阶段。您可以使用 <code class="docutils literal notranslate"><span class="pre">--follow-imports=skip</span></code> 或 <code class="docutils literal notranslate"><span class="pre">--follow-imports=error</span></code> 以回退到稳定功能。有关这些功能的详细信息，请参见 <a class="reference internal" href="running_mypy.html#follow-imports"><span class="std std-ref">跟踪导入(Following imports)</span></a>。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>mypy 守护进程需要 <code class="docutils literal notranslate"><span class="pre">--local-partial-types</span></code> 并会自动启用它。</p>
+</div>
+</section>
+<section id="daemon-client-commands">
+<h2>守护进程客户端命令(Daemon client commands)<a class="headerlink" href="#daemon-client-commands" title="Link to this heading">¶</a></h2>
+<p>虽然 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">run</span></code> 足以满足大多数使用场景，但一些工作流（例如使用 <a class="reference internal" href="additional_features.html#remote-cache"><span class="std std-ref">remote caching</span></a> 的工作流）需要对守护进程生命周期进行更精确的控制：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">stop</span></code> 停止守护进程。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">start</span> <span class="pre">--</span> <span class="pre">&lt;flags&gt;</span></code> 启动守护进程，但不检查任何文件。您可以在 <code class="docutils literal notranslate"><span class="pre">--</span></code> 后使用几乎任意的 mypy 标志。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">restart</span> <span class="pre">--</span> <span class="pre">&lt;flags&gt;</span></code> 重启守护进程。标志与 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">start</span></code> 相同。这相当于先停止再启动。</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">run</span> <span class="pre">--timeout</span> <span class="pre">SECONDS</span> <span class="pre">--</span> <span class="pre">&lt;flags&gt;</span></code> (或 <code class="docutils literal notranslate"><span class="pre">start</span></code> 或 <code class="docutils literal notranslate"><span class="pre">restart</span></code> )在不活动后自动关闭守护进程。默认情况下，守护进程会一直运行，直到明确停止。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">check</span> <span class="pre">&lt;files&gt;</span></code> 使用已在运行的守护进程检查一组文件。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">recheck</span></code> 检查与最近一次 <code class="docutils literal notranslate"><span class="pre">check</span></code> 或 <code class="docutils literal notranslate"><span class="pre">recheck</span></code> 命令相同的文件集。（您还可以使用 <a class="reference internal" href="#cmdoption-dmypy-update"><code class="xref std std-option docutils literal notranslate"><span class="pre">--update</span></code></a> 和 <a class="reference internal" href="#cmdoption-dmypy-remove"><code class="xref std std-option docutils literal notranslate"><span class="pre">--remove</span></code></a> 选项来更改文件集，并定义应处理哪些文件。）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">status</span></code> 检查守护进程是否正在运行。如果有正在运行的守护进程，则打印诊断信息并以 <code class="docutils literal notranslate"><span class="pre">0</span></code> 退出。</p></li>
+</ul>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">--help</span></code> 获取有关未在此讨论的附加命令和命令行选项的帮助，以及 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">&lt;command&gt;</span> <span class="pre">--help</span></code> 获取特定命令选项的帮助。</p>
+</section>
+<section id="additional-daemon-flags">
+<h2>附加守护进程标志(Additional daemon flags)<a class="headerlink" href="#additional-daemon-flags" title="Link to this heading">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-status-file">
+<span class="sig-name descname"><span class="pre">--status-file</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-status-file" title="Link to this definition">¶</a></dt>
+<dd><p>使用 <code class="docutils literal notranslate"><span class="pre">FILE</span></code> 作为存储守护进程运行状态的状态文件。这通常是一个 JSON 文件，包含有关守护进程和连接的信息。默认路径为当前工作目录中的 <code class="docutils literal notranslate"><span class="pre">.dmypy.json</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-log-file">
+<span class="sig-name descname"><span class="pre">--log-file</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-log-file" title="Link to this definition">¶</a></dt>
+<dd><p>将守护进程的 stdout/stderr 定向到 <code class="docutils literal notranslate"><span class="pre">FILE</span></code>。这对于调试守护进程崩溃非常有用，因为服务器的追踪信息并不总是由客户端打印。此选项适用于 <code class="docutils literal notranslate"><span class="pre">start</span></code>、<code class="docutils literal notranslate"><span class="pre">restart</span></code> 和 <code class="docutils literal notranslate"><span class="pre">run</span></code> 命令。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-timeout">
+<span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">TIMEOUT</span></span><a class="headerlink" href="#cmdoption-dmypy-timeout" title="Link to this definition">¶</a></dt>
+<dd><p>在 <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> 秒的不活动后自动关闭服务器。此选项适用于 <code class="docutils literal notranslate"><span class="pre">start</span></code>、<code class="docutils literal notranslate"><span class="pre">restart</span></code> 和 <code class="docutils literal notranslate"><span class="pre">run</span></code> 命令。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-update">
+<span class="sig-name descname"><span class="pre">--update</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-update" title="Link to this definition">¶</a></dt>
+<dd><p>重新检查 <code class="docutils literal notranslate"><span class="pre">FILE</span></code>，或将其添加到被检查的文件集中（并检查它）。此选项可以重复，仅适用于 <code class="docutils literal notranslate"><span class="pre">recheck</span></code> 命令。默认情况下，mypy 找到并检查自上次运行以来更改的所有文件及其依赖文件。然而，如果使用此选项（和/或 <a class="reference internal" href="#cmdoption-dmypy-remove"><code class="xref std std-option docutils literal notranslate"><span class="pre">--remove</span></code></a>），mypy 假设只有明确指定的文件已更改。这仅在您检查大量文件并使用外部快速文件系统监视器（如 <a class="reference external" href="https://facebook.github.io/watchman/">watchman</a> 或 <a class="reference external" href="https://pypi.org/project/watchdog/">watchdog</a>）来确定哪些文件已被编辑或删除时有用。
+<em>注意：</em> 此选项从不需要，仅用于性能调优。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-remove">
+<span class="sig-name descname"><span class="pre">--remove</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-remove" title="Link to this definition">¶</a></dt>
+<dd><p>从被检查的文件集中移除 <code class="docutils literal notranslate"><span class="pre">FILE</span></code>。此选项可以重复，仅适用于 <code class="docutils literal notranslate"><span class="pre">recheck</span></code> 命令。有关何时可能有用，请参见上述 <a class="reference internal" href="#cmdoption-dmypy-update"><code class="xref std std-option docutils literal notranslate"><span class="pre">--update</span></code></a>。
+<em>注意：</em> 此选项从不需要，仅用于性能调优。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-fswatcher-dump-file">
+<span class="sig-name descname"><span class="pre">--fswatcher-dump-file</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-fswatcher-dump-file" title="Link to this definition">¶</a></dt>
+<dd><p>收集当前内部文件状态的信息。此选项仅适用于 <code class="docutils literal notranslate"><span class="pre">status</span></code> 命令。此操作将以格式 <code class="docutils literal notranslate"><span class="pre">{path:</span> <span class="pre">[modification_time,</span> <span class="pre">size,</span> <span class="pre">content_hash]}</span></code> 将 JSON 转储到 <code class="docutils literal notranslate"><span class="pre">FILE</span></code>。这对于调试内置文件系统监视器非常有用。<em>注意：</em> 这是一个内部标志，格式可能会变化。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-perf-stats-file">
+<span class="sig-name descname"><span class="pre">--perf-stats-file</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a class="headerlink" href="#cmdoption-dmypy-perf-stats-file" title="Link to this definition">¶</a></dt>
+<dd><p>将性能分析信息写入 <code class="docutils literal notranslate"><span class="pre">FILE</span></code>。此选项仅适用于 <code class="docutils literal notranslate"><span class="pre">check</span></code>、<code class="docutils literal notranslate"><span class="pre">recheck</span></code> 和 <code class="docutils literal notranslate"><span class="pre">run</span></code> 命令。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-export-types">
+<span class="sig-name descname"><span class="pre">--export-types</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-export-types" title="Link to this definition">¶</a></dt>
+<dd><p>将所有表达式类型存储在内存中以供将来使用。这对于加速后续调用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span></code> 很有帮助（但会使用更多内存）。仅对 <code class="docutils literal notranslate"><span class="pre">check</span></code>、<code class="docutils literal notranslate"><span class="pre">recheck</span></code> 和 <code class="docutils literal notranslate"><span class="pre">run</span></code> 命令有效。</p>
+</dd></dl>
+
+</section>
+<section id="static-inference-of-annotations">
+<h2>静态推断注解(Static inference of annotations)<a class="headerlink" href="#static-inference-of-annotations" title="Link to this heading">¶</a></h2>
+<p>mypy 守护进程支持（作为实验性功能）静态推断草拟的函数和方法类型注解。使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">suggest</span> <span class="pre">FUNCTION</span></code> 生成格式为 <code class="docutils literal notranslate"><span class="pre">(param_type_1,</span> <span class="pre">param_type_2,</span> <span class="pre">...)</span> <span class="pre">-&gt;</span> <span class="pre">ret_type</span></code> 的草拟签名（所有参数的类型均包括在内，包括仅限关键字的参数、<code class="docutils literal notranslate"><span class="pre">*args</span></code> 和 <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> )。</p>
+<p>这是一个低级功能，旨在供编辑器集成、IDE 和其他工具使用（例如， <a class="reference external" href="https://github.com/dropbox/mypy-PyCharm-plugin">PyCharm 的 mypy 插件</a> ），以自动将注释添加到源文件中，或建议函数签名。</p>
+<p>在此示例中，函数 <code class="docutils literal notranslate"><span class="pre">format_id()</span></code> 没有注释：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">format_id</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;User: </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">format_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">suggest</span></code> 使用调用点、返回语句和其他启发式方法（例如查找基类中的签名）推断 <code class="docutils literal notranslate"><span class="pre">format_id()</span></code> 接受一个 <code class="docutils literal notranslate"><span class="pre">int</span></code> 参数并返回一个 <code class="docutils literal notranslate"><span class="pre">str</span></code>。使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">suggest</span> <span class="pre">module.format_id</span></code> 打印该函数的建议签名。</p>
+<p>更一般地，目标函数可以通过两种方式指定：</p>
+<ul class="simple">
+<li><p>通过其完全限定名称，即 <code class="docutils literal notranslate"><span class="pre">[package.]module.[class.]function</span></code>。</p></li>
+<li><p>通过其在源文件中的位置，即 <code class="docutils literal notranslate"><span class="pre">/path/to/file.py:line</span></code>。路径可以是绝对路径或相对路径，<code class="docutils literal notranslate"><span class="pre">line</span></code> 可以指函数体内的任何行号。</p></li>
+</ul>
+<p>该命令也可用于查找现有不精确注释中一些 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型的更精确替代方案。</p>
+<p>以下标志用于自定义 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">suggest</span></code> 命令的各个方面。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-json">
+<span class="sig-name descname"><span class="pre">--json</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-json" title="Link to this definition">¶</a></dt>
+<dd><p>以 JSON 格式输出签名，以便 <a class="reference external" href="https://github.com/dropbox/pyannotate">PyAnnotate</a> 能够读取并将签名添加到源文件中。JSON 的格式如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s2">&quot;func_name&quot;</span><span class="p">:</span> <span class="s2">&quot;example.format_id&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/absolute/path/to/example.py&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;signature&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;arg_types&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">],</span> <span class="s2">&quot;return_type&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">}}]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-no-errors">
+<span class="sig-name descname"><span class="pre">--no-errors</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-no-errors" title="Link to this definition">¶</a></dt>
+<dd><p>仅生成不会导致检查代码中出现错误的建议。默认情况下，mypy 会尝试找到最精确的类型，即使这会导致一些类型错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-no-any">
+<span class="sig-name descname"><span class="pre">--no-any</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-no-any" title="Link to this definition">¶</a></dt>
+<dd><p>仅生成不包含 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型的建议。默认情况下，mypy 提出找到的最精确签名，即使它包含 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-flex-any">
+<span class="sig-name descname"><span class="pre">--flex-any</span></span><span class="sig-prename descclassname"> <span class="pre">FRACTION</span></span><a class="headerlink" href="#cmdoption-dmypy-flex-any" title="Link to this definition">¶</a></dt>
+<dd><p>仅允许建议签名中的某些类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型。该比例范围为 <code class="docutils literal notranslate"><span class="pre">0</span></code> （与 <code class="docutils literal notranslate"><span class="pre">--no-any</span></code> 相同）到 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-callsites">
+<span class="sig-name descname"><span class="pre">--callsites</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-callsites" title="Link to this definition">¶</a></dt>
+<dd><p>仅查找给定函数的调用点，而不是建议类型。这将生成一个列表，列出每个调用的行号和实际参数的类型：<code class="docutils literal notranslate"><span class="pre">/path/to/file.py:line:</span> <span class="pre">(arg_type_1,</span> <span class="pre">arg_type_2,</span> <span class="pre">...)</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-use-fixme">
+<span class="sig-name descname"><span class="pre">--use-fixme</span></span><span class="sig-prename descclassname"> <span class="pre">NAME</span></span><a class="headerlink" href="#cmdoption-dmypy-use-fixme" title="Link to this definition">¶</a></dt>
+<dd><p>对于无法推断的类型，使用一个虚拟名称而不是普通的 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。这可能有助于提醒用户某个类型无法被推断，需要手动输入。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-max-guesses">
+<span class="sig-name descname"><span class="pre">--max-guesses</span></span><span class="sig-prename descclassname"> <span class="pre">NUMBER</span></span><a class="headerlink" href="#cmdoption-dmypy-max-guesses" title="Link to this definition">¶</a></dt>
+<dd><p>设置为一个函数尝试的最大类型数量（默认值：<code class="docutils literal notranslate"><span class="pre">64</span></code> )。</p>
+</dd></dl>
+
+</section>
+<section id="statically-inspect-expressions">
+<h2>静态检查表达式(Statically inspect expressions)<a class="headerlink" href="#statically-inspect-expressions" title="Link to this heading">¶</a></h2>
+<p>守护进程允许使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">LOCATION</span></code> 命令获取表达式的声明或推断类型（或关于表达式的其他信息，例如已知属性或定义位置）。表达式的位置应按格式 <code class="docutils literal notranslate"><span class="pre">path/to/file.py:line:column[:end_line:end_column]</span></code> 指定。行和列均为 1 基数。起始和结束位置均为包含性。这些规则与 mypy 在错误消息中打印错误位置的方式一致。</p>
+<p>如果提供了一个范围（即所有 4 个数字），则仅检查与之完全匹配的表达式。如果只提供了一个位置（即 2 个数字，行和列），mypy 将检查所有包含该位置的 <em>表达式</em>，从最内层的开始。</p>
+<p>考虑以下 Python 代码片段：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">longer_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">x</span>
+    <span class="n">longer_name</span>
+</pre></div>
+</div>
+<p>要查找 <code class="docutils literal notranslate"><span class="pre">x</span></code> 的类型，需要调用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">src.py:2:5:2:5</span></code> 或 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">src.py:2:5</span></code>。而对于 <code class="docutils literal notranslate"><span class="pre">longer_name</span></code>，需要调用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">src.py:3:5:3:15</span></code>，或者例如 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">src.py:3:10</span></code>。请注意，此命令仅在守护进程成功完成类型检查（没有解析错误）后有效，以便类型被填充，例如使用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">check</span></code>。在多个表达式与提供的位置匹配的情况下，其类型将以换行符分隔返回。</p>
+<p>重要提示：建议使用 <a class="reference internal" href="#cmdoption-dmypy-export-types"><code class="xref std std-option docutils literal notranslate"><span class="pre">--export-types</span></code></a> 检查文件，否则大多数检查在没有 <a class="reference internal" href="#cmdoption-dmypy-force-reload"><code class="xref std std-option docutils literal notranslate"><span class="pre">--force-reload</span></code></a> 的情况下将无法正常工作。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-show">
+<span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"> <span class="pre">INSPECTION</span></span><a class="headerlink" href="#cmdoption-dmypy-show" title="Link to this definition">¶</a></dt>
+<dd><p>要对找到的表达式运行哪种检查。目前支持的检查包括：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> （默认）：显示给定表达式的最佳已知类型。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code>：显示表达式有效的属性（例如，用于自动补全）。格式为 <code class="docutils literal notranslate"><span class="pre">{&quot;Base1&quot;:</span> <span class="pre">[&quot;name_1&quot;,</span> <span class="pre">&quot;name_2&quot;,</span> <span class="pre">...];</span> <span class="pre">&quot;Base2&quot;:</span> <span class="pre">...}</span></code>。名称按方法解析顺序排序。如果表达式指向模块，则模块属性将在类似 <code class="docutils literal notranslate"><span class="pre">&quot;&lt;full.module.name&gt;&quot;</span></code> 的键下。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">definition</span></code> (实验性）：显示名称表达式或成员表达式的定义位置。格式为 <code class="docutils literal notranslate"><span class="pre">path/to/file.py:line:column:Symbol</span></code>。如果找到多个定义（例如，对于一个联合属性），它们将用逗号分隔。</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-verbose">
+<span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-verbose" title="Link to this definition">¶</a></dt>
+<dd><p>增加类型字符串表示的详细程度（可以重复）。例如，这将打印实例类型的完全限定名称（如 <code class="docutils literal notranslate"><span class="pre">&quot;builtins.str&quot;</span></code> )，而不仅仅是简短名称（如 <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code> )。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-limit">
+<span class="sig-name descname"><span class="pre">--limit</span></span><span class="sig-prename descclassname"> <span class="pre">NUM</span></span><a class="headerlink" href="#cmdoption-dmypy-limit" title="Link to this definition">¶</a></dt>
+<dd><p>如果位置以 <code class="docutils literal notranslate"><span class="pre">line:column</span></code> 给出，这将导致守护进程仅返回最多 <code class="docutils literal notranslate"><span class="pre">NUM</span></code> 个最内层表达式的检查结果。值为 0 意味着没有限制（这是默认值）。例如，如果调用 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">src.py:4:10</span> <span class="pre">--limit=1</span></code>，代码如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">..</span>
+<span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+<span class="n">baz</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">bar</span><span class="p">(</span><span class="n">foo</span><span class="p">(</span><span class="n">baz</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>这将只输出一个类型 <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code> （针对 <code class="docutils literal notranslate"><span class="pre">baz</span></code> 名称表达式）。而没有限制选项时，它将输出所有三种类型：<code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code>, 和 <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-include-span">
+<span class="sig-name descname"><span class="pre">--include-span</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-include-span" title="Link to this definition">¶</a></dt>
+<dd><p>启用此选项后，守护进程将为每个检查结果添加对应表达式的完整范围，格式为 <code class="docutils literal notranslate"><span class="pre">1:2:1:4</span> <span class="pre">-&gt;</span> <span class="pre">&quot;int&quot;</span></code>。在多个表达式匹配同一位置时，这可能会很有用。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-include-kind">
+<span class="sig-name descname"><span class="pre">--include-kind</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-include-kind" title="Link to this definition">¶</a></dt>
+<dd><p>启用此选项后，守护进程将为每个检查结果添加对应表达式的类型，格式为 <code class="docutils literal notranslate"><span class="pre">NameExpr</span> <span class="pre">-&gt;</span> <span class="pre">&quot;int&quot;</span></code>。如果同时启用了此选项和 <a class="reference internal" href="#cmdoption-dmypy-include-span"><code class="xref std std-option docutils literal notranslate"><span class="pre">--include-span</span></code></a>，则类型将优先显示，例如 <code class="docutils literal notranslate"><span class="pre">NameExpr:1:2:1:4</span> <span class="pre">-&gt;</span> <span class="pre">&quot;int&quot;</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-include-object-attrs">
+<span class="sig-name descname"><span class="pre">--include-object-attrs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-include-object-attrs" title="Link to this definition">¶</a></dt>
+<dd><p>如果进行 <code class="docutils literal notranslate"><span class="pre">atts</span></code> 检查，此选项将使守护进程包括 <code class="docutils literal notranslate"><span class="pre">object</span></code> 的属性（默认情况下排除）。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-union-attrs">
+<span class="sig-name descname"><span class="pre">--union-attrs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-union-attrs" title="Link to this definition">¶</a></dt>
+<dd><p>包含有效的某些可能表达式类型的属性（默认情况下返回交集）。这对于具有值的类型变量的联合类型很有用。例如，以下代码：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">int</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">var</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">]</span>
+<span class="n">var</span>
+</pre></div>
+</div>
+<p>命令 <code class="docutils literal notranslate"><span class="pre">dmypy</span> <span class="pre">inspect</span> <span class="pre">--show</span> <span class="pre">attrs</span> <span class="pre">src.py:10:1</span></code> 将返回 <code class="docutils literal notranslate"><span class="pre">{&quot;A&quot;:</span> <span class="pre">[&quot;z&quot;],</span> <span class="pre">&quot;B&quot;:</span> <span class="pre">[&quot;z&quot;]}</span></code>，而使用 <code class="docutils literal notranslate"><span class="pre">--union-attrs</span></code> 时将返回 <code class="docutils literal notranslate"><span class="pre">{&quot;A&quot;:</span> <span class="pre">[&quot;x&quot;,</span> <span class="pre">&quot;z&quot;],</span> <span class="pre">&quot;B&quot;:</span> <span class="pre">[&quot;y&quot;,</span> <span class="pre">&quot;z&quot;]}</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dmypy-force-reload">
+<span class="sig-name descname"><span class="pre">--force-reload</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dmypy-force-reload" title="Link to this definition">¶</a></dt>
+<dd><p>在检查之前强制重新解析和重新类型检查文件。默认情况下，这仅在需要时执行（例如，文件未从缓存加载或守护进程最初未使用 <code class="docutils literal notranslate"><span class="pre">--export-types</span></code> mypy 选项运行），因为重新加载可能很慢（对于非常大的文件，可能需要几秒钟）。</p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="installed_packages.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">使用已安装的包(Using installed packages)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="inline_config.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">内联配置(Inline configuration)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Mypy 守护进程 (mypy 服务)</a><ul>
+<li><a class="reference internal" href="#basic-usage">基本用法(Basic usage)</a></li>
+<li><a class="reference internal" href="#daemon-client-commands">守护进程客户端命令(Daemon client commands)</a></li>
+<li><a class="reference internal" href="#additional-daemon-flags">附加守护进程标志(Additional daemon flags)</a></li>
+<li><a class="reference internal" href="#static-inference-of-annotations">静态推断注解(Static inference of annotations)</a></li>
+<li><a class="reference internal" href="#statically-inspect-expressions">静态检查表达式(Statically inspect expressions)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

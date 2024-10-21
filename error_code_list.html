@@ -1,0 +1,1247 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="可选检查的错误代码(Error codes for optional checks)" href="error_code_list2.html" /><link rel="prev" title="错误代码(Error codes)" href="error_codes.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>默认启用的错误代码(Error codes enabled by default) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/error_code_list.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/error_code_list.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="error-codes-enabled-by-default">
+<span id="error-code-list"></span><h1>默认启用的错误代码(Error codes enabled by default)<a class="headerlink" href="#error-codes-enabled-by-default" title="Link to this heading">¶</a></h1>
+<p>本节记录了 mypy 在默认选项下可以生成的各种错误代码。有关错误代码的总体文档，请参见 <a class="reference internal" href="error_codes.html#error-codes"><span class="std std-ref">错误代码(Error codes)</span></a>。 <a class="reference internal" href="error_code_list2.html#error-codes-optional"><span class="std std-ref">可选检查的错误代码(Error codes for optional checks)</span></a> 文档记录了您可以启用的其他错误代码。</p>
+<section id="attr-defined">
+<span id="code-attr-defined"></span><h2>检查属性是否存在 [attr-defined]<a class="headerlink" href="#attr-defined" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查在使用点操作符时目标类或模块中是否定义了属性。这适用于获取和设置属性。新属性通过类体中的赋值或方法中对 <code class="docutils literal notranslate"><span class="pre">self.x</span></code> 的赋值来定义。这些赋值不会生成 <code class="docutils literal notranslate"><span class="pre">attr-defined</span></code> 错误。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Resource</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># 错误: &quot;Resource&quot; 没有属性 &quot;id&quot;  [attr-defined]</span>
+<span class="n">r</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># 错误: &quot;Resource&quot; 没有属性 &quot;id&quot;  [attr-defined]</span>
+</pre></div>
+</div>
+<p>如果在 <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">...</span> <span class="pre">import</span></code> 语句中导入的名称在模块中未定义，则也会生成此错误代码（只要目标模块可以找到）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 模块 &quot;os&quot; 没有属性 &quot;non_existent&quot;  [attr-defined]</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">non_existent</span>
+</pre></div>
+</div>
+<p>对缺失属性的引用被赋予 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型。在上述示例中，<code class="docutils literal notranslate"><span class="pre">non_existent</span></code> 的类型将是 <code class="docutils literal notranslate"><span class="pre">Any</span></code>，这在您静默错误时可能很重要。</p>
+</section>
+<section id="union-attr">
+<span id="code-union-attr"></span><h2>检查每个联合项中属性是否存在 [union-attr]<a class="headerlink" href="#union-attr" title="Link to this heading">¶</a></h2>
+<p>如果您访问具有联合类型的值的属性，mypy 会检查该属性是否在该联合中的 <em>每个</em> 类型中定义。否则，该操作可能在运行时失败。这也适用于可选类型。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cat</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sleep</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">miaow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sleep</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">follow_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">animal</span><span class="p">:</span> <span class="n">Cat</span> <span class="o">|</span> <span class="n">Dog</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># OK: &#39;sleep&#39; 对 Cat 和 Dog 都是定义的</span>
+    <span class="n">animal</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span>
+    <span class="c1"># 错误: &quot;Cat | Dog&quot; 的项 &quot;Cat&quot; 没有属性 &quot;follow_me&quot;  [union-attr]</span>
+    <span class="n">animal</span><span class="o">.</span><span class="n">follow_me</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>您可以通过使用 <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">isinstance(obj,</span> <span class="pre">ClassName)</span></code> 或 <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">obj</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code> 来告诉 mypy 您知道该类型比 mypy 认为的更具体，从而通常绕过这些错误。</p>
+</section>
+<section id="name-defined">
+<span id="code-name-defined"></span><h2>检查名称是否定义 [name-defined]<a class="headerlink" href="#name-defined" title="Link to this heading">¶</a></h2>
+<p>Mypy 期望所有名称的引用在活动作用域中都有相应的定义，例如赋值、函数定义或导入。这可以捕捉到缺失的定义、缺失的导入和拼写错误。</p>
+<p>以下示例错误地调用了 <code class="docutils literal notranslate"><span class="pre">sort()</span></code> 而不是 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#sorted" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">sorted()</span></code></a>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">sort</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>  <span class="c1"># 错误: 名称 &quot;sort&quot; 未定义  [name-defined]</span>
+</pre></div>
+</div>
+</section>
+<section id="used-before-def">
+<span id="code-used-before-def"></span><h2>检查变量在定义之前是否被使用 [used-before-def]<a class="headerlink" href="#used-before-def" title="Link to this heading">¶</a></h2>
+<p>如果名称在定义之前被使用，mypy 将生成一个错误。虽然名称定义检查可以捕捉到未定义名称的问题，但如果变量被使用然后在作用域内稍后定义，它不会标记。used-before-def 检查将捕捉到这种情况。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 错误: 名称 &quot;x&quot; 在定义之前被使用 [used-before-def]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">123</span>
+</pre></div>
+</div>
+</section>
+<section id="call-arg">
+<span id="code-call-arg"></span><h2>检查调用中的参数 [call-arg]<a class="headerlink" href="#call-arg" title="Link to this heading">¶</a></h2>
+<p>Mypy 期望参数的数量和名称与被调用函数匹配。请注意，参数类型检查有一个单独的错误代码 <code class="docutils literal notranslate"><span class="pre">arg-type</span></code>。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="n">greet</span><span class="p">(</span><span class="s1">&#39;jack&#39;</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">greet</span><span class="p">(</span><span class="s1">&#39;jill&#39;</span><span class="p">,</span> <span class="s1">&#39;jack&#39;</span><span class="p">)</span>  <span class="c1"># 错误: &quot;greet&quot; 的参数过多 [call-arg]</span>
+</pre></div>
+</div>
+</section>
+<section id="arg-type">
+<span id="code-arg-type"></span><h2>检查参数类型 [arg-type]<a class="headerlink" href="#arg-type" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查调用中的参数类型是否与被调用函数的签名中声明的参数类型匹配（如果存在的话）。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="mi">0</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="c1"># 错误: 对 &quot;first&quot; 的参数 1 的类型不兼容 &quot;tuple[int, int]&quot;;</span>
+<span class="c1">#        期望 &quot;list[int]&quot;  [arg-type]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="call-overload">
+<span id="code-call-overload"></span><h2>检查对重载函数的调用 [call-overload]<a class="headerlink" href="#call-overload" title="Link to this heading">¶</a></h2>
+<p>当您调用一个重载函数时，mypy 检查至少一个重载项的签名是否与调用中的参数类型匹配。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">inc_maybe</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">inc_maybe</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">inc_maybe</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+     <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+         <span class="k">return</span> <span class="kc">None</span>
+     <span class="k">else</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">inc_maybe</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">inc_maybe</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 错误: &quot;inc_maybe&quot; 没有重载变体与参数类型 &quot;float&quot; 匹配  [call-overload]</span>
+<span class="n">inc_maybe</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="valid-type">
+<span id="code-valid-type"></span><h2>检查类型的有效性 [valid-type]<a class="headerlink" href="#valid-type" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查每个类型注解以及任何表示类型的表达式是否有效。有效类型的示例包括类、联合类型、可调用类型、类型别名和字面量类型。无效类型的示例包括裸整数字面量、函数、变量和模块。</p>
+<p>以下示例错误地将函数 <code class="docutils literal notranslate"><span class="pre">log</span></code> 用作类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;log:&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># 错误: 函数 &quot;t.log&quot; 作为类型无效  [valid-type]</span>
+<span class="k">def</span> <span class="nf">log_all</span><span class="p">(</span><span class="n">objs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">],</span> <span class="n">f</span><span class="p">:</span> <span class="n">log</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>您可以使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Callable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a> 作为可调用对象的类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="c1"># OK</span>
+<span class="k">def</span> <span class="nf">log_all</span><span class="p">(</span><span class="n">objs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">],</span> <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">object</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="var-annotated">
+<span id="code-var-annotated"></span><h2>当变量类型不明确时要求注解 [var-annotated]<a class="headerlink" href="#var-annotated" title="Link to this heading">¶</a></h2>
+<p>在某些情况下，mypy 无法在没有显式注解的情况下推断变量的类型。Mypy 将此视为错误。这通常发生在您使用空集合或 <code class="docutils literal notranslate"><span class="pre">None</span></code> 初始化变量时。如果 mypy 无法推断集合项的类型，它将把它无法推断的类型部分替换为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 并生成错误。</p>
+<p>带错误的示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Bundle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># 错误: &quot;items&quot; 需要类型注解</span>
+        <span class="c1">#        （提示: &quot;items: list[&lt;type&gt;] = ...&quot;）  [var-annotated]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">Bundle</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>  <span class="c1"># list[Any]</span>
+</pre></div>
+</div>
+<p>为了解决此问题，我们添加显式注解：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Bundle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># OK</span>
+
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">Bundle</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>  <span class="c1"># list[str]</span>
+</pre></div>
+</div>
+</section>
+<section id="override">
+<span id="code-override"></span><h2>检查重写的有效性 [override]<a class="headerlink" href="#override" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查被重写的方法或属性是否与基类兼容。子类中的方法必须接受基类方法接受的所有参数，并且返回类型必须符合基类中的返回类型（Liskov 替代原则）。</p>
+<p>在子类中，参数类型可以更一般（即可以反变）。返回类型可以在子类中缩小（即可以协变）。在子类方法中定义额外参数是可以的，只要所有额外参数都有默认值或可以省略（例如 <code class="docutils literal notranslate"><span class="pre">*args</span></code> )。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">arg</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">arg</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># OK</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">DerivedBad</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># 错误: &quot;method&quot; 的参数 1 与 &quot;Base&quot; 不兼容  [override]</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">arg</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="return">
+<span id="code-return"></span><h2>检查函数是否返回值 [return]<a class="headerlink" href="#return" title="Link to this heading">¶</a></h2>
+<p>如果函数具有非 <code class="docutils literal notranslate"><span class="pre">None</span></code> 返回类型，mypy 期望该函数始终显式返回一个值（或引发异常）。函数不应在末尾退出，因为这通常是一个错误。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 缺少返回语句  [return]</span>
+<span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># 错误: 缺少返回语句  [return]</span>
+<span class="k">def</span> <span class="nf">pred1</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="c1"># OK</span>
+<span class="k">def</span> <span class="nf">pred2</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;not defined for zero&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="empty-body">
+<span id="code-empty-body"></span><h2>检查函数的主体不为空 [empty-body]<a class="headerlink" href="#empty-body" title="Link to this heading">¶</a></h2>
+<p>此错误代码类似于 <code class="docutils literal notranslate"><span class="pre">[return]</span></code> 代码，但专门针对具有空主体的函数和方法（如果它们注解了非平凡返回类型）。这种区分的存在是因为在某些上下文中，空主体是有效的，例如用于抽象方法或在存根文件中。此外，旧版本的 mypy 一直无条件允许空主体的函数，因此拥有专门的错误代码简化了跨版本兼容性。</p>
+<p>请注意，在 <em>协议</em> 中，方法的空主体是允许的，并且这样的方​​法被视为隐式抽象：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">RegularABC</span><span class="p">:</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># OK</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># 错误: 缺少返回语句  [empty-body]</span>
+
+<span class="k">class</span> <span class="nc">Proto</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+</section>
+<section id="return-value">
+<span id="code-return-value"></span><h2>检查返回值是否兼容 [return-value]<a class="headerlink" href="#return-value" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查返回的值是否与函数的类型签名兼容。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># 错误: 返回值类型不兼容（得到 &quot;int&quot;，预期 &quot;str&quot;）  [return-value]</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+<section id="assignment">
+<span id="code-assignment"></span><h2>检查赋值语句中的类型 [assignment]<a class="headerlink" href="#assignment" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查赋值表达式是否与赋值目标（或目标）兼容。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Resource</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;B&#39;</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 错误: 赋值中的类型不兼容（表达式类型为 &quot;int&quot;，</span>
+<span class="c1">#        变量类型为 &quot;str&quot;）  [assignment]</span>
+<span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</section>
+<section id="method-assign">
+<span id="code-method-assign"></span><h2>检查赋值目标是否为方法 [method-assign]<a class="headerlink" href="#method-assign" title="Link to this heading">¶</a></h2>
+<p>一般来说，将类对象或实例上的方法赋值（即猴子补丁）在类型方面是模糊的，因为 Python 的静态类型系统无法表达绑定和未绑定可调用类型之间的区别。考虑以下示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">h</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="n">A</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">h</span>  <span class="c1"># h 的类型是 Callable[[A], None]</span>
+<span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">f</span><span class="p">()</span>  <span class="c1"># 这有效</span>
+<span class="n">A</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">g</span>  <span class="c1"># A().g 的类型是 Callable[[], None]</span>
+<span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">f</span><span class="p">()</span>  <span class="c1"># ...但这在运行时也有效</span>
+</pre></div>
+</div>
+<p>为了防止模糊性，mypy 默认会标记这两个赋值。如果禁用此错误代码，mypy 将把所有方法赋值中的赋值值视为未绑定，因此只有第二个赋值仍会生成错误。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>此错误代码是更通用的 <code class="docutils literal notranslate"><span class="pre">[assignment]</span></code> 代码的子代码。</p>
+</div>
+</section>
+<section id="type-var">
+<span id="code-type-var"></span><h2>检查类型变量值 [type-var]<a class="headerlink" href="#type-var" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查类型变量的值是否与值限制或上限类型兼容。</p>
+<p>示例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add</span><span class="p">[</span><span class="n">T1</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)](</span><span class="n">x</span><span class="p">:</span> <span class="n">T1</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">T1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T1</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">)</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 错误: &quot;add&quot; 的类型变量 &quot;T1&quot; 的值不能是 &quot;str&quot;  [type-var]</span>
+<span class="n">add</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="operator">
+<span id="code-operator"></span><h2>检查各种运算符的使用 [operator]<a class="headerlink" href="#operator" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查操作数是否支持二元或一元操作，例如 <code class="docutils literal notranslate"><span class="pre">+</span></code> 或 <code class="docutils literal notranslate"><span class="pre">~</span></code> 。索引操作非常常见，以至于它们有自己的错误代码 <code class="docutils literal notranslate"><span class="pre">index</span></code> （见下文）。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 不支持的操作数类型用于 +（&quot;int&quot; 和 &quot;str&quot;）  [operator]</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="s1">&#39;x&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="index">
+<span id="code-index"></span><h2>检查索引操作 [index]<a class="headerlink" href="#index" title="Link to this heading">¶</a></h2>
+<p>Mypy 检查索引操作中索引值（如 <code class="docutils literal notranslate"><span class="pre">x[y]</span></code> )是否支持索引，并且索引表达式是否具有有效的类型。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+<span class="n">a</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 错误: 对于 &quot;dict[str, int]&quot; 的无效索引类型 &quot;int&quot;；预期类型 &quot;str&quot;  [index]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 错误: 对于 &quot;dict[str, int]&quot; 的无效索引类型 &quot;bytes&quot;；预期类型 &quot;str&quot;  [index]</span>
+<span class="n">a</span><span class="p">[</span><span class="sa">b</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</section>
+<section id="list-item">
+<span id="code-list-item"></span><h2>检查列表项 [list-item]<a class="headerlink" href="#list-item" title="Link to this heading">¶</a></h2>
+<p>在使用 <code class="docutils literal notranslate"><span class="pre">[item,</span> <span class="pre">...]</span></code> 构造列表时，mypy 检查每个项是否与从周围上下文推断出的列表类型兼容。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 列表项 0 的类型不兼容 &quot;int&quot;；预期 &quot;str&quot;  [list-item]</span>
+<span class="n">a</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="dict-item">
+<span id="code-dict-item"></span><h2>检查字典项 [dict-item]<a class="headerlink" href="#dict-item" title="Link to this heading">¶</a></h2>
+<p>在使用 <code class="docutils literal notranslate"><span class="pre">{key:</span> <span class="pre">value,</span> <span class="pre">...}</span></code> 或 <code class="docutils literal notranslate"><span class="pre">dict(key=value,</span> <span class="pre">...)</span></code> 构造字典时，mypy 检查每个键和值是否与从周围上下文推断出的字典类型兼容。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 字典条目 0 的类型不兼容 &quot;str&quot;: &quot;str&quot;；预期 &quot;str&quot;: &quot;int&quot;  [dict-item]</span>
+<span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="typeddict-typeddict-item">
+<span id="code-typeddict-item"></span><h2>检查 TypedDict 项 [typeddict-item]<a class="headerlink" href="#typeddict-typeddict-item" title="Link to this heading">¶</a></h2>
+<p>在构造 TypedDict 对象时，mypy 检查每个键和值是否与从周围上下文推断出的 TypedDict 类型兼容。</p>
+<p>在获取 TypedDict 项时，mypy 检查键是否存在。在对 TypedDict 进行赋值时，mypy 检查键和值是否有效。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="c1"># 错误: 类型不兼容（表达式类型为 &quot;float&quot;，</span>
+<span class="c1">#        TypedDict 项 &quot;x&quot; 的类型为 &quot;int&quot;）  [typeddict-item]</span>
+<span class="n">p</span><span class="p">:</span> <span class="n">Point</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="typeddict-typeddict-unknown-key">
+<span id="code-typeddict-unknown-key"></span><h2>检查 TypedDict 键 [typeddict-unknown-key]<a class="headerlink" href="#typeddict-typeddict-unknown-key" title="Link to this heading">¶</a></h2>
+<p>在构造 TypedDict 对象时，mypy 检查定义中是否包含未知键，以捕获无效键和拼写错误。另一方面，当将带有额外键的先前构造的 TypedDict 值作为参数传递给函数时，mypy 不会生成错误，因为 TypedDict 值支持结构子类型（“静态鸭子类型”），假设在构造时已验证了这些键。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">class</span> <span class="nc">Point3D</span><span class="p">(</span><span class="n">Point</span><span class="p">):</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">add_x_coordinates</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
+
+<span class="n">a</span><span class="p">:</span> <span class="n">Point</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="n">b</span><span class="p">:</span> <span class="n">Point3D</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">}</span>
+
+<span class="n">add_x_coordinates</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># OK</span>
+
+<span class="c1"># 错误: TypedDict &quot;Point&quot; 的额外键 &quot;z&quot;  [typeddict-unknown-key]</span>
+<span class="n">add_x_coordinates</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>使用未知键设置 TypedDict 项也会生成此错误，因为这可能是拼写错误：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="n">Point</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="c1"># 错误: TypedDict &quot;Point&quot; 的额外键 &quot;z&quot;  [typeddict-unknown-key]</span>
+<span class="n">a</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>读取未知键将生成更一般（且更严重）的 <code class="docutils literal notranslate"><span class="pre">typeddict-item</span></code> 错误，这可能会导致运行时异常：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="n">Point</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="c1"># 错误: TypedDict &quot;Point&quot; 没有键 &quot;z&quot;  [typeddict-item]</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>此错误代码是更广泛的 <code class="docutils literal notranslate"><span class="pre">[typeddict-item]</span></code> 代码的子代码。</p>
+</div>
+</section>
+<section id="has-type">
+<span id="code-has-type"></span><h2>检查目标的类型是否已知 [has-type]<a class="headerlink" href="#has-type" title="Link to this heading">¶</a></h2>
+<p>当 mypy 未能推断出被引用变量的任何类型时，有时会生成错误。这可能发生在引用在源文件中稍后初始化的变量，以及在形成导入循环的模块之间的引用。当发生这种情况时，引用将隐式获得 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型。</p>
+<p>在此示例中，<code class="docutils literal notranslate"><span class="pre">x</span></code> 和 <code class="docutils literal notranslate"><span class="pre">y</span></code> 的定义是循环的：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Problem</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># 错误: 无法确定 &quot;y&quot; 的类型  [has-type]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">set_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>要解决此错误，可以为目标变量或属性添加显式类型注解。有时，您还可以重新组织代码，使变量的定义在源文件中早于对该变量的引用。解开循环导入也可能有帮助。</p>
+<p>我们为 <code class="docutils literal notranslate"><span class="pre">y</span></code> 属性添加显式注释以解决此问题：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Problem</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>  <span class="c1"># OK</span>
+
+    <span class="k">def</span> <span class="nf">set_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>  <span class="c1"># 在此处添加注释</span>
+</pre></div>
+</div>
+</section>
+<section id="import">
+<span id="code-import"></span><h2>检查导入问题 [import]<a class="headerlink" href="#import" title="Link to this heading">¶</a></h2>
+<p>如果 mypy 无法解析 <cite>import</cite> 语句，则会生成错误。这是 <cite>import-not-found</cite> 和 <cite>import-untyped</cite> 的父错误代码。</p>
+<p>请参见 <a class="reference internal" href="running_mypy.html#ignore-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a> 以了解如何解决这些错误。</p>
+</section>
+<section id="import-not-found">
+<span id="code-import-not-found"></span><h2>检查导入目标是否可以找到 [import-not-found]<a class="headerlink" href="#import-not-found" title="Link to this heading">¶</a></h2>
+<p>如果 mypy 找不到导入模块的源代码或存根文件，则会生成错误。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 找不到名为 &quot;m0dule_with_typo&quot; 的模块的实现或库存根  [import-not-found]</span>
+<span class="kn">import</span> <span class="nn">m0dule_with_typo</span>
+</pre></div>
+</div>
+<p>请参见 <a class="reference internal" href="running_mypy.html#ignore-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a> 以了解如何解决这些错误。</p>
+</section>
+<section id="import-untyped">
+<span id="code-import-untyped"></span><h2>检查导入目标是否可以找到 [import-untyped]<a class="headerlink" href="#import-untyped" title="Link to this heading">¶</a></h2>
+<p>如果 mypy 能找到导入模块的源代码，但该模块不提供类型注解（通过 <a class="reference internal" href="installed_packages.html#installed-packages"><span class="std std-ref">PEP 561</span></a>），则会生成错误。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: &quot;bs4&quot; 的库存根未安装  [import-untyped]</span>
+<span class="kn">import</span> <span class="nn">bs4</span>
+<span class="c1"># 错误: 跳过分析 &quot;no_py_typed&quot;: 模块已安装，但缺少库存根或 py.typed 标记  [import-untyped]</span>
+<span class="kn">import</span> <span class="nn">no_py_typed</span>
+</pre></div>
+</div>
+<p>在某些情况下，可以通过安装适当的存根包来修复这些错误。有关详细信息，请参见 <a class="reference internal" href="running_mypy.html#ignore-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a>。</p>
+</section>
+<section id="no-redef">
+<span id="code-no-redef"></span><h2>检查每个名称是否仅定义一次 [no-redef]<a class="headerlink" href="#no-redef" title="Link to this heading">¶</a></h2>
+<p>如果在同一命名空间中有多个名称定义，mypy 可能会生成错误。原因是这通常是一个错误，因为第二个定义可能会覆盖第一个定义。此外，mypy 通常无法确定引用是指向第一个还是第二个定义，这会影响类型检查。</p>
+<p>如果您忽略此错误，对定义名称的所有引用都将引用 <em>第一个</em> 定义。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>  <span class="c1"># 错误: 名称 &quot;A&quot; 在第 1 行已经定义  [no-redef]</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="c1"># 错误: &quot;A&quot; 的参数 1 类型不兼容 &quot;str&quot;；预期 &quot;int&quot;</span>
+<span class="c1">#        （第一个定义胜出!）</span>
+<span class="n">A</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="func-returns-value">
+<span id="code-func-returns-value"></span><h2>检查被调用函数是否返回值 [func-returns-value]<a class="headerlink" href="#func-returns-value" title="Link to this heading">¶</a></h2>
+<p>如果您调用返回类型为 <code class="docutils literal notranslate"><span class="pre">None</span></code> 的函数且不忽略返回值，mypy 将报告错误，因为这通常（但并非总是）是编程错误。</p>
+<p>在此示例中，<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">f()</span></code> 检查总是为假，因为 <code class="docutils literal notranslate"><span class="pre">f</span></code> 返回 <code class="docutils literal notranslate"><span class="pre">None</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="c1"># OK: 我们不处理返回值</span>
+<span class="n">f</span><span class="p">()</span>
+
+<span class="c1"># 错误: &quot;f&quot; 不返回值（它仅返回 None）  [func-returns-value]</span>
+<span class="k">if</span> <span class="n">f</span><span class="p">():</span>
+     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;not false&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="abstract">
+<span id="code-abstract"></span><h2>检查抽象类的实例化 [abstract]<a class="headerlink" href="#abstract" title="Link to this heading">¶</a></h2>
+<p>如果您尝试实例化抽象基类（ABC），mypy 会生成错误。抽象基类是至少包含一个抽象方法或属性的类。（参见 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/abc.html#module-abc" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code></a> 模块文档）</p>
+<p>有时，由于未实现的抽象方法，类会意外变为抽象类。在这种情况下，您需要为该方法提供实现，使类变为具体类（非抽象类）。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">Persistent</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Thing</span><span class="p">(</span><span class="n">Persistent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="o">...</span>  <span class="c1"># 没有 &quot;save&quot; 方法</span>
+
+<span class="c1"># 错误: 无法实例化具有抽象属性 &quot;save&quot; 的抽象类 &quot;Thing&quot;  [abstract]</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Thing</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="type-abstract">
+<span id="code-type-abstract"></span><h2>安全处理抽象类型对象类型 [type-abstract]<a class="headerlink" href="#type-abstract" title="Link to this heading">¶</a></h2>
+<p>Mypy 始终允许实例化（调用）类型为 <code class="docutils literal notranslate"><span class="pre">type[t]</span></code> 的对象，即使不知道 <code class="docutils literal notranslate"><span class="pre">t</span></code> 是否为非抽象类型，因为创建作为对象工厂（自定义构造函数）的函数是一种常见模式。因此，为了防止上述部分中描述的问题，当抽象类型对象作为预期的 <code class="docutils literal notranslate"><span class="pre">type[t]</span></code> 传递时，mypy 会给出错误。</p>
+<p>示例（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">make_many</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">typ</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>  <span class="c1"># 如果 typ 是抽象类，将引发错误</span>
+
+<span class="c1"># 错误: 只能在预期为 &quot;type[Config]&quot; 的地方提供具体类 [type-abstract]</span>
+<span class="n">make_many</span><span class="p">(</span><span class="n">Config</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="super-safe-super">
+<span id="code-safe-super"></span><h2>检查通过 super 调用抽象方法是否有效 [safe-super]<a class="headerlink" href="#super-safe-super" title="Link to this heading">¶</a></h2>
+<p>抽象方法通常没有任何默认实现，即其主体为空。在子类中通过 <code class="docutils literal notranslate"><span class="pre">super()</span></code> 调用此类方法将导致运行时错误，因此 mypy 阻止您这样做：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">Sub</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 错误: 通过 super() 调用具有</span>
+                                  <span class="c1"># 平凡主体的 &quot;Base&quot; 的抽象方法 &quot;foo&quot; 是不安全的  [safe-super]</span>
+<span class="n">Sub</span><span class="p">()</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span>  <span class="c1"># 这将在运行时崩溃。</span>
+</pre></div>
+</div>
+<p>Mypy 将以下内容视为平凡主体：<code class="docutils literal notranslate"><span class="pre">pass</span></code> 语句、字面省略号 <code class="docutils literal notranslate"><span class="pre">...</span></code>、文档字符串和 <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">NotImplementedError</span></code> 语句。</p>
+</section>
+<section id="newtype-valid-newtype">
+<span id="code-valid-newtype"></span><h2>检查 NewType 的目标 [valid-newtype]<a class="headerlink" href="#newtype-valid-newtype" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 定义的目标必须是类类型。它不能是联合类型、<code class="docutils literal notranslate"><span class="pre">Any</span></code> 或其他各种特殊类型。</p>
+<p>如果目标是从 mypy 无法找到其源的模块导入的，也会出现此错误，因为此类定义被 mypy 视为具有 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型的值。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span>
+
+<span class="c1"># &quot;acme&quot; 的源代码对 mypy 不可用</span>
+<span class="kn">from</span> <span class="nn">acme</span> <span class="kn">import</span> <span class="n">Entity</span>  <span class="c1"># type: ignore</span>
+
+<span class="c1"># 错误: NewType(...) 的参数 2 必须可子类化（得到 &quot;Any&quot;）  [valid-newtype]</span>
+<span class="n">UserEntity</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;UserEntity&#39;</span><span class="p">,</span> <span class="n">Entity</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>要解决此问题，您可以为 mypy 提供对 <code class="docutils literal notranslate"><span class="pre">acme</span></code> 源代码的访问，或者为该模块创建一个存根文件。有关更多信息，请参见 <a class="reference internal" href="running_mypy.html#ignore-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a>。</p>
+</section>
+<section id="exit-exit-return">
+<span id="code-exit-return"></span><h2>检查 __exit__ 的返回类型 [exit-return]<a class="headerlink" href="#exit-exit-return" title="Link to this heading">¶</a></h2>
+<p>如果 mypy 能够确定 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__exit__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__</span></code></a> 始终返回 <code class="docutils literal notranslate"><span class="pre">False</span></code>，则 mypy 检查返回类型 <em>不能</em> 是 <code class="docutils literal notranslate"><span class="pre">bool</span></code>。返回类型的布尔值会影响 mypy 认为在 <code class="docutils literal notranslate"><span class="pre">with</span></code> 语句后哪些行是可达的，因为任何可以返回 <code class="docutils literal notranslate"><span class="pre">True</span></code> 的 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__exit__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__</span></code></a> 方法都可能吞噬异常。不精确的返回类型可能导致在 <code class="docutils literal notranslate"><span class="pre">with</span></code> 语句附近报告神秘错误。</p>
+<p>要修复此问题，可以使用 <code class="docutils literal notranslate"><span class="pre">typing.Literal[False]</span></code> 或 <code class="docutils literal notranslate"><span class="pre">None</span></code> 作为返回类型。在这种情况下，返回 <code class="docutils literal notranslate"><span class="pre">None</span></code> 等价于返回 <code class="docutils literal notranslate"><span class="pre">False</span></code>，因为两者都被视为假值。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyContext</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>  <span class="c1"># 错误</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>这会产生以下来自 mypy 的输出：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>example.py:3: 错误: &quot;__exit__&quot; 的返回类型为 &quot;bool&quot;，但始终返回 False
+example.py:3: 注意: 使用 &quot;typing_extensions.Literal[False]&quot; 作为返回类型或将其更改为 &quot;None&quot;
+example.py:3: 注意: 如果 &quot;__exit__&quot; 的返回类型表示它可能返回 True，则上下文管理器可能会吞噬异常
+</pre></div>
+</div>
+<p>您可以使用 <code class="docutils literal notranslate"><span class="pre">Literal[False]</span></code> 来修复此错误：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="k">class</span> <span class="nc">MyContext</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>  <span class="c1"># OK</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>您也可以使用 <code class="docutils literal notranslate"><span class="pre">None</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyContext</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># 也 OK</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="name-match">
+<span id="code-name-match"></span><h2>检查命名的一致性 [name-match]<a class="headerlink" href="#name-match" title="Link to this heading">¶</a></h2>
+<p>在使用基于调用的语法时，命名元组或 TypedDict 的定义必须一致命名。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
+
+<span class="c1"># 错误: namedtuple() 的第一个参数应为 &quot;Point2D&quot;，而不是 &quot;Point&quot;</span>
+<span class="n">Point2D</span> <span class="o">=</span> <span class="n">NamedTuple</span><span class="p">(</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)])</span>
+</pre></div>
+</div>
+</section>
+<section id="literal-required">
+<span id="code-literal-required"></span><h2>检查字面量在预期位置的使用 [literal-required]<a class="headerlink" href="#literal-required" title="Link to this heading">¶</a></h2>
+<p>在某些地方，仅期望使用（字符串）字面量值以便进行静态类型检查，例如 <code class="docutils literal notranslate"><span class="pre">TypedDict</span></code> 键或 <code class="docutils literal notranslate"><span class="pre">__match_args__</span></code> 项。在这种情况下提供 <code class="docutils literal notranslate"><span class="pre">str</span></code> 值的变量将导致错误。请注意，在许多情况下，您还可以使用 <code class="docutils literal notranslate"><span class="pre">Final</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Literal</span></code> 变量。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Final</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">X</span><span class="p">]</span>  <span class="c1"># OK</span>
+
+    <span class="n">Y</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span>  <span class="c1"># OK</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>  <span class="c1"># key 的推断类型是 `str`</span>
+    <span class="c1"># 错误: TypedDict 键必须是字符串字面量；</span>
+    <span class="c1">#   预期值之一为 (&quot;x&quot;, &quot;y&quot;)  [literal-required]</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="no-overload-impl">
+<span id="code-no-overload-impl"></span><h2>检查重载函数是否有实现 [no-overload-impl]<a class="headerlink" href="#no-overload-impl" title="Link to this heading">¶</a></h2>
+<p>在存根文件之外，重载函数必须跟随一个非重载的实现。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="c1"># 下方所需函数的存在被检查</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">pass</span>  <span class="c1"># 实际实现</span>
+</pre></div>
+</div>
+</section>
+<section id="unused-coroutine">
+<span id="code-unused-coroutine"></span><h2>检查协程返回值是否被使用 [unused-coroutine]<a class="headerlink" href="#unused-coroutine" title="Link to this heading">¶</a></h2>
+<p>Mypy 确保 async def 函数的返回值不会被忽略，因为这通常是编程错误，因为协程在调用处不会被执行。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">f</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">g</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">()</span>  <span class="c1"># 错误: 缺少 await</span>
+    <span class="k">await</span> <span class="n">f</span><span class="p">()</span>  <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p>您可以通过将结果分配给临时且未使用的变量来解决此错误：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">f</span><span class="p">()</span>  <span class="c1"># 没有错误</span>
+</pre></div>
+</div>
+</section>
+<section id="await-top-level-await">
+<span id="code-top-level-await"></span><h2>关于顶层 await 表达式发出警告 [top-level-await]<a class="headerlink" href="#await-top-level-await" title="Link to this heading">¶</a></h2>
+<p>此错误代码与一般的 <code class="docutils literal notranslate"><span class="pre">[syntax]</span></code> 错误分开，因为在某些环境中（例如 IPython），顶层 <code class="docutils literal notranslate"><span class="pre">await</span></code> 是被允许的。在这样的环境中，用户可能希望使用 <code class="docutils literal notranslate"><span class="pre">--disable-error-code=top-level-await</span></code>，这仍然允许对其他不当使用 <code class="docutils literal notranslate"><span class="pre">await</span></code> 的情况产生错误，例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">f</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">top</span> <span class="o">=</span> <span class="k">await</span> <span class="n">f</span><span class="p">()</span>  <span class="c1"># 错误: &quot;await&quot; 在函数外  [top-level-await]</span>
+</pre></div>
+</div>
+</section>
+<section id="await-await-not-async">
+<span id="code-await-not-async"></span><h2>关于在协程外使用 await 表达式发出警告 [await-not-async]<a class="headerlink" href="#await-await-not-async" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">await</span></code> 必须在协程内部使用。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">f</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">g</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">f</span><span class="p">()</span>  <span class="c1"># 错误: &quot;await&quot; 在协程外 (&quot;async def&quot;)  [await-not-async]</span>
+</pre></div>
+</div>
+</section>
+<section id="assert-type-assert-type">
+<span id="code-assert-type"></span><h2>检查 assert_type 中的类型 [assert-type]<a class="headerlink" href="#assert-type-assert-type" title="Link to this heading">¶</a></h2>
+<p>传递给 <code class="docutils literal notranslate"><span class="pre">assert_type</span></code> 的表达式的推断类型必须与提供的类型匹配。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">assert_type</span>
+
+<span class="n">assert_type</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span>  <span class="c1"># OK</span>
+
+<span class="n">assert_type</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span>  <span class="c1"># 错误</span>
+</pre></div>
+</div>
+</section>
+<section id="truthy-function">
+<span id="code-truthy-function"></span><h2>检查函数未在布尔上下文中使用 [truthy-function]<a class="headerlink" href="#truthy-function" title="Link to this heading">¶</a></h2>
+<p>函数在布尔上下文中总是会被评估为真。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="k">if</span> <span class="n">f</span><span class="p">:</span>  <span class="c1"># 错误: 函数 &quot;Callable[[], Any]&quot; 在布尔上下文中可能始终为真 [truthy-function]</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="str-format">
+<span id="code-str-format"></span><h2>检查字符串格式化/插值是否类型安全 [str-format]<a class="headerlink" href="#str-format" title="Link to this heading">¶</a></h2>
+<p>Mypy 会检查 f-string、<code class="docutils literal notranslate"><span class="pre">str.format()</span></code> 调用和 <code class="docutils literal notranslate"><span class="pre">%</span></code> 插值是否有效（当相应的模板是字面字符串时）。这包括检查替换的数量和类型，例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错误: 找不到位置格式说明符 1 的替换 [str-format]</span>
+<span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;spam&quot;</span><span class="p">)</span>
+<span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;spam&quot;</span><span class="p">,</span> <span class="s2">&quot;eggs&quot;</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="c1"># 错误: 在字符串格式化过程中未转换所有参数 [str-format]</span>
+<span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;spam&quot;</span><span class="p">,</span> <span class="s2">&quot;eggs&quot;</span><span class="p">,</span> <span class="s2">&quot;cheese&quot;</span><span class="p">)</span>
+
+<span class="c1"># 错误: 字符串插值中的不兼容类型</span>
+<span class="c1"># (表达式类型为 &quot;float&quot;，占位符类型为 &quot;int&quot;) [str-format]</span>
+<span class="s2">&quot;</span><span class="si">{:d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="str-bytes-safe">
+<span id="code-str-bytes-safe"></span><h2>检查隐式字节强制转换 [str-bytes-safe]<a class="headerlink" href="#str-bytes-safe" title="Link to this heading">¶</a></h2>
+<p>警告可能以意外方式将字节对象转换为字符串的情况。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;abc&quot;</span>
+
+<span class="c1"># 错误: 如果 x = b&#39;abc&#39; 则 f&quot;{x}&quot; 或 &quot;{}&quot;.format(x) 生成 &quot;b&#39;abc&#39;&quot;，而不是 &quot;abc&quot;。</span>
+<span class="c1"># 如果这是期望的行为，请使用 f&quot;{x!r}&quot; 或 &quot;{!r}&quot;.format(x)。</span>
+<span class="c1"># 否则，请解码字节 [str-bytes-safe]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The alphabet starts with </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># OK</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The alphabet starts with </span><span class="si">{</span><span class="n">b</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 字母表以 b&#39;abc&#39; 开头</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The alphabet starts with </span><span class="si">{</span><span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 字母表以 abc 开头</span>
+</pre></div>
+</div>
+</section>
+<section id="overload-overlap">
+<span id="code-overload-overlap"></span><h2>检查重载函数是否重叠 [overload-overlap]<a class="headerlink" href="#overload-overlap" title="Link to this heading">¶</a></h2>
+<p>如果多个 <code class="docutils literal notranslate"><span class="pre">&#64;overload</span></code> 变体以潜在不安全的方式重叠，则发出警告。这可以防止以下情况：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">B</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>  <span class="c1"># 错误: 重载函数签名 1 和 2 的重叠，返回类型不兼容 [overload-overlap]</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">takes_a</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">foo</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">B</span><span class="p">()</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">takes_a</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="c1"># mypy 将认为 value 是 str，但它实际上可以是 int</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="c1"># 显示类型是 &quot;builtins.str&quot;</span>
+</pre></div>
+</div>
+<p>请注意，在忽略此错误的情况下，mypy 通常仍会推断出您期望的类型。</p>
+<p>有关更多解释，请参见 <a class="reference internal" href="more_types.html#function-overloading"><span class="std std-ref">overloading</span></a>。</p>
+</section>
+<section id="overload-cannot-match">
+<span id="code-overload-cannot-match"></span><h2>检查无法匹配的重载签名 [overload-cannot-match]<a class="headerlink" href="#overload-cannot-match" title="Link to this heading">¶</a></h2>
+<p>如果 <code class="docutils literal notranslate"><span class="pre">&#64;overload</span></code> 变体永远无法匹配，则发出警告，因为之前的重载具有更宽的签名。例如，如果两个重载接受相同的参数，并且第一个重载的每个参数的类型与第二个重载的相应参数的类型相同或更宽，则会发生这种情况。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">response1</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">response2</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">response1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">response2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="c1"># 错误: 重载函数签名 2 将永远无法匹配: 签名 1 的参数类型相同或更广 [overload-cannot-match]</span>
+    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">response1</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">response2</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">response1</span> <span class="o">+</span> <span class="n">response2</span>
+</pre></div>
+</div>
+</section>
+<section id="annotation-unchecked">
+<span id="code-annotation-unchecked"></span><h2>通知未检查函数中的注释 [annotation-unchecked]<a class="headerlink" href="#annotation-unchecked" title="Link to this heading">¶</a></h2>
+<p>有时用户可能会不小心省略函数的注释，而 mypy 将不会检查该函数的主体（除非使用 <a class="reference internal" href="command_line.html#cmdoption-mypy-check-untyped-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--check-untyped-defs</span></code></a> 或 <a class="reference internal" href="command_line.html#cmdoption-mypy-disallow-untyped-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-untyped-defs</span></code></a>）。为了避免此类情况被忽视，mypy 将显示一条注释，如果未检查函数中有任何类型注解：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_assignment</span><span class="p">():</span>  <span class="c1"># &quot;-&gt; None&quot; 返回注释缺失</span>
+    <span class="c1"># 注意: 默认情况下，未类型化函数的主体不被检查，</span>
+    <span class="c1"># 考虑使用 --check-untyped-defs [annotation-unchecked]</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="s2">&quot;no way&quot;</span>
+</pre></div>
+</div>
+<p>请注意，mypy 仍将以返回代码 <code class="docutils literal notranslate"><span class="pre">0</span></code> 退出，因为这种行为是 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a> 中规定的。</p>
+</section>
+<section id="prop-decorator">
+<span id="code-prop-decorator"></span><h2>装饰器在属性之前不支持 [prop-decorator]<a class="headerlink" href="#prop-decorator" title="Link to this heading">¶</a></h2>
+<p>Mypy 目前尚不支持分析位于属性装饰器之前的装饰器。如果装饰器未能保留属性声明的类型，mypy 将无法推断出声明的正确类型。如果装饰器无法移动到 <code class="docutils literal notranslate"><span class="pre">&#64;property</span></code> 装饰器之后，则必须使用类型忽略注释：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+    <span class="nd">@special</span>  <span class="c1"># type: ignore[prop-decorator]</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">magic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;xyzzy&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>为了向后兼容，此错误代码是通用 <code class="docutils literal notranslate"><span class="pre">[misc]</span></code> 代码的子代码。</p>
+</div>
+</section>
+<section id="syntax">
+<span id="code-syntax"></span><h2>报告语法错误 [syntax]<a class="headerlink" href="#syntax" title="Link to this heading">¶</a></h2>
+<p>如果被检查的代码在语法上无效，mypy 会发出语法错误。大多数语法错误，但并非所有，都是 <em>阻塞错误</em> ：
+它们不能通过 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释被忽略。</p>
+</section>
+<section id="typeddict-typeddict-readonly-mutated">
+<span id="code-typeddict-readonly-mutated"></span><h2>只读 TypedDict 的键被修改 [typeddict-readonly-mutated]<a class="headerlink" href="#typeddict-typeddict-readonly-mutated" title="Link to this heading">¶</a></h2>
+<p>考虑这个示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">ReadOnly</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="n">ReadOnly</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">last_active</span><span class="p">:</span> <span class="n">datetime</span>
+
+<span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;last_active&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()}</span>
+<span class="n">user</span><span class="p">[</span><span class="s1">&#39;last_active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>  <span class="c1"># OK</span>
+<span class="n">user</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;other&#39;</span>  <span class="c1"># 错误: 只读 TypedDict 键 &quot;key&quot; 被修改 [typeddict-readonly-mutated]</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://peps.python.org/pep-0705">PEP 705</a> 规范了 <code class="docutils literal notranslate"><span class="pre">ReadOnly</span></code> 特殊形式在 <code class="docutils literal notranslate"><span class="pre">TypedDict</span></code> 对象中的工作原理。</p>
+</section>
+<section id="misc">
+<span id="code-misc"></span><h2>杂项检查 [misc]<a class="headerlink" href="#misc" title="Link to this heading">¶</a></h2>
+<p>Mypy 执行许多其他不常见的检查，这些检查没有特定的错误代码。它们使用 <code class="docutils literal notranslate"><span class="pre">misc</span></code> 错误代码。除了用于多个无关错误之外，<code class="docutils literal notranslate"><span class="pre">misc</span></code> 错误代码并不特殊。例如，您可以通过使用 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore[misc]</span></code> 注释来忽略该类别中的所有错误。由于这些错误不太可能常见，因此在单行上看到两个 <em>不同</em> 的 <code class="docutils literal notranslate"><span class="pre">misc</span></code> 错误不太可能发生——尽管这确实偶尔会发生。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>未来的 mypy 版本可能会为当前使用 <code class="docutils literal notranslate"><span class="pre">misc</span></code> 错误代码的一些错误添加新的错误代码。</p>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="error_code_list2.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">可选检查的错误代码(Error codes for optional checks)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="error_codes.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">错误代码(Error codes)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">默认启用的错误代码(Error codes enabled by default)</a><ul>
+<li><a class="reference internal" href="#attr-defined">检查属性是否存在 [attr-defined]</a></li>
+<li><a class="reference internal" href="#union-attr">检查每个联合项中属性是否存在 [union-attr]</a></li>
+<li><a class="reference internal" href="#name-defined">检查名称是否定义 [name-defined]</a></li>
+<li><a class="reference internal" href="#used-before-def">检查变量在定义之前是否被使用 [used-before-def]</a></li>
+<li><a class="reference internal" href="#call-arg">检查调用中的参数 [call-arg]</a></li>
+<li><a class="reference internal" href="#arg-type">检查参数类型 [arg-type]</a></li>
+<li><a class="reference internal" href="#call-overload">检查对重载函数的调用 [call-overload]</a></li>
+<li><a class="reference internal" href="#valid-type">检查类型的有效性 [valid-type]</a></li>
+<li><a class="reference internal" href="#var-annotated">当变量类型不明确时要求注解 [var-annotated]</a></li>
+<li><a class="reference internal" href="#override">检查重写的有效性 [override]</a></li>
+<li><a class="reference internal" href="#return">检查函数是否返回值 [return]</a></li>
+<li><a class="reference internal" href="#empty-body">检查函数的主体不为空 [empty-body]</a></li>
+<li><a class="reference internal" href="#return-value">检查返回值是否兼容 [return-value]</a></li>
+<li><a class="reference internal" href="#assignment">检查赋值语句中的类型 [assignment]</a></li>
+<li><a class="reference internal" href="#method-assign">检查赋值目标是否为方法 [method-assign]</a></li>
+<li><a class="reference internal" href="#type-var">检查类型变量值 [type-var]</a></li>
+<li><a class="reference internal" href="#operator">检查各种运算符的使用 [operator]</a></li>
+<li><a class="reference internal" href="#index">检查索引操作 [index]</a></li>
+<li><a class="reference internal" href="#list-item">检查列表项 [list-item]</a></li>
+<li><a class="reference internal" href="#dict-item">检查字典项 [dict-item]</a></li>
+<li><a class="reference internal" href="#typeddict-typeddict-item">检查 TypedDict 项 [typeddict-item]</a></li>
+<li><a class="reference internal" href="#typeddict-typeddict-unknown-key">检查 TypedDict 键 [typeddict-unknown-key]</a></li>
+<li><a class="reference internal" href="#has-type">检查目标的类型是否已知 [has-type]</a></li>
+<li><a class="reference internal" href="#import">检查导入问题 [import]</a></li>
+<li><a class="reference internal" href="#import-not-found">检查导入目标是否可以找到 [import-not-found]</a></li>
+<li><a class="reference internal" href="#import-untyped">检查导入目标是否可以找到 [import-untyped]</a></li>
+<li><a class="reference internal" href="#no-redef">检查每个名称是否仅定义一次 [no-redef]</a></li>
+<li><a class="reference internal" href="#func-returns-value">检查被调用函数是否返回值 [func-returns-value]</a></li>
+<li><a class="reference internal" href="#abstract">检查抽象类的实例化 [abstract]</a></li>
+<li><a class="reference internal" href="#type-abstract">安全处理抽象类型对象类型 [type-abstract]</a></li>
+<li><a class="reference internal" href="#super-safe-super">检查通过 super 调用抽象方法是否有效 [safe-super]</a></li>
+<li><a class="reference internal" href="#newtype-valid-newtype">检查 NewType 的目标 [valid-newtype]</a></li>
+<li><a class="reference internal" href="#exit-exit-return">检查 __exit__ 的返回类型 [exit-return]</a></li>
+<li><a class="reference internal" href="#name-match">检查命名的一致性 [name-match]</a></li>
+<li><a class="reference internal" href="#literal-required">检查字面量在预期位置的使用 [literal-required]</a></li>
+<li><a class="reference internal" href="#no-overload-impl">检查重载函数是否有实现 [no-overload-impl]</a></li>
+<li><a class="reference internal" href="#unused-coroutine">检查协程返回值是否被使用 [unused-coroutine]</a></li>
+<li><a class="reference internal" href="#await-top-level-await">关于顶层 await 表达式发出警告 [top-level-await]</a></li>
+<li><a class="reference internal" href="#await-await-not-async">关于在协程外使用 await 表达式发出警告 [await-not-async]</a></li>
+<li><a class="reference internal" href="#assert-type-assert-type">检查 assert_type 中的类型 [assert-type]</a></li>
+<li><a class="reference internal" href="#truthy-function">检查函数未在布尔上下文中使用 [truthy-function]</a></li>
+<li><a class="reference internal" href="#str-format">检查字符串格式化/插值是否类型安全 [str-format]</a></li>
+<li><a class="reference internal" href="#str-bytes-safe">检查隐式字节强制转换 [str-bytes-safe]</a></li>
+<li><a class="reference internal" href="#overload-overlap">检查重载函数是否重叠 [overload-overlap]</a></li>
+<li><a class="reference internal" href="#overload-cannot-match">检查无法匹配的重载签名 [overload-cannot-match]</a></li>
+<li><a class="reference internal" href="#annotation-unchecked">通知未检查函数中的注释 [annotation-unchecked]</a></li>
+<li><a class="reference internal" href="#prop-decorator">装饰器在属性之前不支持 [prop-decorator]</a></li>
+<li><a class="reference internal" href="#syntax">报告语法错误 [syntax]</a></li>
+<li><a class="reference internal" href="#typeddict-typeddict-readonly-mutated">只读 TypedDict 的键被修改 [typeddict-readonly-mutated]</a></li>
+<li><a class="reference internal" href="#misc">杂项检查 [misc]</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

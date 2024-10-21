@@ -1,0 +1,1109 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="字面量类型(Literal types)和枚举(Enums)" href="literal_types.html" /><link rel="prev" title="泛型(Generics)" href="generics.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>更多类型 - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/more_types.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/more_types.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="id1">
+<h1>更多类型<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>本节介绍了几种额外类型，包括 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NoReturn" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoReturn</span></code></a> 、 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 和用于异步代码的类型。还讨论了如何使用重载为函数提供更精确的类型。这些仅在特定情况下有用，因此可以随时跳过本节，等到需要时再回来。</p>
+<p>以下是本节内容的快速总结：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NoReturn" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoReturn</span></code></a> 让您告诉 mypy 某个函数永远不会正常返回。</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 让您定义一个类型的变体，该变体在 mypy 中被视为单独的类型，但在运行时与原始类型相同。例如，您可以将 <code class="docutils literal notranslate"><span class="pre">UserId</span></code> 作为 <code class="docutils literal notranslate"><span class="pre">int</span></code> 的变体，而在运行时它只是一个 <code class="docutils literal notranslate"><span class="pre">int</span></code>。</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.overload" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;overload</span></code></a> 让您定义一个可以接受多个不同签名的函数。如果您需要编码参数与返回类型之间的关系，而这种关系通常很难表达，这将非常有用。</p></li>
+<li><p>异步类型让您可以使用 <code class="docutils literal notranslate"><span class="pre">async</span></code> 和 <code class="docutils literal notranslate"><span class="pre">await</span></code> 进行程序的类型检查。</p></li>
+</ul>
+<section id="noreturn">
+<span id="id2"></span><h2>NoReturn 类型<a class="headerlink" href="#noreturn" title="Link to this heading">¶</a></h2>
+<p>Mypy 提供对从不返回的函数的支持。例如，一个无条件抛出异常的函数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NoReturn</span>
+
+<span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;no way&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Mypy 将确保标注为返回 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NoReturn" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoReturn</span></code></a> 的函数确实不会返回，无论是隐式还是显式。Mypy 还会识别在调用此类函数后的代码是不可达的，并相应地进行处理：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="n">stop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s1">&#39;whatever works&#39;</span>  <span class="c1"># 在不可达的代码块中没有错误</span>
+</pre></div>
+</div>
+<p>在早期版本的 Python 中，您需要使用 pip 安装 <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code> 才能在代码中使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NoReturn" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoReturn</span></code></a> 。Python 3 命令行：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3 -m pip install --upgrade typing-extensions
+</pre></div>
+</div>
+</section>
+<section id="newtypes">
+<span id="id3"></span><h2>NewTypes<a class="headerlink" href="#newtypes" title="Link to this heading">¶</a></h2>
+<p>在某些情况下，您可能希望通过创建简单的派生类来避免编程错误，这些派生类仅用于区分某些值与基类实例。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UserId</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">get_by_user_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">UserId</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>然而，这种方法会引入一些运行时开销。为避免这种情况，typing 模块提供了一个辅助对象 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> ，可以创建几乎没有运行时开销的简单唯一类型。Mypy 将把语句 <code class="docutils literal notranslate"><span class="pre">Derived</span> <span class="pre">=</span> <span class="pre">NewType('Derived',</span> <span class="pre">Base)</span></code> 视为与以下定义大致等效：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_x</span><span class="p">:</span> <span class="n">Base</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>然而，在运行时，<code class="docutils literal notranslate"><span class="pre">NewType('Derived',</span> <span class="pre">Base)</span></code> 将返回一个虚拟的可调用对象，该对象仅返回其参数：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">Derived</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_x</span>
+</pre></div>
+</div>
+<p>Mypy 将要求在期望 <code class="docutils literal notranslate"><span class="pre">UserId</span></code> 的地方进行从 <code class="docutils literal notranslate"><span class="pre">int</span></code> 的显式转换，同时在期望 <code class="docutils literal notranslate"><span class="pre">int</span></code> 的地方隐式转换自 <code class="docutils literal notranslate"><span class="pre">UserId</span></code>。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span>
+
+<span class="n">UserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;UserId&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">name_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">UserId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">UserId</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">)</span>          <span class="c1"># 类型检查失败</span>
+
+<span class="n">name_by_id</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>          <span class="c1"># 类型检查失败</span>
+<span class="n">name_by_id</span><span class="p">(</span><span class="n">UserId</span><span class="p">(</span><span class="mi">42</span><span class="p">))</span>  <span class="c1"># 正常</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 接受两个参数。第一个参数必须是包含新类型名称的字符串字面量，并且必须与分配新类型的变量名称相等。第二个参数必须是一个适当的可子类化类，即，不能是像 <a class="reference internal" href="kinds_of_types.html#union-types"><span class="std std-ref">union type</span></a> 这样的类型构造。</p>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 返回的可调用对象只接受一个参数；这等同于仅支持一个构造函数，该构造函数接受基类的实例（见上文）。示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span>
+
+<span class="k">class</span> <span class="nc">PacketId</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">major</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">minor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_major</span> <span class="o">=</span> <span class="n">major</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minor</span> <span class="o">=</span> <span class="n">minor</span>
+
+<span class="n">TcpPacketId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;TcpPacketId&#39;</span><span class="p">,</span> <span class="n">PacketId</span><span class="p">)</span>
+
+<span class="n">packet</span> <span class="o">=</span> <span class="n">PacketId</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">tcp_packet</span> <span class="o">=</span> <span class="n">TcpPacketId</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>  <span class="c1"># 正常</span>
+
+<span class="n">tcp_packet</span> <span class="o">=</span> <span class="n">TcpPacketId</span><span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># 在类型检查器和运行时都失败</span>
+</pre></div>
+</div>
+<p>您不能对 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 返回的对象使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 或 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#issubclass" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">issubclass()</span></code></a>，也不能对子类化 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 返回的对象。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>与类型别名不同，使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 时将创建一个全新且唯一的类型。 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 的目的是帮助您检测意外将旧基类型与新派生类型混合在一起的情况。</p>
+<p>例如，以下代码在使用类型别名时将成功通过类型检查：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">UserId</span> <span class="o">=</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">name_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">UserId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">name_by_id</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># int 和 UserId 是同义的</span>
+</pre></div>
+</div>
+<p>但是，使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NewType" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewType</span></code></a> 的类似示例将无法通过类型检查：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span>
+
+<span class="n">UserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;UserId&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">name_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">UserId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">name_by_id</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># int 与 UserId 不相同</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="overload">
+<span id="function-overloading"></span><h2>函数重载(overload)<a class="headerlink" href="#overload" title="Link to this heading">¶</a></h2>
+<p>有时，函数的参数和类型之间的关系无法通过 <a class="reference internal" href="kinds_of_types.html#union-types"><span class="std std-ref">union types</span></a> 捕获。例如，假设我们想编写一个可以接受 x-y 坐标的函数。如果我们只传入一个 x-y 坐标，我们返回一个 <code class="docutils literal notranslate"><span class="pre">ClickEvent</span></code> 对象。然而，如果我们传入两个 x-y 坐标，我们返回一个 <code class="docutils literal notranslate"><span class="pre">DragEvent</span></code> 对象。</p>
+<p>我们编写这个函数的第一次尝试可能如下所示：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mouse_event</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">x2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">y2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClickEvent</span> <span class="o">|</span> <span class="n">DragEvent</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ClickEvent</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">x2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DragEvent</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Bad arguments&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>虽然这个函数签名是可行的，但它太宽松：它暗示 <code class="docutils literal notranslate"><span class="pre">mouse_event</span></code> 无论我们传入多少个参数都可能返回任意对象。它也不禁止调用者传入错误数量的整数；例如，mypy 会将 <code class="docutils literal notranslate"><span class="pre">mouse_event(1,</span> <span class="pre">2,</span> <span class="pre">20)</span></code> 视为有效。</p>
+<p>我们可以通过使用 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/#function-method-overloading"><strong>overloading</strong></a> 来改善这一点，它允许我们为同一函数提供多个类型注解（签名），以更准确地描述函数的行为：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="c1"># &#39;mouse_event&#39; 的重载 *变体*。</span>
+<span class="c1"># 这些变体向类型检查器提供额外信息。</span>
+<span class="c1"># 它们在运行时被忽略。</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">mouse_event</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClickEvent</span><span class="p">:</span> <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">mouse_event</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DragEvent</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="c1"># &#39;mouse_event&#39; 的实际 *实现*。</span>
+<span class="c1"># 实现包含实际的运行时逻辑。</span>
+<span class="c1">#</span>
+<span class="c1"># 它可以有类型提示，也可以没有。如果有，mypy</span>
+<span class="c1"># 将检查实现的主体是否与类型提示一致。</span>
+<span class="c1">#</span>
+<span class="c1"># Mypy 还会检查并确保签名与提供的变体一致。</span>
+
+<span class="k">def</span> <span class="nf">mouse_event</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">x2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">y2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClickEvent</span> <span class="o">|</span> <span class="n">DragEvent</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ClickEvent</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">x2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DragEvent</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Bad arguments&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这使得 mypy 可以更精确地理解对 <code class="docutils literal notranslate"><span class="pre">mouse_event</span></code> 的调用。例如，mypy 将理解 <code class="docutils literal notranslate"><span class="pre">mouse_event(5,</span> <span class="pre">25)</span></code> 始终返回 <code class="docutils literal notranslate"><span class="pre">ClickEvent</span></code> 类型，并会对调用 <code class="docutils literal notranslate"><span class="pre">mouse_event(5,</span> <span class="pre">25,</span> <span class="pre">2)</span></code> 报告错误。</p>
+<p>作为另一个示例，假设我们想编写一个自定义容器类，该类实现 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__getitem__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__</span></code></a> 方法( <code class="docutils literal notranslate"><span class="pre">[]</span></code> 括号索引）。如果该方法接收一个整数，我们返回一个单一项。如果它接收一个 <code class="docutils literal notranslate"><span class="pre">slice</span></code> ，我们返回一个 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Sequence" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> 的项。</p>
+<p>我们可以通过使用重载准确地编码参数与返回类型之间的关系，如下所示（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">MyList</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c1"># 返回 T</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="c1"># 返回 T 的序列</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>以下是使用旧版语法（Python 3.11 及之前版本）的相同示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyList</span><span class="p">(</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c1"># 返回 T</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="c1"># 返回 T 的序列</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>如果您只需要将类型变量限制为某些类型或子类型，可以使用 <a class="reference internal" href="generics.html#type-variable-value-restriction"><span class="std std-ref">value restriction</span></a>。</p>
+</div>
+<p>函数参数的默认值不会影响其签名——只有默认值的缺失或存在才会影响。因此，为减少冗余，可以在重载定义中用 <code class="docutils literal notranslate"><span class="pre">...</span></code> 作为占位符替换默认值：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">M</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">model_or_pk</span><span class="p">:</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">M</span><span class="p">:</span> <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">model_or_pk</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">flag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">M</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">model_or_pk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">M</span><span class="p">,</span> <span class="n">flag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">M</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<section id="behavior">
+<h3>运行时行为(behavior)<a class="headerlink" href="#behavior" title="Link to this heading">¶</a></h3>
+<p>重载函数必须由两个或多个重载 <em>变体</em> 和一个 <em>实现</em> 组成。变体和实现必须在代码中相邻：可以将它们视为一个不可分割的单元。</p>
+<p>变体主体必须都是空的；只有实现允许包含代码。这是因为在运行时，变体会被完全忽略：它们被最终的实现函数覆盖。</p>
+<p>这意味着重载函数仍然是一个普通的 Python 函数!没有自动调度处理，您必须在实现中手动处理不同的类型（例如，通过使用 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语句和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance</span></code></a> 检查）。</p>
+<p>如果您在存根文件中添加重载，应该省略实现函数：存根不包含运行时逻辑。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>虽然我们可以使用 <code class="docutils literal notranslate"><span class="pre">pass</span></code> 关键字留空变体主体，但更常见的约定是使用省略号( <code class="docutils literal notranslate"><span class="pre">...</span></code> )字面量。</p>
+</div>
+</section>
+<section id="type-checking">
+<h3>重载调用时的类型检查(Type checking)<a class="headerlink" href="#type-checking" title="Link to this heading">¶</a></h3>
+<p>当您调用一个重载函数时，mypy 将通过选择最佳匹配的变体来推断正确的返回类型，同时考虑参数类型和数量。然而，调用永远不会与实现进行类型检查。这就是为什么 mypy 会将像 <code class="docutils literal notranslate"><span class="pre">mouse_event(5,</span> <span class="pre">25,</span> <span class="pre">3)</span></code> 的调用报告为无效，即使它与实现签名匹配。</p>
+<p>如果有多个同样好的匹配变体，mypy 将选择第一个定义的变体。例如，考虑以下程序：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 对于 Python 3.8 及以下版本，您必须使用 `typing.List` 而不是 `list`。例如：</span>
+<span class="c1"># from typing import List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># 执行整数特定代码</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># 执行字符串特定代码</span>
+
+<span class="c1"># &#39;output&#39; 的类型是什么？float 还是 str？</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">summarize</span><span class="p">([])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">summarize([])</span></code> 调用匹配两个变体：一个空列表可以是 <code class="docutils literal notranslate"><span class="pre">list[int]</span></code> 或 <code class="docutils literal notranslate"><span class="pre">list[str]</span></code>。在这种情况下，mypy 将通过选择第一个匹配的变体来打破平局：<code class="docutils literal notranslate"><span class="pre">output</span></code> 将推断为 <code class="docutils literal notranslate"><span class="pre">float</span></code> 类型。实现者有责任确保 <code class="docutils literal notranslate"><span class="pre">summarize</span></code> 在运行时以相同的方式打破平局。</p>
+<p>然而，“选择第一个匹配”规则有两个例外。首先，如果由于某个参数的类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 而匹配多个变体，mypy 将使推断类型也为 <code class="docutils literal notranslate"><span class="pre">Any</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dynamic_var</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">some_dynamic_function</span><span class="p">()</span>
+
+<span class="c1"># output2 的类型为 &#39;Any&#39;</span>
+<span class="n">output2</span> <span class="o">=</span> <span class="n">summarize</span><span class="p">(</span><span class="n">dynamic_var</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>其次，如果由于一个或多个参数是联合类型而匹配多个变体，mypy 将使推断类型为匹配变体返回的联合类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">some_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="c1"># output3 的类型为 &#39;float | str&#39;</span>
+<span class="n">output3</span> <span class="o">=</span> <span class="n">summarize</span><span class="p">(</span><span class="n">some_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>由于“选择第一个匹配(pick the first match)”规则，更改重载变体的顺序可能会改变 mypy 如何对您的程序进行类型检查。</p>
+<p>为了最小化潜在问题，我们建议您：</p>
+<ol class="arabic simple">
+<li><p>确保您的重载变体按与实现中运行时检查（例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance</span></code></a> 检查）相同的顺序列出。</p></li>
+<li><p>按从最具体到最不具体的顺序排列您的变体和运行时检查。
+（请参见下一小节的示例）。</p></li>
+</ol>
+</div>
+</section>
+<section id="variants">
+<h3>类型检查的变体(variants)<a class="headerlink" href="#variants" title="Link to this heading">¶</a></h3>
+<p>Mypy 将对您的重载变体定义执行几项检查，以确保它们按预期行为。首先，mypy 将检查并确保没有重载变体遮蔽后续变体。例如，考虑以下函数，它将两个 <code class="docutils literal notranslate"><span class="pre">Expression</span></code> 对象相加，并包含一个特殊案例以处理接收两个 <code class="docutils literal notranslate"><span class="pre">Literal</span></code> 类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">Expression</span><span class="p">:</span>
+    <span class="c1"># ...snip...</span>
+
+<span class="k">class</span> <span class="nc">Literal</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="c1"># ...snip...</span>
+
+<span class="c1"># 警告 - 第一个重载变体遮蔽了第二个!</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Expression</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expression</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Literal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Expression</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expression</span><span class="p">:</span>
+    <span class="c1"># ...snip...</span>
+</pre></div>
+</div>
+<p>虽然这个代码片段在技术上是类型安全的，但它确实包含一种反模式：第二个变体永远不会被选择!如果我们尝试调用 <code class="docutils literal notranslate"><span class="pre">add(Literal(3),</span> <span class="pre">Literal(4))</span></code>，mypy 将始终选择第一个变体，并将函数调用的类型评估为 <code class="docutils literal notranslate"><span class="pre">Expression</span></code>，而不是 <code class="docutils literal notranslate"><span class="pre">Literal</span></code>。这是因为 <code class="docutils literal notranslate"><span class="pre">Literal</span></code> 是 <code class="docutils literal notranslate"><span class="pre">Expression</span></code> 的子类型，这意味着“选择第一个匹配”规则在考虑第一个重载后总是会停止。</p>
+<p>由于拥有一个永远无法匹配的重载变体几乎肯定是一个错误，mypy 将报告错误。要修复错误，我们可以 1) 删除第二个重载或 2) 交换重载的顺序：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 现在一切正常 - 变体的顺序从最具体到最不具体正确。</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Literal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Expression</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expression</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">left</span><span class="p">:</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">Expression</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expression</span><span class="p">:</span>
+    <span class="c1"># ...snip...</span>
+</pre></div>
+</div>
+<p>Mypy 还将对不同的变体进行类型检查，并标记任何具有固有不安全重叠变体的重载。例如，考虑以下不安全的重载定义：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">unsafe_func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">unsafe_func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">unsafe_func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">42</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;some string&quot;</span>
+</pre></div>
+</div>
+<p>表面上看，这个函数定义似乎没有问题。然而，当我们尝试这样使用它时，它将导致推断类型与实际运行时类型之间的差异：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">some_obj</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">unsafe_func</span><span class="p">(</span><span class="n">some_obj</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; danger danger&quot;</span>  <span class="c1"># 类型检查通过，但在运行时崩溃!</span>
+</pre></div>
+</div>
+<p>由于 <code class="docutils literal notranslate"><span class="pre">some_obj</span></code> 的类型为 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#object" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>，mypy 将决定 <code class="docutils literal notranslate"><span class="pre">unsafe_func</span></code> 必须返回某种类型为 <code class="docutils literal notranslate"><span class="pre">str</span></code> 的值，从而得出上述将通过类型检查的结论。但实际上，<code class="docutils literal notranslate"><span class="pre">unsafe_func</span></code> 将返回一个整数，导致代码在运行时崩溃!</p>
+<p>为了防止这些类型的问题，mypy 将检测并禁止固有不安全重叠的重载，尽可能地进行努力。当以下两个条件都为真时，两个变体被视为不安全重叠：</p>
+<ol class="arabic simple">
+<li><p>第一个变体的所有参数都可能与第二个参数兼容。</p></li>
+<li><p>第一个变体的返回类型与第二个不兼容（例如，不是子类型）。</p></li>
+</ol>
+<p>因此在这个例子中，第一个变体中的 <code class="docutils literal notranslate"><span class="pre">int</span></code> 参数是第二个的 <code class="docutils literal notranslate"><span class="pre">object</span></code> 参数的子类型，但 <code class="docutils literal notranslate"><span class="pre">int</span></code> 返回类型不是 <code class="docutils literal notranslate"><span class="pre">str</span></code> 的子类型。两个条件都成立，所以 mypy 会正确标记 <code class="docutils literal notranslate"><span class="pre">unsafe_func</span></code> 为不安全。</p>
+<p>请注意，在您忽略重叠重载错误的情况下，mypy 通常仍会在调用位置推断出您期望的类型。</p>
+<p>然而，mypy 并不会检测到 <em>所有</em> 不安全的重载使用。例如，假设我们修改上述代码片段，使其调用 <code class="docutils literal notranslate"><span class="pre">summarize</span></code> 而不是 <code class="docutils literal notranslate"><span class="pre">unsafe_func</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">some_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">summarize</span><span class="p">(</span><span class="n">some_list</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;danger danger&quot;</span>  <span class="c1"># 类型安全，但在运行时崩溃!</span>
+</pre></div>
+</div>
+<p>我们在这里遇到了类似的问题。如果我们只查看重载上的注解，这个程序会通过类型检查。但由于 <code class="docutils literal notranslate"><span class="pre">summarize(...)</span></code> 设计为在接收到空列表时偏向返回浮点数，因此这个程序实际上会在运行时崩溃。</p>
+<p>mypy 不会将像 <code class="docutils literal notranslate"><span class="pre">summarize</span></code> 这样的定义标记为潜在不安全的原因是，如果这样做，将极其困难编写安全的重载。例如，假设我们定义一个具有两个变体的重载，分别接受类型 <code class="docutils literal notranslate"><span class="pre">A</span></code> 和 <code class="docutils literal notranslate"><span class="pre">B</span></code>。即使这两种类型完全不相关，用户仍然可以通过传入某个继承自 <code class="docutils literal notranslate"><span class="pre">A</span></code> 和 <code class="docutils literal notranslate"><span class="pre">B</span></code> 的第三种类型 <code class="docutils literal notranslate"><span class="pre">C</span></code> 的值来触发类似于上述的运行时错误。</p>
+<p>幸运的是，这类情况相对较少。这意味着，在设计或使用可能接收看似无关类型实例的重载函数时，您应该保持谨慎。</p>
+</section>
+<section id="implementation">
+<h3>类型检查的实现(implementation)<a class="headerlink" href="#implementation" title="Link to this heading">¶</a></h3>
+<p>实现的主体会根据提供的类型提示进行类型检查。例如，在上面的 <code class="docutils literal notranslate"><span class="pre">MyList</span></code> 示例中，主体中的代码会根据参数列表 <code class="docutils literal notranslate"><span class="pre">index:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">slice</span></code> 和返回类型 <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">|</span> <span class="pre">Sequence[T]</span></code> 进行检查。如果实现上没有注解，则主体不会进行类型检查。如果您希望强制 mypy 检查主体，可以使用 <a class="reference internal" href="command_line.html#cmdoption-mypy-check-untyped-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--check-untyped-defs</span></code></a> 标志（<a class="reference internal" href="command_line.html#untyped-definitions-and-calls"><span class="std std-ref">更多细节见这里</span></a>）。</p>
+<p>变体也必须与实现的类型提示兼容。在 <code class="docutils literal notranslate"><span class="pre">MyList</span></code> 示例中，mypy 将检查参数类型 <code class="docutils literal notranslate"><span class="pre">int</span></code> 和返回类型 <code class="docutils literal notranslate"><span class="pre">T</span></code> 是否与第一个变体的 <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">|</span> <span class="pre">slice</span></code> 和 <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">|</span> <span class="pre">Sequence</span></code> 兼容。对于第二个变体，它验证参数类型 <code class="docutils literal notranslate"><span class="pre">slice</span></code> 和返回类型 <code class="docutils literal notranslate"><span class="pre">Sequence[T]</span></code> 是否与 <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">|</span> <span class="pre">slice</span></code> 和 <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">|</span> <span class="pre">Sequence</span></code> 兼容。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>上述重载语义是从 mypy 0.620 开始的新特性。</p>
+<p>之前，mypy 对所有重载变体执行类型擦除。例如，前一节中的 <code class="docutils literal notranslate"><span class="pre">summarize</span></code> 示例以前是非法的，因为 <code class="docutils literal notranslate"><span class="pre">list[str]</span></code> 和 <code class="docutils literal notranslate"><span class="pre">list[int]</span></code> 都擦除为 <code class="docutils literal notranslate"><span class="pre">list[Any]</span></code>。这个限制在 mypy 0.620 中被移除。</p>
+<p>此外，mypy 之前使用不同的算法选择最佳匹配变体。如果该算法未能找到匹配项，则默认为返回 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。新算法使用“选择第一个匹配”规则，只有在输入参数中也包含 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 时，才会回退到返回 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。</p>
+</div>
+</section>
+<section id="conditional">
+<h3>有条件的重载(Conditional)<a class="headerlink" href="#conditional" title="Link to this heading">¶</a></h3>
+<p>有时，有条件的定义重载是有用的。常见用例包括在运行时不可用的类型或仅在某些 Python 版本中存在的类型。所有现有的重载规则仍然适用。例如，必须至少有两个重载。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Mypy 只能推断有限数量的条件。
+当前支持的条件包括 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.TYPE_CHECKING" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">TYPE_CHECKING</span></code></a>、<code class="docutils literal notranslate"><span class="pre">MYPY</span></code>、
+<a class="reference internal" href="common_issues.html#version-and-platform-checks"><span class="std std-ref">Python 版本和系统平台检查(Python version and system platform checks)</span></a>、<a class="reference internal" href="command_line.html#cmdoption-mypy-always-true"><code class="xref std std-option docutils literal notranslate"><span class="pre">--always-true</span></code></a>，
+和 <a class="reference internal" href="command_line.html#cmdoption-mypy-always-false"><code class="xref std std-option docutils literal notranslate"><span class="pre">--always-false</span></code></a> 值。</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">class</span> <span class="nc">B</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">B</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">B</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">var</span>
+
+
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">A</span><span class="p">()))</span>  <span class="c1"># 显示类型为 &quot;A&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># flags: --python-version 3.10</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">C</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">D</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">B</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">B</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">C</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">D</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">var</span>
+
+
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">B</span><span class="p">()))</span>  <span class="c1"># 显示类型为 &quot;B&quot;</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">C</span><span class="p">()))</span>  <span class="c1"># 没有 &quot;func&quot; 的重载变体与参数类型 &quot;C&quot; 匹配</span>
+    <span class="c1"># 可能的重载变体：</span>
+    <span class="c1">#     def func(var: B) -&gt; B</span>
+    <span class="c1">#     def func(var: D) -&gt; D</span>
+    <span class="c1"># 显示类型为 &quot;Any&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>在最后一个示例中，mypy 是通过
+<a class="reference internal" href="command_line.html#cmdoption-mypy-python-version"><code class="xref std std-option docutils literal notranslate"><span class="pre">--python-version</span> <span class="pre">3.10</span></code></a> 执行的。
+因此，条件 <code class="docutils literal notranslate"><span class="pre">sys.version_info</span> <span class="pre">&gt;=</span> <span class="pre">(3,</span> <span class="pre">10)</span></code> 将匹配，
+并且 <code class="docutils literal notranslate"><span class="pre">B</span></code> 的重载将被添加。
+对 <code class="docutils literal notranslate"><span class="pre">A</span></code> 和 <code class="docutils literal notranslate"><span class="pre">C</span></code> 的重载会被忽略!
+对 <code class="docutils literal notranslate"><span class="pre">D</span></code> 的重载并不是条件定义的，因此也会被添加。</p>
+</div>
+<p>当 mypy 无法推断某个条件始终为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 或始终为 <code class="docutils literal notranslate"><span class="pre">False</span></code> 时，会发出错误。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">bool_var</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">bool_var</span><span class="p">:</span>  <span class="c1"># 条件无法推断，无法合并重载</span>
+        <span class="nd">@overload</span>
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span> <span class="o">...</span>
+
+        <span class="nd">@overload</span>
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">B</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">B</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">A</span><span class="p">()))</span>  <span class="c1"># 显示类型为 &quot;Any&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="self-self-types">
+<span id="advanced-self"></span><h2>self类型的高级用法(self-types)<a class="headerlink" href="#self-self-types" title="Link to this heading">¶</a></h2>
+<p>通常，mypy 不要求实例方法和类方法的第一个参数进行注解。然而，为了实现某些编程模式的更精确静态类型，可能需要进行注解。</p>
+<section id="restricted-methods">
+<h3>在泛型类中的受限方法(Restricted methods)<a class="headerlink" href="#restricted-methods" title="Link to this heading">¶</a></h3>
+<p>在泛型类中，有些方法可能仅允许对某些类型参数的值进行调用（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Tag</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="n">item</span><span class="p">:</span> <span class="n">T</span>
+
+    <span class="k">def</span> <span class="nf">uppercase_item</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Tag</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="n">ti</span><span class="p">:</span> <span class="n">Tag</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">ts</span><span class="p">:</span> <span class="n">Tag</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ti</span><span class="o">.</span><span class="n">uppercase_item</span><span class="p">()</span>  <span class="c1"># E: 无效的 self 参数 &quot;Tag[int]&quot; 传递给属性函数</span>
+                         <span class="c1"># &quot;uppercase_item&quot;，类型为 &quot;Callable[[Tag[str]], str]&quot;</span>
+    <span class="n">ts</span><span class="o">.</span><span class="n">uppercase_item</span><span class="p">()</span>  <span class="c1"># 这是可以的</span>
+</pre></div>
+</div>
+<p>这种模式还允许在类型参数本身为泛型的情况下对嵌套类型进行匹配（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="k">class</span> <span class="nc">Storage</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">content</span>
+
+    <span class="k">def</span> <span class="nf">first_chunk</span><span class="p">[</span><span class="n">S</span><span class="p">](</span><span class="bp">self</span><span class="p">:</span> <span class="n">Storage</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">S</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">page</span><span class="p">:</span> <span class="n">Storage</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="n">page</span><span class="o">.</span><span class="n">first_chunk</span><span class="p">()</span>  <span class="c1"># OK，类型为 &quot;str&quot;</span>
+
+<span class="n">Storage</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">first_chunk</span><span class="p">()</span>  <span class="c1"># 错误：无效的 self 参数 &quot;Storage[int]&quot; 传递给属性函数</span>
+                          <span class="c1"># &quot;first_chunk&quot;，类型为 &quot;Callable[[Storage[Sequence[S]]], S]&quot;</span>
+</pre></div>
+</div>
+<p>最后，可以在 self类型(self-type) 上使用重载来表达一些复杂方法的精确类型（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">Tag</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Tag</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">converter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span>
+        <span class="k">return</span> <span class="n">converter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>特别是，重载 self类型(self-type) 的 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__init__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> 方法对于注解泛型类构造函数可能很有用，其中类型参数以非平凡的方式依赖于构造函数参数，参见例如 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Popen</span></code></a>。</p>
+</section>
+<section id="mixin">
+<h3>Mixin 类<a class="headerlink" href="#mixin" title="Link to this heading">¶</a></h3>
+<p>在混入方法中使用宿主类协议作为自类型，可以提高混入类静态类型的代码重用性。例如，可以定义一个协议来定义宿主类的通用功能，而不是在每个混入中添加所需的抽象方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Lockable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lock</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Lock</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">AtomicCloseMixin</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">atomic_close</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Lockable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="c1"># 执行操作</span>
+
+<span class="k">class</span> <span class="nc">AtomicOpenMixin</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">atomic_open</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Lockable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="c1"># 执行操作</span>
+
+<span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">AtomicCloseMixin</span><span class="p">,</span> <span class="n">AtomicOpenMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Bad</span><span class="p">(</span><span class="n">AtomicCloseMixin</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span>
+<span class="n">b</span><span class="p">:</span> <span class="n">Bad</span>
+<span class="n">f</span><span class="o">.</span><span class="n">atomic_close</span><span class="p">()</span>  <span class="c1"># OK</span>
+<span class="n">b</span><span class="o">.</span><span class="n">atomic_close</span><span class="p">()</span>  <span class="c1"># 错误：无效的 self 类型用于 &quot;atomic_close&quot;</span>
+</pre></div>
+</div>
+<p>请注意，当显式 self类型(self-type) 不是当前类的超类时， <em>需要</em> 为协议。在这种情况下，mypy 仅在调用处检查 self类型(self-type) 的有效性。</p>
+</section>
+<section id="precise-typing">
+<h3>替代构造函数的精确类型(Precise typing)<a class="headerlink" href="#precise-typing" title="Link to this heading">¶</a></h3>
+<p>某些类可能定义替代构造函数。如果这些类是泛型的， self类型(self-type) 允许为它们提供精确的签名（Python 3.12 语法）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_pair</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">Self</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="bp">cls</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Sub</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Base</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="o">...</span>
+
+<span class="n">pair</span> <span class="o">=</span> <span class="n">Sub</span><span class="o">.</span><span class="n">make_pair</span><span class="p">(</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>  <span class="c1"># 类型为 &quot;tuple[Sub[str], Sub[str]]&quot;</span>
+<span class="n">bad</span> <span class="o">=</span> <span class="n">Sub</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">make_pair</span><span class="p">(</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>  <span class="c1"># 错误：传递给 &quot;Base&quot; 的 &quot;make_pair&quot; 的参数 1</span>
+                                <span class="c1"># 类型不兼容，实际类型为 &quot;str&quot;，预期为 &quot;int&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="async-await-typing">
+<span id="async-and-await"></span><h2>async/await 注解(Typing)<a class="headerlink" href="#async-await-typing" title="Link to this heading">¶</a></h2>
+<p>Mypy 允许你为使用 <code class="docutils literal notranslate"><span class="pre">async/await</span></code> 语法的协程进行类型注解。有关协程的更多信息，请参见 <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0492/"><strong>PEP 492</strong></a> 和 <a class="reference external" href="python:library/asyncio">asyncio 文档</a>。</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span></code> 定义的函数的类型注解与普通函数相似。返回类型注解应与在 <code class="docutils literal notranslate"><span class="pre">await</span></code> 协程时预期返回的值的类型相同。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">format_string</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;T-minus </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">my_str</span> <span class="o">=</span> <span class="k">await</span> <span class="n">format_string</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>  <span class="c1"># 类型被推断为 str</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="s2">&quot;Blastoff!&quot;</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">countdown</span><span class="p">(</span><span class="s2">&quot;Millennium Falcon&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>调用 <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span></code> 函数 <em>而不等待(without awaiting)</em> 的结果将自动推断为
+类型 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Coroutine" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coroutine[Any,</span> <span class="pre">Any,</span> <span class="pre">T]</span></code></a>，这是
+<a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.Awaitable" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable[T]</span></code></a> 的一个子类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_coroutine</span> <span class="o">=</span> <span class="n">countdown</span><span class="p">(</span><span class="s2">&quot;Millennium Falcon&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">my_coroutine</span><span class="p">)</span>  <span class="c1"># 显示类型为 &quot;typing.Coroutine[Any, Any, builtins.str]&quot;</span>
+</pre></div>
+</div>
+<section id="asynchronous-iterators">
+<span id="async-iterators"></span><h3>异步迭代器(Asynchronous iterators)<a class="headerlink" href="#asynchronous-iterators" title="Link to this heading">¶</a></h3>
+<p>如果你有一个异步迭代器，可以在你的注解中使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/collections.abc.html#collections.abc.AsyncIterator" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncIterator</span></code></a> 类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">class</span> <span class="nc">arange</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">stop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">start</span> <span class="o">-</span> <span class="n">step</span>
+
+    <span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_countdown</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">countdown</span><span class="p">:</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">countdown</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;T-minus </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;Blastoff!&quot;</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_countdown</span><span class="p">(</span><span class="s2">&quot;Serenity&quot;</span><span class="p">,</span> <span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>异步生成器（在 <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0525/"><strong>PEP 525</strong></a> 中引入）是创建异步迭代器的简单方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="c1"># 也可以将此类型注解为返回 AsyncIterator[int]</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">arange</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">step</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">stop</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">step</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">current</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">current</span>
+        <span class="n">current</span> <span class="o">+=</span> <span class="n">step</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_countdown</span><span class="p">(</span><span class="s2">&quot;Battlestar Galactica&quot;</span><span class="p">,</span> <span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>一个常见的误解是，在 <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span></code> 函数中存在 <code class="docutils literal notranslate"><span class="pre">yield</span></code> 语句会影响该函数的类型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">arange</span><span class="p">(</span><span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="c1"># 调用时，arange 返回一个异步迭代器</span>
+    <span class="c1"># 相当于 Callable[[int], AsyncIterator[int]]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">stop</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">i</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="c1"># 调用时，coroutine 返回一个可以等待以获取异步迭代器的对象</span>
+    <span class="c1"># 相当于 Callable[[int], Coroutine[Any, Any, AsyncIterator[int]]]</span>
+    <span class="k">return</span> <span class="n">arange</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># 显示类型为 &quot;typing.AsyncIterator[builtins.int]&quot;</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">coroutine</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># 显示类型为 &quot;typing.Coroutine[Any, Any, typing.AsyncIterator[builtins.int]]&quot;</span>
+
+    <span class="k">await</span> <span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># 错误：在 &quot;await&quot; 中类型不兼容（实际类型为 &quot;AsyncIterator[int]&quot;，预期类型为 &quot;Awaitable[Any]&quot;）</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="k">await</span> <span class="n">coroutine</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># 显示类型为 &quot;typing.AsyncIterator[builtins.int]&quot;</span>
+</pre></div>
+</div>
+<p>这在尝试定义基类、协议或重载时有时会出现：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="k">class</span> <span class="nc">LauncherIncorrect</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="c1"># 因为 launch 没有 yield，这里类型为</span>
+    <span class="c1"># Callable[[], Coroutine[Any, Any, AsyncIterator[int]]]</span>
+    <span class="c1"># 而不是</span>
+    <span class="c1"># Callable[[], AsyncIterator[int]]</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">class</span> <span class="nc">LauncherCorrect</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">class</span> <span class="nc">LauncherAlsoCorrect</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="mi">0</span>
+
+<span class="c1"># 重载的类型与实现无关。</span>
+<span class="c1"># 特别是，它们的类型不受实现是否包含 `yield` 的影响。</span>
+<span class="c1"># 使用 `def` 清楚表明类型是 Callable[..., AsyncIterator[int]]，</span>
+<span class="c1"># 而使用 `async def` 则是 Callable[..., Coroutine[Any, Any, AsyncIterator[int]]]</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span> <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span> <span class="o">...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="c1"># launch 的实现是一个异步生成器，并包含一个 yield</span>
+    <span class="k">yield</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="literal_types.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">字面量类型(Literal types)和枚举(Enums)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="generics.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">泛型(Generics)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">更多类型</a><ul>
+<li><a class="reference internal" href="#noreturn">NoReturn 类型</a></li>
+<li><a class="reference internal" href="#newtypes">NewTypes</a></li>
+<li><a class="reference internal" href="#overload">函数重载(overload)</a><ul>
+<li><a class="reference internal" href="#behavior">运行时行为(behavior)</a></li>
+<li><a class="reference internal" href="#type-checking">重载调用时的类型检查(Type checking)</a></li>
+<li><a class="reference internal" href="#variants">类型检查的变体(variants)</a></li>
+<li><a class="reference internal" href="#implementation">类型检查的实现(implementation)</a></li>
+<li><a class="reference internal" href="#conditional">有条件的重载(Conditional)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#self-self-types">self类型的高级用法(self-types)</a><ul>
+<li><a class="reference internal" href="#restricted-methods">在泛型类中的受限方法(Restricted methods)</a></li>
+<li><a class="reference internal" href="#mixin">Mixin 类</a></li>
+<li><a class="reference internal" href="#precise-typing">替代构造函数的精确类型(Precise typing)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#async-await-typing">async/await 注解(Typing)</a><ul>
+<li><a class="reference internal" href="#asynchronous-iterators">异步迭代器(Asynchronous iterators)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

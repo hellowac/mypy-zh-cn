@@ -1,0 +1,656 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="运行时的注解问题(Annotation issues)" href="runtime_troubles.html" /><link rel="prev" title="类型的种类(kinds)" href="kinds_of_types.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>Class 基础(basics) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/class_basics.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/class_basics.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="class-basics">
+<span id="id1"></span><h1>Class 基础(basics)<a class="headerlink" href="#class-basics" title="Link to this heading">¶</a></h1>
+<p>本节将帮助您开始注解类(class)。包括内置类(Built-in classes)，如 <cite>int</cite>，也遵循相同的规则。</p>
+<section id="id2">
+<h2>实例和类属性<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>mypy 类型检查器可以检测您是否试图访问缺失的属性，这是一个非常常见的编程错误。为了使这一点正常工作，实例和类属性必须在类内定义或初始化。mypy 推断属性的类型:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># Aha，属性 &#39;x&#39; 的类型为 &#39;int&#39;</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># OK!</span>
+<span class="n">a</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># 错误:“A”没有属性“y”</span>
+</pre></div>
+</div>
+<p>这有点像每个类都有一个隐式定义的 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__slots__" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">__slots__</span></code></a> 属性。这只在类型检查期间强制执行，而不是在程序运行时。</p>
+<p>您可以在类体中显式声明变量的类型:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>  <span class="c1"># 声明属性 &#39;x&#39; 的类型为 list[int]</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>     <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p>在 Python 中，类体中定义的变量可以作为类变量或实例变量使用。（如下一节所述，您可以使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 注解覆盖此行为。）</p>
+<p>类似地，您可以为在方法中定义的实例变量提供显式类型:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>您只能在方法内通过使用 <code class="docutils literal notranslate"><span class="pre">self</span></code> 显式赋值来定义实例变量:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># 定义 &#39;y&#39;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># 错误:&#39;x&#39; 未定义</span>
+</pre></div>
+</div>
+</section>
+<section id="init">
+<h2>注解 __init__ 方法<a class="headerlink" href="#init" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__init__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__</span></code></a> 方法有些特别——它不返回值。最佳表达方式是 <code class="docutils literal notranslate"><span class="pre">-&gt;</span> <span class="pre">None</span></code>。然而，由于许多人认为这很冗余，如果 <strong>至少有一个参数被注解</strong>，则可以省略 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__init__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__</span></code></a> 方法的返回类型声明。例如，在以下类中，<cite>:py:meth:`__init__ &lt;object.__init__&gt;</cite> 被视为完全注解:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C1</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="k">class</span> <span class="nc">C2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="n">arg</span>
+</pre></div>
+</div>
+<p>但是，如果 <a class="reference external" href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__init__" title="（在 Python v3.13）"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__</span></code></a> 方法没有注解参数且没有返回类型注解，它将被视为未注解的方法:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 这个主体不进行类型检查</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="mi">42</span> <span class="o">+</span> <span class="s1">&#39;abc&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="classvar">
+<h2>类属性注解(ClassVar)<a class="headerlink" href="#classvar" title="Link to this heading">¶</a></h2>
+<p>您可以使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar[t]</span></code></a> 注解显式声明特定属性不应在实例上设置:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 仅类变量</span>
+
+<span class="n">A</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># OK</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 错误:无法通过实例赋值给类变量 &quot;x&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># OK — 可以通过实例读取</span>
+</pre></div>
+</div>
+<p>并非所有类变量都需要使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 注解。没有 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 注解的属性仍然可以用作类变量。然而，mypy 不会防止它被用作实例变量，如前所述:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 可以用作类或实例变量</span>
+
+<span class="n">A</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># OK</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 也可以</span>
+</pre></div>
+</div>
+<p>请注意，<a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 不是一个类，您不能使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#isinstance" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> 或 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/functions.html#issubclass" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">issubclass()</span></code></a>。它不会改变 Python 的运行时行为——它仅用于类型检查器，如 mypy（同时也对人类读者有帮助）。</p>
+<p>您还可以省略方括号和变量类型，但这可能不会如您所期望:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">ClassVar</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 类型隐式为 Any!</span>
+</pre></div>
+</div>
+<p>在这种情况下，属性的类型将隐式为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 。这种行为将来会改变，因为它令人惊讶。</p>
+<p>显式的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 在区分可调用类型的类变量和实例变量时尤其方便。例如:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">bar</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">A</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span>
+    <span class="n">bad</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">A</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">foo</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># OK</span>
+<span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">bad</span><span class="p">()</span>  <span class="c1"># 错误:参数数量不足</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p><a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.ClassVar" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">ClassVar</span></code></a> 类型参数不能包含类型变量: <code class="docutils literal notranslate"><span class="pre">ClassVar[T]</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ClassVar[list[T]]</span></code> 都是无效的，如果 <code class="docutils literal notranslate"><span class="pre">T</span></code> 是一个类型变量（有关类型变量的更多信息，请参见 <a class="reference internal" href="generics.html#generic-classes"><span class="std std-ref">定义泛型类(generic classes)</span></a>）。</p>
+</div>
+</section>
+<section id="override">
+<h2>重写静态类型方法(override)<a class="headerlink" href="#override" title="Link to this heading">¶</a></h2>
+<p>在重写静态类型方法时，mypy 会检查重写的方法是否具有兼容的签名:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived1</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># 错误:&#39;x&#39; 的类型不兼容</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived2</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># 错误:参数过多</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived3</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># OK</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived4</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># OK:mypy 将 int 视为 float 的子类型</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived5</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># OK:接受比基类方法更多的参数</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>在重写时，您还可以 <strong>协变(covariantly)</strong> 地重写返回类型。例如，您可以用子类型如 <code class="docutils literal notranslate"><span class="pre">list[int]</span></code> 来重写返回类型 <code class="docutils literal notranslate"><span class="pre">Iterable[int]</span></code> 。同样，您可以 <strong>逆变(contravariantly)</strong> 重写参数类型 — —子类可以拥有更一般的参数类型。</p>
+</div>
+<p>为了确保在重命名方法时代码保持正确，显式标记一个方法为重写基类方法是很有帮助的。这可以通过 <code class="docutils literal notranslate"><span class="pre">&#64;override</span></code> 装饰器实现。 <code class="docutils literal notranslate"><span class="pre">&#64;override</span></code> 可以从 Python 3.12 开始从 <code class="docutils literal notranslate"><span class="pre">typing</span></code> 导入，或者从 <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code> 导入以用于较旧的 Python 版本。如果基类方法在重写方法未重命名的情况下被重命名，mypy 将显示错误:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">override</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">g_renamed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Derived1</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># OK</span>
+        <span class="o">...</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># 错误:未找到对应的基类方法</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>使用 <a class="reference internal" href="error_code_list2.html#code-explicit-override"><span class="std std-ref">--enable-error-code explicit-override</span></a> 来要求方法重写使用 <code class="docutils literal notranslate"><span class="pre">&#64;override</span></code> 装饰器。缺少时会产生错误。</p>
+</div>
+<p>您还可以使用动态类型的方法重写静态类型的方法。这允许动态类型代码重写库类中定义的方法，而不必担心它们的类型签名。</p>
+<p>如往常一样，依赖动态类型代码可能不安全。因为在运行时没有强制执行重写方法返回的值与原始返回类型兼容，注解在运行时无效:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>   <span class="c1"># 重写，动态类型</span>
+        <span class="k">return</span> <span class="s1">&#39;hello&#39;</span>  <span class="c1"># 与 &#39;Base&#39; 不兼容，但没有 mypy 错误</span>
+</pre></div>
+</div>
+</section>
+<section id="abstract">
+<h2>抽象基类和多重继承(Abstract)<a class="headerlink" href="#abstract" title="Link to this heading">¶</a></h2>
+<p>Mypy 支持 Python 的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/abc.html" title="（在 Python v3.13）"><span class="xref std std-doc">抽象基类</span></a> (ABCs)。抽象类至少有一个抽象方法或属性，任何具体（非抽象）子类必须实现这些方法或属性。您可以使用 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/abc.html#abc.ABCMeta" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABCMeta</span></code></a> 元类和 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/abc.html#abc.abstractmethod" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;abc.abstractmethod</span></code></a> 函数装饰器定义抽象基类。示例:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">Animal</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">food</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">can_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Cat</span><span class="p">(</span><span class="n">Animal</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">food</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>  <span class="c1"># 省略实现</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">can_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Animal</span><span class="p">()</span>  <span class="c1"># 错误:&#39;Animal&#39; 是抽象的，因为缺少 &#39;eat&#39; 和 &#39;can_walk&#39;</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Cat</span><span class="p">()</span>     <span class="c1"># OK</span>
+</pre></div>
+</div>
+<p>请注意，即使您省略了 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/abc.html#abc.ABCMeta" title="（在 Python v3.13）"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABCMeta</span></code></a> 元类，mypy 仍会检查未实现的抽象方法。这在元类可能导致运行时元类冲突时特别有用。</p>
+<p>由于无法创建 ABC 的实例，因此它们最常用于类型注解。例如，以下方法接受包含任意动物（具体的 <cite>Animal</cite> 子类实例）的任意可迭代对象:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">feed_all</span><span class="p">(</span><span class="n">animals</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Animal</span><span class="p">],</span> <span class="n">food</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="n">animals</span><span class="p">:</span>
+        <span class="n">animal</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">food</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>关于 ABC 的工作方式，有一个重要的特性——一个类是否为抽象类在某种程度上是隐式的。在下面的示例中，由于 <cite>Derived</cite> 继承了来自 <cite>Base</cite> 的抽象方法 <cite>f</cite>，并且没有显式实现它，因此 <cite>Derived</cite> 被视为抽象基类。定义 <cite>Derived</cite> 时，mypy 不会产生错误，因为这是一个有效的 ABC:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>  <span class="c1"># 无错误 - Derived 隐式为抽象类</span>
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>但是，尝试创建 <cite>Derived</cite> 的实例会被拒绝:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">Derived</span><span class="p">()</span>  <span class="c1"># 错误:&#39;Derived&#39; 是抽象的</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>忘记实现抽象方法是一个常见错误。如上所示，在这种情况下，类定义不会产生错误，但任何尝试构造实例的行为都会被标记为错误。</p>
+</div>
+<p>Mypy 允许您省略抽象方法的主体，但如果您这样做，通过 <cite>super()</cite> 调用该方法是不安全的。例如:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="k">pass</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+<span class="k">class</span> <span class="nc">Sub</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 错误:调用 &quot;Base&quot; 的抽象方法 &quot;foo&quot;</span>
+                                  <span class="c1"># 通过 super() 调用带有简单主体的抽象方法是不安全的</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 这是可以的。</span>
+</pre></div>
+</div>
+<p>一个类可以继承任意数量的类，包括抽象类和具体类。与普通重写一样，动态类型的方法可以重写或实现任何基类中定义的静态类型方法，包括在抽象基类中定义的抽象方法。</p>
+<p>您可以使用常规属性或实例变量来实现抽象属性。</p>
+</section>
+<section id="slots">
+<h2>槽（Slots）<a class="headerlink" href="#slots" title="Link to this heading">¶</a></h2>
+<p>当一个类显式定义了 <a class="reference external" href="https://docs.python.org/zh-cn/3/glossary.html#term-__slots__" title="（在 Python v3.13）"><span class="xref std std-term">__slots__</span></a> 时，mypy 会检查所有赋值的属性是否是 <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 的成员：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Album</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+       <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+       <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+       <span class="c1"># 错误：尝试为类型 &quot;Album&quot; 的 &quot;__slots__&quot; 赋值 &quot;released&quot;，但不在 &quot;__slots__&quot; 中</span>
+       <span class="bp">self</span><span class="o">.</span><span class="n">released</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">my_album</span> <span class="o">=</span> <span class="n">Album</span><span class="p">(</span><span class="s1">&#39;Songs about Python&#39;</span><span class="p">,</span> <span class="mi">2021</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Mypy 仅在以下条件下检查属性赋值与 <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 的一致性：</p>
+<ol class="arabic simple">
+<li><p>所有基类（除了内置类）必须显式定义 <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> （这反映了 Python 的语义）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 不包括 <code class="docutils literal notranslate"><span class="pre">__dict__</span></code>。如果 <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 包含 <code class="docutils literal notranslate"><span class="pre">__dict__</span></code> ，则可以设置任意属性，类似于未定义 <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 时的行为（这也反映了 Python 的语义）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__slots__</span></code> 中的所有值必须是字符串字面量。</p></li>
+</ol>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="runtime_troubles.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">运行时的注解问题(Annotation issues)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="kinds_of_types.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">类型的种类(kinds)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Class 基础(basics)</a><ul>
+<li><a class="reference internal" href="#id2">实例和类属性</a></li>
+<li><a class="reference internal" href="#init">注解 __init__ 方法</a></li>
+<li><a class="reference internal" href="#classvar">类属性注解(ClassVar)</a></li>
+<li><a class="reference internal" href="#override">重写静态类型方法(override)</a></li>
+<li><a class="reference internal" href="#abstract">抽象基类和多重继承(Abstract)</a></li>
+<li><a class="reference internal" href="#slots">槽（Slots）</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

@@ -1,0 +1,1305 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="mypy 配置文件(mypy configuration file)" href="config_file.html" /><link rel="prev" title="运行 mypy 和管理导入(imports)" href="running_mypy.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>mypy命令行(command line) - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/command_line.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/command_line.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="mypy-command-line">
+<span id="command-line"></span><h1>mypy命令行(command line)<a class="headerlink" href="#mypy-command-line" title="Link to this heading">¶</a></h1>
+<p>本节记录了 mypy 的命令行接口。您可以通过运行 <a class="reference internal" href="#cmdoption-mypy-h"><code class="xref std std-option docutils literal notranslate"><span class="pre">mypy</span> <span class="pre">--help</span></code></a> 查看可用标志的快速摘要。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>命令行标志可能在不同版本之间发生变化。</p>
+</div>
+<section id="what-to-type-check">
+<h2>指定类型检查的内容(what to type check)<a class="headerlink" href="#what-to-type-check" title="Link to this heading">¶</a></h2>
+<p>默认情况下，您可以通过传递希望 mypy 检查的路径来指定要进行类型检查的代码:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mypy foo.py bar.py some_directory
+</pre></div>
+</div>
+<p>请注意，目录会递归检查。</p>
+<p>Mypy 还允许您以几种其他方式指定要进行类型检查的代码。以下是相关标志的简要总结；有关完整细节，请参见 <a class="reference internal" href="running_mypy.html#running-mypy"><span class="std std-ref">运行 mypy 和管理导入(imports)</span></a>。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-m">
+<span id="cmdoption-mypy-module"></span><span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">MODULE</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--module</span></span><span class="sig-prename descclassname"> <span class="pre">MODULE</span></span><a class="headerlink" href="#cmdoption-mypy-m" title="Link to this definition">¶</a></dt>
+<dd><p>要求 mypy 对提供的模块进行类型检查。此标志可以重复多次。</p>
+<p>Mypy <em>不会</em> 递归检查提供的模块的任何子模块。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-p">
+<span id="cmdoption-mypy-package"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">PACKAGE</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--package</span></span><span class="sig-prename descclassname"> <span class="pre">PACKAGE</span></span><a class="headerlink" href="#cmdoption-mypy-p" title="Link to this definition">¶</a></dt>
+<dd><p>要求 mypy 对提供的包进行类型检查。此标志可以重复多次。</p>
+<p>Mypy <em>会</em> 递归检查提供的包的任何子模块。此标志的行为与 <a class="reference internal" href="#cmdoption-mypy-m"><code class="xref std std-option docutils literal notranslate"><span class="pre">--module</span></code></a> 相同，除了这一点。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-c">
+<span id="cmdoption-mypy-command"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"> <span class="pre">PROGRAM_TEXT</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--command</span></span><span class="sig-prename descclassname"> <span class="pre">PROGRAM_TEXT</span></span><a class="headerlink" href="#cmdoption-mypy-c" title="Link to this definition">¶</a></dt>
+<dd><p>要求 mypy 对提供的字符串作为程序进行类型检查。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-exclude">
+<span class="sig-name descname"><span class="pre">--exclude</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-exclude" title="Link to this definition">¶</a></dt>
+<dd><p>一个正则表达式，用于匹配文件名、目录名和路径，mypy 在递归发现要检查的文件时应忽略这些匹配项。所有平台上均使用正斜杠。</p>
+<p>例如，为了避免发现任何名为 <cite>setup.py</cite> 的文件，您可以传递 <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">'/setup\.py$'</span></code>。同样，您可以通过 e.g. <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">/build/</span></code> 忽略发现具有给定名称的目录，或者通过 <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">/project/vendor/</span></code> 忽略与子路径匹配的目录。要忽略多个文件/目录/路径，您可以多次提供 --exclude 标志，例如 <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">'/setup\.py$'</span> <span class="pre">--exclude</span> <span class="pre">'/build/'</span></code>。</p>
+<p>请注意，此标志仅影响递归目录树发现，即当 mypy 在发现要检查的目录树或包的子模块中的文件时。如果您明确传递一个文件或模块，它仍然会被检查。例如，<code class="docutils literal notranslate"><span class="pre">mypy</span> <span class="pre">--exclude</span> <span class="pre">'/setup.py$'</span>
+<span class="pre">but_still_check/setup.py</span></code>。</p>
+<p>特别地，<code class="docutils literal notranslate"><span class="pre">--exclude</span></code> 不影响 mypy 的 <a class="reference internal" href="running_mypy.html#follow-imports"><span class="std std-ref">导入跟踪</span></a>。您可以使用每个模块的 <a class="reference internal" href="config_file.html#confval-follow_imports"><code class="xref std std-confval docutils literal notranslate"><span class="pre">follow_imports</span></code></a> 配置选项，进一步避免 mypy 跟踪导入并检查您不希望被检查的代码。</p>
+<p>请注意，mypy 永远不会递归发现名为 &quot;site-packages&quot;、&quot;node_modules&quot; 或 &quot;__pycache__&quot; 的文件和目录，或那些名称以句点开头的文件和目录，正如 <code class="docutils literal notranslate"><span class="pre">--exclude</span>
+<span class="pre">'/(site-packages|node_modules|__pycache__|\..*)/$'</span></code> 所示。Mypy 也不会递归发现扩展名不是 <code class="docutils literal notranslate"><span class="pre">.py</span></code> 或 <code class="docutils literal notranslate"><span class="pre">.pyi</span></code> 的文件。</p>
+</dd></dl>
+
+</section>
+<section id="arguments">
+<h2>可选参数(arguments)<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-h">
+<span id="cmdoption-mypy-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-h" title="Link to this definition">¶</a></dt>
+<dd><p>显示帮助信息并退出。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-v">
+<span id="cmdoption-mypy-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-v" title="Link to this definition">¶</a></dt>
+<dd><p>显示更详细的信息。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-V">
+<span id="cmdoption-mypy-version"></span><span class="sig-name descname"><span class="pre">-V</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-V" title="Link to this definition">¶</a></dt>
+<dd><p>显示程序的版本号并退出。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-O">
+<span id="cmdoption-mypy-output"></span><span class="sig-name descname"><span class="pre">-O</span></span><span class="sig-prename descclassname"> <span class="pre">FORMAT</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">FORMAT</span> <span class="pre">{json}</span></span><a class="headerlink" href="#cmdoption-mypy-O" title="Link to this definition">¶</a></dt>
+<dd><p>设置自定义输出格式。</p>
+</dd></dl>
+
+</section>
+<section id="config-file">
+<span id="config-file-flag"></span><h2>配置文件(Config file)<a class="headerlink" href="#config-file" title="Link to this heading">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-config-file">
+<span class="sig-name descname"><span class="pre">--config-file</span></span><span class="sig-prename descclassname"> <span class="pre">CONFIG_FILE</span></span><a class="headerlink" href="#cmdoption-mypy-config-file" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 从指定文件读取配置设置。</p>
+<p>默认情况下，设置从当前目录中的 <code class="docutils literal notranslate"><span class="pre">mypy.ini</span></code>, <code class="docutils literal notranslate"><span class="pre">.mypy.ini</span></code>, <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> 或 <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> 读取。设置会覆盖 mypy 的内置默认值，命令行标志也可以覆盖设置。</p>
+<p>指定 <a class="reference internal" href="#cmdoption-mypy-config-file"><code class="xref std std-option docutils literal notranslate"><span class="pre">--config-file=</span></code></a> （不带文件名）将忽略 <em>所有</em> 配置文件。</p>
+<p>请参见 <a class="reference internal" href="config_file.html#config-file"><span class="std std-ref">mypy 配置文件(mypy configuration file)</span></a> 了解配置文件的语法。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-unused-configs">
+<span class="sig-name descname"><span class="pre">--warn-unused-configs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-unused-configs" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 对未使用的 <code class="docutils literal notranslate"><span class="pre">[mypy-&lt;pattern&gt;]</span></code> 配置文件部分发出警告。
+（这需要使用 <a class="reference internal" href="#cmdoption-mypy-no-incremental"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-incremental</span></code></a> 关闭增量模式。）</p>
+</dd></dl>
+
+</section>
+<section id="import-discovery">
+<span id="id1"></span><h2>导入发现(Import discovery)<a class="headerlink" href="#import-discovery" title="Link to this heading">¶</a></h2>
+<p>以下标志自定义 mypy 如何发现和跟踪导入。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-explicit-package-bases">
+<span class="sig-name descname"><span class="pre">--explicit-package-bases</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-explicit-package-bases" title="Link to this definition">¶</a></dt>
+<dd><p>此标志告诉 mypy 顶级包将基于当前目录、<code class="docutils literal notranslate"><span class="pre">MYPYPATH</span></code> 环境变量或 <a class="reference internal" href="config_file.html#confval-mypy_path"><code class="xref std std-confval docutils literal notranslate"><span class="pre">mypy_path</span></code></a> 配置选项的某个成员。此选项仅在缺少 <cite>__init__.py</cite> 的情况下有用。有关详细信息，请参见 <a class="reference internal" href="running_mypy.html#mapping-paths-to-modules"><span class="std std-ref">Mapping file paths to modules</span></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-ignore-missing-imports">
+<span class="sig-name descname"><span class="pre">--ignore-missing-imports</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-ignore-missing-imports" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 忽略所有缺失的导入。它等同于在代码库中所有未解析的导入上添加 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释。</p>
+<p>请注意，此标志 <em>不</em> 会抑制关于成功解析的模块中缺失名称的错误。例如，如果有以下文件:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<span class="n">package</span><span class="o">/</span><span class="n">mod</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>那么 mypy 在使用 <a class="reference internal" href="#cmdoption-mypy-ignore-missing-imports"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ignore-missing-imports</span></code></a> 时会生成以下错误：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">package.unknown</span>      <span class="c1"># 无错误，被忽略</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">package</span><span class="o">.</span><span class="n">unknown</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>  <span class="c1"># OK. &#39;func&#39; 被假定为类型 &#39;Any&#39;</span>
+
+<span class="kn">from</span> <span class="nn">package</span> <span class="kn">import</span> <span class="n">unknown</span>          <span class="c1"># 无错误，被忽略</span>
+<span class="kn">from</span> <span class="nn">package.mod</span> <span class="kn">import</span> <span class="n">NonExisting</span>  <span class="c1"># 错误：模块没有属性 &#39;NonExisting&#39;</span>
+</pre></div>
+</div>
+<p>有关更多详细信息，请参见 <a class="reference internal" href="running_mypy.html#ignore-missing-imports"><span class="std std-ref">缺失导入(Missing imports)</span></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-follow-imports">
+<span class="sig-name descname"><span class="pre">--follow-imports</span></span><span class="sig-prename descclassname"> <span class="pre">{normal,silent,skip,error}</span></span><a class="headerlink" href="#cmdoption-mypy-follow-imports" title="Link to this definition">¶</a></dt>
+<dd><p>此标志调整 mypy 跟踪未通过命令行显式传递的导入模块的方式。</p>
+<p>默认选项为 <code class="docutils literal notranslate"><span class="pre">normal</span></code>：mypy 将跟踪并类型检查所有模块。有关其他选项的更多信息，请参见 <a class="reference internal" href="running_mypy.html#follow-imports"><span class="std std-ref">Following imports</span></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-python-executable">
+<span class="sig-name descname"><span class="pre">--python-executable</span></span><span class="sig-prename descclassname"> <span class="pre">EXECUTABLE</span></span><a class="headerlink" href="#cmdoption-mypy-python-executable" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 从为 Python 可执行文件 <code class="docutils literal notranslate"><span class="pre">EXECUTABLE</span></code> 安装的 <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 兼容包中收集类型信息。如果未提供，mypy 将使用为运行 mypy 的 Python 可执行文件安装的 PEP 561 兼容包。</p>
+<p>有关如何制作 PEP 561 兼容包的更多信息，请参见 <a class="reference internal" href="installed_packages.html#installed-packages"><span class="std std-ref">使用已安装的包(Using installed packages)</span></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-site-packages">
+<span class="sig-name descname"><span class="pre">--no-site-packages</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-site-packages" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将禁用搜索 <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 兼容包。这也将禁用搜索可用的 Python 可执行文件。</p>
+<p>如果 mypy 无法为正在检查的 Python 版本找到 Python 可执行文件，并且您不需要使用 PEP 561 类型的包，则使用此标志。否则，请使用 <a class="reference internal" href="#cmdoption-mypy-python-executable"><code class="xref std std-option docutils literal notranslate"><span class="pre">--python-executable</span></code></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-silence-site-packages">
+<span class="sig-name descname"><span class="pre">--no-silence-site-packages</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-silence-site-packages" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，mypy 会抑制在 <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 兼容包内生成的任何错误消息。添加此标志将禁用此行为。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-fast-module-lookup">
+<span class="sig-name descname"><span class="pre">--fast-module-lookup</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-fast-module-lookup" title="Link to this definition">¶</a></dt>
+<dd><p>用于扫描搜索路径以解析导入的默认逻辑在某些情况下具有二次最坏情况的行为，例如，当大量文件夹共享顶级命名空间时，如下所示:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">foo</span><span class="o">/</span>
+    <span class="n">company</span><span class="o">/</span>
+        <span class="n">foo</span><span class="o">/</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">py</span>
+<span class="n">bar</span><span class="o">/</span>
+    <span class="n">company</span><span class="o">/</span>
+        <span class="n">bar</span><span class="o">/</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">py</span>
+<span class="n">baz</span><span class="o">/</span>
+    <span class="n">company</span><span class="o">/</span>
+        <span class="n">baz</span><span class="o">/</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">py</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>如果您处于这种情况，可以通过设置 <a class="reference internal" href="#cmdoption-mypy-fast-module-lookup"><code class="xref std std-option docutils literal notranslate"><span class="pre">--fast-module-lookup</span></code></a> 选项来启用实验性的快速路径。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-namespace-packages">
+<span class="sig-name descname"><span class="pre">--no-namespace-packages</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-namespace-packages" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁用命名空间包的导入发现（见 <span class="target" id="index-3"></span><a class="pep reference external" href="https://peps.python.org/pep-0420/"><strong>PEP 420</strong></a>）。特别是，这会阻止发现没有 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> （或 <code class="docutils literal notranslate"><span class="pre">__init__.pyi</span></code> ）文件的包。</p>
+<p>此标志影响 mypy 如何查找命令行中显式传递的模块和包。它还影响 mypy 如何确定命令行中传递的文件的完全限定模块名称。有关详细信息，请参见 <a class="reference internal" href="running_mypy.html#mapping-paths-to-modules"><span class="std std-ref">映射文件路径到模块</span></a>。</p>
+</dd></dl>
+
+</section>
+<section id="platform-configuration">
+<span id="id2"></span><h2>平台配置(Platform configuration)<a class="headerlink" href="#platform-configuration" title="Link to this heading">¶</a></h2>
+<p>默认情况下，mypy 会假定您打算在与运行 mypy 本身相同的操作系统和 Python 版本上运行代码。以下标志允许您修改此行为。</p>
+<p>有关如何使用这些标志的更多信息，请参见 <a class="reference internal" href="common_issues.html#version-and-platform-checks"><span class="std std-ref">Python 版本和系统平台检查(Python version and system platform checks)</span></a>。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-python-version">
+<span class="sig-name descname"><span class="pre">--python-version</span></span><span class="sig-prename descclassname"> <span class="pre">X.Y</span></span><a class="headerlink" href="#cmdoption-mypy-python-version" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 将您的代码类型检查为在 Python 版本 X.Y 下运行。未使用此选项时，mypy 默认使用运行 mypy 的 Python 版本。</p>
+<p>此标志将尝试查找对应版本的 Python 可执行文件，以搜索 <span class="target" id="index-4"></span><a class="pep reference external" href="https://peps.python.org/pep-0561/"><strong>PEP 561</strong></a> 兼容包。如果您希望禁用此功能，请使用 <a class="reference internal" href="#cmdoption-mypy-no-site-packages"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-site-packages</span></code></a> 标志（有关更多详细信息，请参见 <a class="reference internal" href="#import-discovery"><span class="std std-ref">导入发现(Import discovery)</span></a>）。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-platform">
+<span class="sig-name descname"><span class="pre">--platform</span></span><span class="sig-prename descclassname"> <span class="pre">PLATFORM</span></span><a class="headerlink" href="#cmdoption-mypy-platform" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 将您的代码类型检查为在给定操作系统下运行。未使用此选项时，mypy 默认使用您当前使用的操作系统。</p>
+<p><code class="docutils literal notranslate"><span class="pre">PLATFORM</span></code> 参数可以是 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/sys.html#sys.platform" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.platform</span></code></a> 支持的任何字符串。</p>
+</dd></dl>
+
+<dl class="std option" id="always-true">
+<dt class="sig sig-object std" id="cmdoption-mypy-always-true">
+<span class="sig-name descname"><span class="pre">--always-true</span></span><span class="sig-prename descclassname"> <span class="pre">NAME</span></span><a class="headerlink" href="#cmdoption-mypy-always-true" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将把所有名为 <code class="docutils literal notranslate"><span class="pre">NAME</span></code> 的变量视为总是为真的编译时常量。此标志可以重复使用。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-always-false">
+<span class="sig-name descname"><span class="pre">--always-false</span></span><span class="sig-prename descclassname"> <span class="pre">NAME</span></span><a class="headerlink" href="#cmdoption-mypy-always-false" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将把所有名为 <code class="docutils literal notranslate"><span class="pre">NAME</span></code> 的变量视为总是为假的编译时常量。此标志可以重复使用。</p>
+</dd></dl>
+
+</section>
+<section id="disallow-dynamic-typing">
+<span id="id3"></span><h2>禁止动态类型(Disallow dynamic typing)<a class="headerlink" href="#disallow-dynamic-typing" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型用于表示具有 <a class="reference internal" href="dynamic_typing.html#dynamic-typing"><span class="std std-ref">dynamic type</span></a> 的值。<code class="docutils literal notranslate"><span class="pre">--disallow-any</span></code> 系列标志将禁止在模块中以各种方式使用 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 类型——这让我们能够以受控的方式战略性地禁止动态类型的使用。</p>
+<p>以下选项可用：</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-any-unimported">
+<span class="sig-name descname"><span class="pre">--disallow-any-unimported</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-any-unimported" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁止使用来自未跟踪导入的类型（此类类型变为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的别名）。未跟踪导入发生在导入的模块不存在或设置了 <a class="reference internal" href="#cmdoption-mypy-follow-imports"><code class="xref std std-option docutils literal notranslate"><span class="pre">--follow-imports=skip</span></code></a> 时。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-any-expr">
+<span class="sig-name descname"><span class="pre">--disallow-any-expr</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-any-expr" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁止模块中所有类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的表达式。如果类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的表达式在模块中的任何地方出现，mypy 将输出错误，除非该表达式立即用作 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.cast" title="（在 Python v3.13）"><code class="xref py py-func docutils literal notranslate"><span class="pre">cast()</span></code></a> 的参数或赋值给具有显式类型注解的变量。</p>
+<p>此外，声明类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的变量或转换为类型 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 也是不允许的。请注意，调用参数类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的函数仍然是允许的。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-any-decorated">
+<span class="sig-name descname"><span class="pre">--disallow-any-decorated</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-any-decorated" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁止在装饰器转换后签名中包含 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的函数。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-any-explicit">
+<span class="sig-name descname"><span class="pre">--disallow-any-explicit</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-any-explicit" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁止在类型位置中显式使用 <code class="docutils literal notranslate"><span class="pre">Any</span></code>，如类型注解和泛型类型参数。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-any-generics">
+<span class="sig-name descname"><span class="pre">--disallow-any-generics</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-any-generics" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁止使用未指定显式类型参数的泛型类型。例如，您不能使用裸的 <code class="docutils literal notranslate"><span class="pre">x:</span> <span class="pre">list</span></code>。相反，您必须始终写成 <code class="docutils literal notranslate"><span class="pre">x:</span> <span class="pre">list[int]</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-subclassing-any">
+<span class="sig-name descname"><span class="pre">--disallow-subclassing-any</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-subclassing-any" title="Link to this definition">¶</a></dt>
+<dd><p>此标志在类继承类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的值时报告错误。这可能发生在基类从不存在的模块中导入（使用 <a class="reference internal" href="#cmdoption-mypy-ignore-missing-imports"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ignore-missing-imports</span></code></a>）或由于 <a class="reference internal" href="#cmdoption-mypy-follow-imports"><code class="xref std std-option docutils literal notranslate"><span class="pre">--follow-imports=skip</span></code></a> 或 <code class="docutils literal notranslate"><span class="pre">import</span></code> 语句上的 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释而被忽略。</p>
+<p>由于模块被静默处理，导入的类被赋予类型 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。默认情况下，mypy 会假定子类正确继承了基类，即使实际上可能并非如此。此标志使 mypy 报告错误。</p>
+</dd></dl>
+
+</section>
+<section id="untyped-definitions-and-calls">
+<span id="id4"></span><h2>未类型化的定义和调用(Untyped definitions and calls)<a class="headerlink" href="#untyped-definitions-and-calls" title="Link to this heading">¶</a></h2>
+<p>以下标志配置 mypy 如何处理未类型化的函数定义或调用。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-untyped-calls">
+<span class="sig-name descname"><span class="pre">--disallow-untyped-calls</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-untyped-calls" title="Link to this definition">¶</a></dt>
+<dd><p>此标志在函数带有类型注解的情况下，报告调用未定义注解的函数时的错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-untyped-calls-exclude">
+<span class="sig-name descname"><span class="pre">--untyped-calls-exclude</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-untyped-calls-exclude" title="Link to this definition">¶</a></dt>
+<dd><p>此标志允许有选择性地禁用 <a class="reference internal" href="#cmdoption-mypy-disallow-untyped-calls"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-untyped-calls</span></code></a>，适用于特定包、模块或类中定义的函数和方法。请注意，每个排除条目作为前缀起作用。例如（假设没有可用的 <code class="docutils literal notranslate"><span class="pre">third_party_lib</span></code> 的类型注解）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mypy --disallow-untyped-calls</span>
+<span class="c1">#      --untyped-calls-exclude=third_party_lib.module_a</span>
+<span class="c1">#      --untyped-calls-exclude=foo.A</span>
+<span class="kn">from</span> <span class="nn">third_party_lib.module_a</span> <span class="kn">import</span> <span class="n">some_func</span>
+<span class="kn">from</span> <span class="nn">third_party_lib.module_b</span> <span class="kn">import</span> <span class="n">other_func</span>
+<span class="kn">import</span> <span class="nn">foo</span>
+
+<span class="n">some_func</span><span class="p">()</span>  <span class="c1"># OK，函数来自模块 `third_party_lib.module_a`</span>
+<span class="n">other_func</span><span class="p">()</span>  <span class="c1"># E: 在类型上下文中调用未类型化函数 &quot;other_func&quot;</span>
+
+<span class="n">foo</span><span class="o">.</span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">meth</span><span class="p">()</span>  <span class="c1"># OK，方法在类 `foo.A` 中定义</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">B</span><span class="p">()</span><span class="o">.</span><span class="n">meth</span><span class="p">()</span>  <span class="c1"># E: 在类型上下文中调用未类型化函数 &quot;meth&quot;</span>
+
+<span class="c1"># file foo.py</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-untyped-defs">
+<span class="sig-name descname"><span class="pre">--disallow-untyped-defs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-untyped-defs" title="Link to this definition">¶</a></dt>
+<dd><p>此标志在遇到没有类型注解或带有不完整类型注解的函数定义时报告错误。
+（是 <a class="reference internal" href="#cmdoption-mypy-disallow-incomplete-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-incomplete-defs</span></code></a> 的超集）。</p>
+<p>例如，它会对 <code class="code docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(a,</span> <span class="pre">b)</span></code> 和 <code class="code docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(a:</span> <span class="pre">int,</span> <span class="pre">b)</span></code> 报告错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-incomplete-defs">
+<span class="sig-name descname"><span class="pre">--disallow-incomplete-defs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-incomplete-defs" title="Link to this definition">¶</a></dt>
+<dd><p>此标志在遇到部分注解的函数定义时报告错误，同时仍允许完全未注解的定义。</p>
+<p>例如，它会对 <code class="code docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(a:</span> <span class="pre">int,</span> <span class="pre">b)</span></code> 报告错误，但不会对 <code class="code docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(a,</span> <span class="pre">b)</span></code> 报告错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-check-untyped-defs">
+<span class="sig-name descname"><span class="pre">--check-untyped-defs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-check-untyped-defs" title="Link to this definition">¶</a></dt>
+<dd><p>此标志的严厉程度低于前两个选项——它对每个函数的主体进行类型检查，无论其是否有类型注解。
+（默认情况下，未注解的函数主体不进行类型检查。）</p>
+<p>它将假定所有参数的类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code>，并始终推断返回类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disallow-untyped-decorators">
+<span class="sig-name descname"><span class="pre">--disallow-untyped-decorators</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disallow-untyped-decorators" title="Link to this definition">¶</a></dt>
+<dd><p>此标志在带有类型注解的函数被未注解的装饰器装饰时报告错误。</p>
+</dd></dl>
+
+</section>
+<section id="none-optional-none-and-optional-handling">
+<span id="none-and-optional-handling"></span><h2>None 和 Optional 处理(None and Optional handling)<a class="headerlink" href="#none-optional-none-and-optional-handling" title="Link to this heading">¶</a></h2>
+<p>以下标志调整 mypy 如何处理类型为 <code class="docutils literal notranslate"><span class="pre">None</span></code> 的值。</p>
+<dl class="std option" id="implicit-optional">
+<dt class="sig sig-object std" id="cmdoption-mypy-implicit-optional">
+<span class="sig-name descname"><span class="pre">--implicit-optional</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-implicit-optional" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 将默认值为 <code class="docutils literal notranslate"><span class="pre">None</span></code> 的参数视为具有隐式可选类型( <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">|</span> <span class="pre">None</span></code> )。</p>
+<p>例如，如果设置了此标志，mypy 将假定下面代码片段中的 <code class="docutils literal notranslate"><span class="pre">x</span></code> 参数实际上是类型 <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span></code>，因为默认参数为 <code class="docutils literal notranslate"><span class="pre">None</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>注意：</strong> 从 mypy 0.980 开始，此功能默认禁用。</p>
+</dd></dl>
+
+<dl class="std option" id="no-strict-optional">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-strict-optional">
+<span class="sig-name descname"><span class="pre">--no-strict-optional</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-strict-optional" title="Link to this definition">¶</a></dt>
+<dd><p>此标志有效地禁用可选类型和 <code class="docutils literal notranslate"><span class="pre">None</span></code> 值的检查。使用此选项时，mypy 通常不检查 <code class="docutils literal notranslate"><span class="pre">None</span></code> 值的使用——它被视为与每种类型兼容。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p><code class="docutils literal notranslate"><span class="pre">--no-strict-optional</span></code> 是有害的。避免使用它，并且绝对不要在不理解其作用的情况下使用它。</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="configuring-warnings">
+<span id="id5"></span><h2>配置警告(Configuring warnings)<a class="headerlink" href="#configuring-warnings" title="Link to this heading">¶</a></h2>
+<p>以下标志为合理但在某种程度上可能存在问题或冗余的代码启用警告。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-redundant-casts">
+<span class="sig-name descname"><span class="pre">--warn-redundant-casts</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-redundant-casts" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 在代码使用可以安全删除的不必要类型转换时报告错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-unused-ignores">
+<span class="sig-name descname"><span class="pre">--warn-unused-ignores</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-unused-ignores" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 在代码中使用不实际生成错误消息的 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释时报告错误。</p>
+<p>此标志与 <a class="reference internal" href="#cmdoption-mypy-warn-redundant-casts"><code class="xref std std-option docutils literal notranslate"><span class="pre">--warn-redundant-casts</span></code></a> 标志特别有用，尤其是在您升级 mypy 时。之前，您可能需要添加类型转换或 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释，以解决 mypy 中的错误或缺少第三方库的存根。</p>
+<p>这两个标志使您能够发现这些解决方法不再必要的情况。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-warn-no-return">
+<span class="sig-name descname"><span class="pre">--no-warn-no-return</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-warn-no-return" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，当函数在某些执行路径中缺少返回语句时，mypy 将生成错误。唯一的例外是：</p>
+<ul class="simple">
+<li><p>函数具有 <code class="docutils literal notranslate"><span class="pre">None</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 返回类型</p></li>
+<li><p>函数具有空主体并被标记为抽象方法、位于协议类中或在存根文件中</p></li>
+<li><p>执行路径永远不会返回；例如，如果总是引发异常</p></li>
+</ul>
+<p>传入 <a class="reference internal" href="#cmdoption-mypy-no-warn-no-return"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-warn-no-return</span></code></a> 将在所有情况下禁用这些错误消息。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-return-any">
+<span class="sig-name descname"><span class="pre">--warn-return-any</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-return-any" title="Link to this definition">¶</a></dt>
+<dd><p>此标志会使 mypy 在从声明为非 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 返回类型的函数中返回类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的值时生成警告。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-unreachable">
+<span class="sig-name descname"><span class="pre">--warn-unreachable</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-unreachable" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将在 mypy 遇到经过类型分析确定为不可达或冗余的代码时报告错误。这是一种检测代码中某些类型的错误的有效方式。</p>
+<p>例如，启用此标志将使 mypy 报告 <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">7</span></code> 检查是冗余的，并且下面的 <code class="docutils literal notranslate"><span class="pre">else</span></code> 块是不可达的。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># 错误：或运算符的右操作数从未被求值</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="c1"># 错误：对 + 的不支持操作数类型（&quot;int&quot; 和 &quot;str&quot;）</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;bad&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># 错误：&#39;语句不可达&#39; 错误</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;bad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>为了防止 mypy 生成虚假的警告，&quot;语句不可达&quot; 警告将在以下两种情况下被抑制：</p>
+<ol class="arabic simple">
+<li><p>当不可达语句是 <code class="docutils literal notranslate"><span class="pre">raise</span></code> 语句、<code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">False</span></code> 语句，或调用具有 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#typing.NoReturn" title="（在 Python v3.13）"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoReturn</span></code></a> 返回类型提示的函数时。换句话说，当不可达语句抛出错误或以某种方式终止程序时。</p></li>
+<li><p>当不可达语句被 <em>故意</em> 标记为不可达时，使用 <a class="reference internal" href="common_issues.html#version-and-platform-checks"><span class="std std-ref">Python 版本和系统平台检查(Python version and system platform checks)</span></a>。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>当前，mypy 无法检测和报告任何使用 <a class="reference internal" href="generics.html#type-variable-value-restriction"><span class="std std-ref">带值限制的类型变量(Type variables)</span></a> 的函数中的不可达或冗余代码。</p>
+<p>此限制将在未来的 mypy 版本中移除。</p>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-report-deprecated-as-error">
+<span class="sig-name descname"><span class="pre">--report-deprecated-as-error</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-report-deprecated-as-error" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，如果您的代码导入或使用了已弃用的特性，mypy 会发出说明。此标志将此类说明转换为错误，导致 mypy 最终以非零退出代码结束。当特性被标记为 <code class="docutils literal notranslate"><span class="pre">warnings.deprecated</span></code> 时，视为已弃用。</p>
+</dd></dl>
+
+</section>
+<section id="miscellaneous-strictness-flags">
+<span id="id6"></span><h2>其他严格性标志(Miscellaneous strictness flags)<a class="headerlink" href="#miscellaneous-strictness-flags" title="Link to this heading">¶</a></h2>
+<p>本节记录了任何不完全适合上述任何部分的其他标志。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-allow-untyped-globals">
+<span class="sig-name descname"><span class="pre">--allow-untyped-globals</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-allow-untyped-globals" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 抑制由于无法完全推断全局和类变量类型而导致的错误。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-allow-redefinition">
+<span class="sig-name descname"><span class="pre">--allow-redefinition</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-allow-redefinition" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，mypy 不允许用无关类型重新定义变量。此标志允许在某些上下文中使用任意类型重新定义变量：仅允许在与原始定义相同的块和嵌套深度内进行重新定义。以下示例展示了这种情况的有用性：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># &#39;items&#39; 的类型是 list[str]</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
+    <span class="c1"># &#39;items&#39; 现在的类型是 list[list[str]]</span>
+</pre></div>
+</div>
+<p>变量必须在重新定义之前使用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+   <span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;mypy&quot;</span>  <span class="c1"># 无效的重新定义为 str，因为变量尚未使用</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+   <span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;100&quot;</span>  <span class="c1"># 有效，items 现在的类型是 str</span>
+   <span class="n">items</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>  <span class="c1"># 有效，items 现在的类型是 int</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-local-partial-types">
+<span class="sig-name descname"><span class="pre">--local-partial-types</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-local-partial-types" title="Link to this definition">¶</a></dt>
+<dd><p>在 mypy 中，部分类型最常见的情况是使用 <code class="docutils literal notranslate"><span class="pre">None</span></code> 初始化的变量，但没有显式的 <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">|</span> <span class="pre">None</span></code> 注释。默认情况下，mypy 不会检查跨模块顶层或类顶层的部分类型。此标志更改行为，仅允许在本地级别进行部分类型，因此不允许从不同作用域中的两个赋值推断 <code class="docutils literal notranslate"><span class="pre">None</span></code> 的变量类型。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 如果使用 --local-partial-types，这里需要类型注解</span>
+<span class="n">b</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 如果使用 --local-partial-types，这里需要类型注解</span>
+    <span class="n">baz</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>  <span class="c1"># &#39;int | None&#39;，在没有 --local-partial-types 的情况下</span>
+</pre></div>
+</div>
+<p>注意：此选项在 mypy 守护进程中始终隐式启用，并将在未来的 mypy 版本中默认启用。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-implicit-reexport">
+<span class="sig-name descname"><span class="pre">--no-implicit-reexport</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-implicit-reexport" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，导入到模块的值被视为已导出，mypy 允许其他模块导入它们。此标志更改行为，仅在使用 from-as 导入或包含在 <code class="docutils literal notranslate"><span class="pre">__all__</span></code> 中时才重新导出项。注意，这在存根文件中始终视为启用。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 这不会重新导出该值</span>
+<span class="kn">from</span> <span class="nn">foo</span> <span class="kn">import</span> <span class="n">bar</span>
+
+<span class="c1"># 这也不会</span>
+<span class="kn">from</span> <span class="nn">foo</span> <span class="kn">import</span> <span class="n">bar</span> <span class="k">as</span> <span class="n">bang</span>
+
+<span class="c1"># 这将以 bar 重新导出，并允许其他模块导入它</span>
+<span class="kn">from</span> <span class="nn">foo</span> <span class="kn">import</span> <span class="n">bar</span> <span class="k">as</span> <span class="n">bar</span>
+
+<span class="c1"># 这也会重新导出 bar</span>
+<span class="kn">from</span> <span class="nn">foo</span> <span class="kn">import</span> <span class="n">bar</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-strict-equality">
+<span class="sig-name descname"><span class="pre">--strict-equality</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-strict-equality" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，mypy 允许总是为假的比较，例如 <code class="docutils literal notranslate"><span class="pre">42</span> <span class="pre">==</span> <span class="pre">'no'</span></code>。使用此标志禁止此类不同类型的比较，以及类似的身份和容器检查：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="k">if</span> <span class="s1">&#39;some string&#39;</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>  <span class="c1"># 错误：非重叠容器检查!</span>
+    <span class="o">...</span>
+
+<span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+<span class="k">if</span> <span class="n">text</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;other bytes&#39;</span><span class="p">:</span>  <span class="c1"># 错误：非重叠相等检查!</span>
+    <span class="o">...</span>
+
+<span class="k">assert</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># OK，检查 None 被允许作为特殊情况。</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-extra-checks">
+<span class="sig-name descname"><span class="pre">--extra-checks</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-extra-checks" title="Link to this definition">¶</a></dt>
+<dd><p>此标志启用技术上正确但在实际代码中可能不切实际的额外检查。特别是，它禁止在 <code class="docutils literal notranslate"><span class="pre">TypedDict</span></code> 更新中的部分重叠，并使通过 <code class="docutils literal notranslate"><span class="pre">Concatenate</span></code> 预置的参数仅限于位置参数。例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="n">Bar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># 这在技术上是不安全的，因为 foo 可以在运行时具有 Foo 的子类型，</span>
+    <span class="c1"># 其中键 &quot;b&quot; 的类型与 int 不兼容，见下文</span>
+    <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Bad</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">bad</span><span class="p">:</span> <span class="n">Bad</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">}</span>
+<span class="n">test</span><span class="p">(</span><span class="n">bad</span><span class="p">,</span> <span class="n">bar</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-strict">
+<span class="sig-name descname"><span class="pre">--strict</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-strict" title="Link to this definition">¶</a></dt>
+<dd><p>此标志模式启用所有可选错误检查标志。您可以在完整的 <a class="reference internal" href="#cmdoption-mypy-h"><code class="xref std std-option docutils literal notranslate"><span class="pre">mypy</span> <span class="pre">--help</span></code></a> 输出中查看严格模式启用的标志列表。</p>
+<p>注意：通过运行 <a class="reference internal" href="#cmdoption-mypy-strict"><code class="xref std std-option docutils literal notranslate"><span class="pre">--strict</span></code></a> 启用的标志的确切列表可能会随时间而变化。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-disable-error-code">
+<span class="sig-name descname"><span class="pre">--disable-error-code</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-disable-error-code" title="Link to this definition">¶</a></dt>
+<dd><p>此标志允许全局禁用一个或多个错误代码。有关更多信息，请参见 <a class="reference internal" href="error_codes.html#error-codes"><span class="std std-ref">错误代码(Error codes)</span></a>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 无标志</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;a string&#39;</span>
+<span class="n">x</span><span class="o">.</span><span class="n">trim</span><span class="p">()</span>  <span class="c1"># 错误：“str”没有属性“trim”  [attr-defined]</span>
+
+<span class="c1"># 当使用 --disable-error-code attr-defined 时</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;a string&#39;</span>
+<span class="n">x</span><span class="o">.</span><span class="n">trim</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-enable-error-code">
+<span class="sig-name descname"><span class="pre">--enable-error-code</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-enable-error-code" title="Link to this definition">¶</a></dt>
+<dd><p>此标志允许全局启用一个或多个错误代码。有关更多信息，请参见 <a class="reference internal" href="error_codes.html#error-codes"><span class="std std-ref">错误代码(Error codes)</span></a>。</p>
+<p>注意：此标志将覆盖来自 <a class="reference internal" href="#cmdoption-mypy-disable-error-code"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disable-error-code</span></code></a> 标志的禁用错误代码。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 当使用 --disable-error-code attr-defined 时</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;a string&#39;</span>
+<span class="n">x</span><span class="o">.</span><span class="n">trim</span><span class="p">()</span>
+
+<span class="c1"># --disable-error-code attr-defined --enable-error-code attr-defined</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;a string&#39;</span>
+<span class="n">x</span><span class="o">.</span><span class="n">trim</span><span class="p">()</span>  <span class="c1"># 错误：“str”没有属性“trim”  [attr-defined]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="configuring-error-messages">
+<span id="id7"></span><h2>配置错误消息(Configuring error messages)<a class="headerlink" href="#configuring-error-messages" title="Link to this heading">¶</a></h2>
+<p>以下标志允许您调整 mypy 在错误消息中显示的详细程度。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-error-context">
+<span class="sig-name descname"><span class="pre">--show-error-context</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-error-context" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将在所有错误前添加“注释”消息，解释错误的上下文。例如，考虑以下程序：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;bar&quot;</span>
+</pre></div>
+</div>
+<p>Mypy 通常显示的错误消息如下所示:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">operand</span> <span class="n">types</span> <span class="k">for</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;int&quot;</span> <span class="ow">and</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如果启用此标志，错误消息现在如下所示:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>main.py: note: In member &quot;foo&quot; of class &quot;Test&quot;:
+main.py:3: error: Unsupported operand types for + (&quot;int&quot; and &quot;str&quot;)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-column-numbers">
+<span class="sig-name descname"><span class="pre">--show-column-numbers</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-column-numbers" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将向错误消息添加列偏移量。
+例如，以下指示在第 12 行第 9 列的错误
+（注意，列偏移量是 0 基的）:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">9</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">operand</span> <span class="n">types</span> <span class="k">for</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;int&quot;</span> <span class="ow">and</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-error-code-links">
+<span class="sig-name descname"><span class="pre">--show-error-code-links</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-error-code-links" title="Link to this definition">¶</a></dt>
+<dd><p>此标志还将显示指向错误代码文档的链接，链接到 mypy 报告的错误代码。
+相应的错误代码将在文档页面中高亮显示。
+如果启用此标志，错误消息现在如下所示:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">operand</span> <span class="n">types</span> <span class="k">for</span> <span class="o">-</span> <span class="p">(</span><span class="s2">&quot;int&quot;</span> <span class="ow">and</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>  <span class="p">[</span><span class="n">operator</span><span class="p">]</span>
+<span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span> <span class="n">note</span><span class="p">:</span> <span class="n">See</span> <span class="s1">&#39;https://mypy.rtfd.io/en/stable/_refs.html#code-operator&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">info</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-error-end">
+<span class="sig-name descname"><span class="pre">--show-error-end</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-error-end" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 显示错误被检测到的起始位置，以及相关表达式的结束位置。
+这样，各种工具可以轻松突出显示整个错误跨度。格式为
+<code class="docutils literal notranslate"><span class="pre">file:line:column:end_line:end_column</span></code>。此选项隐含
+<code class="docutils literal notranslate"><span class="pre">--show-column-numbers</span></code>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-hide-error-codes">
+<span class="sig-name descname"><span class="pre">--hide-error-codes</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-hide-error-codes" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将从错误消息中隐藏错误代码 <code class="docutils literal notranslate"><span class="pre">[&lt;code&gt;]</span></code>。默认情况下，错误
+代码在每个错误消息后显示:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">prog</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s2">&quot;trim&quot;</span>  <span class="p">[</span><span class="n">attr</span><span class="o">-</span><span class="n">defined</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>有关更多信息，请参见 <a class="reference internal" href="error_codes.html#error-codes"><span class="std std-ref">错误代码(Error codes)</span></a>。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-pretty">
+<span class="sig-name descname"><span class="pre">--pretty</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-pretty" title="Link to this definition">¶</a></dt>
+<dd><p>在错误消息中使用更美观的输出：使用软换行，
+显示源代码片段，并显示错误位置标记。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-color-output">
+<span class="sig-name descname"><span class="pre">--no-color-output</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-color-output" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将禁用错误消息中的颜色输出，默认情况下启用。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-error-summary">
+<span class="sig-name descname"><span class="pre">--no-error-summary</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-error-summary" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将禁用错误摘要。默认情况下，mypy 显示一行摘要
+包括错误总数、包含错误的文件数量和检查的文件数量。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-absolute-path">
+<span class="sig-name descname"><span class="pre">--show-absolute-path</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-absolute-path" title="Link to this definition">¶</a></dt>
+<dd><p>显示文件的绝对路径。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-soft-error-limit">
+<span class="sig-name descname"><span class="pre">--soft-error-limit</span></span><span class="sig-prename descclassname"> <span class="pre">N</span></span><a class="headerlink" href="#cmdoption-mypy-soft-error-limit" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将调整 mypy 在此之后（有时）禁用报告大多数附加错误的限制。仅在似乎
+大多数剩余错误可能不太有用或可能过于嘈杂时，限制才适用。如果 <code class="docutils literal notranslate"><span class="pre">N</span></code> 为负数，则没有限制。默认限制为 -1。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-force-uppercase-builtins">
+<span class="sig-name descname"><span class="pre">--force-uppercase-builtins</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-force-uppercase-builtins" title="Link to this definition">¶</a></dt>
+<dd><p>始终在错误消息中使用 <code class="docutils literal notranslate"><span class="pre">List</span></code> 而不是 <code class="docutils literal notranslate"><span class="pre">list</span></code>，
+即使在 Python 3.9+ 中。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-force-union-syntax">
+<span class="sig-name descname"><span class="pre">--force-union-syntax</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-force-union-syntax" title="Link to this definition">¶</a></dt>
+<dd><p>始终在错误消息中使用 <code class="docutils literal notranslate"><span class="pre">Union[]</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Optional[]</span></code> 表示联合类型
+（而不是 <code class="docutils literal notranslate"><span class="pre">|</span></code> 运算符），
+即使在 Python 3.10+ 中。</p>
+</dd></dl>
+
+</section>
+<section id="incremental-mode">
+<span id="incremental"></span><h2>增量模式(Incremental mode)<a class="headerlink" href="#incremental-mode" title="Link to this heading">¶</a></h2>
+<p>默认情况下，mypy 会将类型信息存储到缓存中。Mypy 将使用这些信息以避免在再次类型检查代码时进行不必要的重新计算。这可以帮助加快类型检查过程，尤其是在自上次 mypy 运行以来，大部分程序部分没有改变的情况下。</p>
+<p>如果您希望加快重新检查代码的速度，超出增量模式所能提供的范围，可以尝试在 <a class="reference internal" href="mypy_daemon.html#mypy-daemon"><span class="std std-ref">daemon mode</span></a> 中运行 mypy。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-no-incremental">
+<span class="sig-name descname"><span class="pre">--no-incremental</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-no-incremental" title="Link to this definition">¶</a></dt>
+<dd><p>此标志禁用增量模式：mypy 将不再在重新运行时引用缓存。</p>
+<p>请注意，即使禁用增量模式，mypy 仍然会写入缓存：有关更多详细信息，请参见下面的 <a class="reference internal" href="#cmdoption-mypy-cache-dir"><code class="xref std std-option docutils literal notranslate"><span class="pre">--cache-dir</span></code></a> 标志。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-cache-dir">
+<span class="sig-name descname"><span class="pre">--cache-dir</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-cache-dir" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，mypy 将所有缓存数据存储在当前目录下名为 <code class="docutils literal notranslate"><span class="pre">.mypy_cache</span></code> 的文件夹中。此标志允许您更改该文件夹。此标志在使用 <a class="reference internal" href="additional_features.html#remote-cache"><span class="std std-ref">remote caching</span></a> 时也可以用于控制缓存的使用。</p>
+<p>如果设置了该选项，则此设置将覆盖 <code class="docutils literal notranslate"><span class="pre">MYPY_CACHE_DIR</span></code> 环境变量。</p>
+<p>即使禁用增量模式，mypy 仍然会始终写入缓存，以便“预热”缓存。要禁用写入缓存，请使用 <code class="docutils literal notranslate"><span class="pre">--cache-dir=/dev/null</span></code> （UNIX）或 <code class="docutils literal notranslate"><span class="pre">--cache-dir=nul</span></code> （Windows）。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-sqlite-cache">
+<span class="sig-name descname"><span class="pre">--sqlite-cache</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-sqlite-cache" title="Link to this definition">¶</a></dt>
+<dd><p>使用 <a class="reference external" href="https://www.sqlite.org/">SQLite</a> 数据库来存储缓存。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-cache-fine-grained">
+<span class="sig-name descname"><span class="pre">--cache-fine-grained</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-cache-fine-grained" title="Link to this definition">¶</a></dt>
+<dd><p>在 mypy 守护进程的缓存中包含细粒度的依赖信息。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-skip-version-check">
+<span class="sig-name descname"><span class="pre">--skip-version-check</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-skip-version-check" title="Link to this definition">¶</a></dt>
+<dd><p>默认情况下，mypy 将忽略由不同版本的 mypy 生成的缓存数据。此标志禁用该行为。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-skip-cache-mtime-checks">
+<span class="sig-name descname"><span class="pre">--skip-cache-mtime-checks</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-skip-cache-mtime-checks" title="Link to this definition">¶</a></dt>
+<dd><p>跳过基于 mtime 的缓存内部一致性检查。</p>
+</dd></dl>
+
+</section>
+<section id="advanced-options">
+<h2>高级选项(Advanced options)<a class="headerlink" href="#advanced-options" title="Link to this heading">¶</a></h2>
+<p>以下标志主要适用于有兴趣开发或调试 mypy 内部的人。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-pdb">
+<span class="sig-name descname"><span class="pre">--pdb</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-pdb" title="Link to this definition">¶</a></dt>
+<dd><p>当 mypy 遇到致命错误时，此标志将调用 Python 调试器。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-show-traceback">
+<span id="cmdoption-mypy-tb"></span><span class="sig-name descname"><span class="pre">--show-traceback</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--tb</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-show-traceback" title="Link to this definition">¶</a></dt>
+<dd><p>如果设置，此标志将在 mypy 遇到致命错误时显示完整的回溯信息。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-raise-exceptions">
+<span class="sig-name descname"><span class="pre">--raise-exceptions</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-raise-exceptions" title="Link to this definition">¶</a></dt>
+<dd><p>在致命错误时引发异常。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-custom-typing-module">
+<span class="sig-name descname"><span class="pre">--custom-typing-module</span></span><span class="sig-prename descclassname"> <span class="pre">MODULE</span></span><a class="headerlink" href="#cmdoption-mypy-custom-typing-module" title="Link to this definition">¶</a></dt>
+<dd><p>此标志允许您使用自定义模块替代 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/typing.html#module-typing" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> 模块。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-custom-typeshed-dir">
+<span class="sig-name descname"><span class="pre">--custom-typeshed-dir</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-custom-typeshed-dir" title="Link to this definition">¶</a></dt>
+<dd><p>此标志指定 mypy 查找标准库 typeshed 存根的目录，而不是与 mypy 一起提供的 typeshed。这主要是为了便于在提交变更之前测试 typeshed 的更改，但也允许您使用一个分叉版本的 typeshed。</p>
+<p>请注意，这不会影响第三方库的存根。要测试第三方存根，例如可以尝试 <code class="docutils literal notranslate"><span class="pre">MYPYPATH=stubs/six</span> <span class="pre">mypy</span> <span class="pre">...</span></code>。</p>
+</dd></dl>
+
+<dl class="std option" id="warn-incomplete-stub">
+<dt class="sig sig-object std" id="cmdoption-mypy-warn-incomplete-stub">
+<span class="sig-name descname"><span class="pre">--warn-incomplete-stub</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-warn-incomplete-stub" title="Link to this definition">¶</a></dt>
+<dd><p>此标志修改 <a class="reference internal" href="#cmdoption-mypy-disallow-untyped-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-untyped-defs</span></code></a> 和
+<a class="reference internal" href="#cmdoption-mypy-disallow-incomplete-defs"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-incomplete-defs</span></code></a> 标志，以便在 typeshed 中缺少类型注解或具有不完整注释时也报告错误。如果两个标志都缺失，<a class="reference internal" href="#cmdoption-mypy-warn-incomplete-stub"><code class="xref std std-option docutils literal notranslate"><span class="pre">--warn-incomplete-stub</span></code></a> 也不会执行任何操作。</p>
+<p>此标志主要供希望贡献 typeshed 的人使用，以便方便地查找缺口和遗漏。</p>
+<p>如果您希望 mypy 在代码库 <em>使用</em> 未类型化的函数时报告错误，无论该函数是否在 typeshed 中定义，请使用 <a class="reference internal" href="#cmdoption-mypy-disallow-untyped-calls"><code class="xref std std-option docutils literal notranslate"><span class="pre">--disallow-untyped-calls</span></code></a> 标志。有关更多详细信息，请参见 <a class="reference internal" href="#untyped-definitions-and-calls"><span class="std std-ref">未类型化的定义和调用(Untyped definitions and calls)</span></a>。</p>
+</dd></dl>
+
+<dl class="std option" id="shadow-file">
+<dt class="sig sig-object std" id="cmdoption-mypy-shadow-file">
+<span class="sig-name descname"><span class="pre">--shadow-file</span></span><span class="sig-prename descclassname"> <span class="pre">SOURCE_FILE</span> <span class="pre">SHADOW_FILE</span></span><a class="headerlink" href="#cmdoption-mypy-shadow-file" title="Link to this definition">¶</a></dt>
+<dd><p>当请求 mypy 对 <code class="docutils literal notranslate"><span class="pre">SOURCE_FILE</span></code> 进行类型检查时，此标志使 mypy 从 <code class="docutils literal notranslate"><span class="pre">SHADOW_FILE</span></code> 读取并进行类型检查。然而，诊断仍将引用 <code class="docutils literal notranslate"><span class="pre">SOURCE_FILE</span></code>。</p>
+<p>多次指定此参数( <code class="docutils literal notranslate"><span class="pre">--shadow-file</span> <span class="pre">X1</span> <span class="pre">Y1</span> <span class="pre">--shadow-file</span> <span class="pre">X2</span> <span class="pre">Y2</span></code> )将允许 mypy 执行多个替换。</p>
+<p>这允许工具创建临时文件并进行有用的修改，而不必直接更改源文件。例如，假设我们有一个管道为某些变量添加 <code class="docutils literal notranslate"><span class="pre">reveal_type</span></code>。这个管道在 <code class="docutils literal notranslate"><span class="pre">original.py</span></code> 上运行以生成 <code class="docutils literal notranslate"><span class="pre">temp.py</span></code>。运行 <code class="docutils literal notranslate"><span class="pre">mypy</span> <span class="pre">--shadow-file</span> <span class="pre">original.py</span> <span class="pre">temp.py</span> <span class="pre">original.py</span></code> 将导致 mypy 对 <code class="docutils literal notranslate"><span class="pre">temp.py</span></code> 的内容进行类型检查，而不是 <code class="docutils literal notranslate"><span class="pre">original.py</span></code>，但错误消息仍将引用 <code class="docutils literal notranslate"><span class="pre">original.py</span></code>。</p>
+</dd></dl>
+
+</section>
+<section id="report-generation">
+<h2>报告生成(Report generation)<a class="headerlink" href="#report-generation" title="Link to this heading">¶</a></h2>
+<p>如果设置了这些标志，mypy 将在指定目录中以指定格式生成报告。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-any-exprs-report">
+<span class="sig-name descname"><span class="pre">--any-exprs-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-any-exprs-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个文本文件报告，记录代码库中存在多少类型为 <code class="docutils literal notranslate"><span class="pre">Any</span></code> 的表达式。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-cobertura-xml-report">
+<span class="sig-name descname"><span class="pre">--cobertura-xml-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-cobertura-xml-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个 Cobertura XML 类型检查覆盖率报告。</p>
+<p>要生成此报告，您必须手动安装 <a class="reference external" href="https://pypi.org/project/lxml/">lxml</a> 库，或指定带有 setuptools 附加项 <code class="docutils literal notranslate"><span class="pre">mypy[reports]</span></code> 的 mypy 安装。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-html-report">
+<span class="sig-name descname"><span class="pre">--html-report</span></span><span class="sig-prename descclassname"> <span class="pre">/</span> <span class="pre">--xslt-html-report</span> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-html-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个 HTML 类型检查覆盖率报告。</p>
+<p>要生成此报告，您必须手动安装 <a class="reference external" href="https://pypi.org/project/lxml/">lxml</a> 库，或指定带有 setuptools 附加项 <code class="docutils literal notranslate"><span class="pre">mypy[reports]</span></code> 的 mypy 安装。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-linecount-report">
+<span class="sig-name descname"><span class="pre">--linecount-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-linecount-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个文本文件报告，记录代码库中已类型化和未类型化的函数及行数。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-linecoverage-report">
+<span class="sig-name descname"><span class="pre">--linecoverage-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-linecoverage-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个 JSON 文件，将每个源文件的绝对文件名映射到该文件中类型化函数所属的行号列表。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-lineprecision-report">
+<span class="sig-name descname"><span class="pre">--lineprecision-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-lineprecision-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个平面文本文件报告，包含每个模块的统计信息，例如有多少行被类型检查等。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-txt-report">
+<span class="sig-name descname"><span class="pre">--txt-report</span></span><span class="sig-prename descclassname"> <span class="pre">/</span> <span class="pre">--xslt-txt-report</span> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-txt-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个文本文件类型检查覆盖率报告。</p>
+<p>要生成此报告，您必须手动安装 <a class="reference external" href="https://pypi.org/project/lxml/">lxml</a> 库，或指定带有 setuptools 附加项 <code class="docutils literal notranslate"><span class="pre">mypy[reports]</span></code> 的 mypy 安装。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-xml-report">
+<span class="sig-name descname"><span class="pre">--xml-report</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-mypy-xml-report" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个 XML 类型检查覆盖率报告。</p>
+<p>要生成此报告，您必须手动安装 <a class="reference external" href="https://pypi.org/project/lxml/">lxml</a> 库，或指定带有 setuptools 附加项 <code class="docutils literal notranslate"><span class="pre">mypy[reports]</span></code> 的 mypy 安装。</p>
+</dd></dl>
+
+</section>
+<section id="enabling-incomplete-experimental-features">
+<h2>启用不完整/实验性功能(Enabling incomplete/experimental features)<a class="headerlink" href="#enabling-incomplete-experimental-features" title="Link to this heading">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-enable-incomplete-feature">
+<span id="cmdoption-mypy-arg-InlineTypedDict"></span><span class="sig-name descname"><span class="pre">--enable-incomplete-feature</span></span><span class="sig-prename descclassname"> <span class="pre">{PreciseTupleTypes</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">InlineTypedDict}</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-enable-incomplete-feature" title="Link to this definition">¶</a></dt>
+<dd><p>某些功能可能需要多个 mypy 版本才能实现，例如由于其复杂性、潜在的向后不兼容性或模糊的语义，这些都需要来自社区的反馈。您可以使用此标志启用这些功能以供早期预览。请注意，并不能保证所有功能最终都会默认启用。在 <em>少数情况下</em>，我们可能决定不继续某些功能。</p>
+</dd></dl>
+
+<p>当前不完整/实验性功能列表：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PreciseTupleTypes</span></code>：此功能将在各种场景中推断更精确的元组类型。在 <span class="target" id="index-5"></span><a class="pep reference external" href="https://peps.python.org/pep-0646/"><strong>PEP 646</strong></a> 添加可变参数类型到 Python 类型系统之前，无法表达像“一个包含至少两个整数的元组”这样的类型。可用的最佳类型是 <code class="docutils literal notranslate"><span class="pre">tuple[int,</span> <span class="pre">...]</span></code>。因此，mypy 对可变长度元组进行了非常宽松的检查。现在，这种类型可以表示为 <code class="docutils literal notranslate"><span class="pre">tuple[int,</span> <span class="pre">int,</span> <span class="pre">*tuple[int,</span> <span class="pre">...]]</span></code>。对于这些更精确的类型（当由用户显式 <em>定义</em> 时），mypy 例如会警告不安全的索引访问，并一般以类型安全的方式处理它们。然而，为了避免现有代码中的问题，mypy 在技术上能够推断这些精确类型时并不会 <em>推断</em> 这些类型。以下是 <code class="docutils literal notranslate"><span class="pre">PreciseTupleTypes</span></code> 推断更精确类型的显著示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="n">more_numbers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">numbers</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">more_numbers</span><span class="p">)</span>
+<span class="c1"># Without PreciseTupleTypes: tuple[int, ...]</span>
+<span class="c1"># With PreciseTupleTypes: tuple[int, *tuple[int, ...], int]</span>
+
+<span class="n">other_numbers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">numbers</span>
+<span class="n">reveal_type</span><span class="p">(</span><span class="n">other_numbers</span><span class="p">)</span>
+<span class="c1"># Without PreciseTupleTypes: tuple[int, ...]</span>
+<span class="c1"># With PreciseTupleTypes: tuple[int, int, *tuple[int, ...]]</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="c1"># Without PreciseTupleTypes: tuple[int, ...]</span>
+    <span class="c1"># With PreciseTupleTypes: tuple[int, int, int, *tuple[int, ...]]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">reveal_type</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="c1"># Without PreciseTupleTypes: tuple[int, ...]</span>
+    <span class="c1"># With PreciseTupleTypes: tuple[()] | tuple[int] | tuple[int, int]</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InlineTypedDict</span></code>：此功能启用非标准语法的内联 <a class="reference internal" href="typed_dict.html#typeddict"><span class="std std-ref">TypedDicts</span></a>，例如：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">}:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="miscellaneous">
+<h2>杂项(Miscellaneous)<a class="headerlink" href="#miscellaneous" title="Link to this heading">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-install-types">
+<span class="sig-name descname"><span class="pre">--install-types</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-install-types" title="Link to this definition">¶</a></dt>
+<dd><p>此标志使 mypy 使用 pip 安装第三方库中已知缺失的存根包。它将显示将要运行的 pip 命令，并在安装任何内容之前期望确认。出于安全原因，这些存根仅限于一小部分经过类型仓库团队验证的手动选择包。这些包仅包含存根文件，不包含可执行代码。</p>
+<p>如果您使用此选项而不提供任何要类型检查的文件或模块，mypy 将安装在上次 mypy 运行期间建议的存根包。如果有要类型检查的文件或模块，mypy 首先对这些文件进行类型检查，并在运行结束时建议安装缺失的存根，但仅在检测到任何缺失模块的情况下。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>这是 mypy 0.900 中的新功能。之前的 mypy 版本包括一系列第三方包存根，而不是单独安装它们。</p>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-non-interactive">
+<span class="sig-name descname"><span class="pre">--non-interactive</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-non-interactive" title="Link to this definition">¶</a></dt>
+<dd><p>当与 <a class="reference internal" href="#cmdoption-mypy-install-types"><code class="xref std std-option docutils literal notranslate"><span class="pre">--install-types</span></code></a> 一起使用时，此选项将导致 mypy 使用 pip 安装所有建议的存根包，而无需确认，然后继续使用已安装的存根进行类型检查，如果提供了一些文件或模块进行检查。</p>
+<p>这在内部实现为最多两次 mypy 运行。第一次运行用于查找缺失的存根包，仅当未找到缺失的存根包时才显示此运行的输出。如果找到缺失的存根包，将进行安装，然后再进行一次运行。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-junit-xml">
+<span class="sig-name descname"><span class="pre">--junit-xml</span></span><span class="sig-prename descclassname"> <span class="pre">JUNIT_XML</span></span><a class="headerlink" href="#cmdoption-mypy-junit-xml" title="Link to this definition">¶</a></dt>
+<dd><p>使 mypy 生成一个包含类型检查结果的 JUnit XML 测试结果文档。这可以使 mypy 更容易与持续集成 (CI) 工具集成。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-find-occurrences">
+<span class="sig-name descname"><span class="pre">--find-occurrences</span></span><span class="sig-prename descclassname"> <span class="pre">CLASS.MEMBER</span></span><a class="headerlink" href="#cmdoption-mypy-find-occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将使 mypy 打印出基于静态类型信息的类成员的所有用法。此功能仍处于实验阶段。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-mypy-scripts-are-modules">
+<span class="sig-name descname"><span class="pre">--scripts-are-modules</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-mypy-scripts-are-modules" title="Link to this definition">¶</a></dt>
+<dd><p>此标志将给出看起来像脚本的命令行参数（即文件名不以 <code class="docutils literal notranslate"><span class="pre">.py</span></code> 结尾），而是从脚本名称派生的模块名称，而不是固定名称 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/__main__.html#module-__main__" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a>。</p>
+<p>这使您可以在一次 mypy 调用中检查多个脚本。（默认的 <a class="reference external" href="https://docs.python.org/zh-cn/3/library/__main__.html#module-__main__" title="（在 Python v3.13）"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a> 从技术上讲更为准确，但如果您有许多导入大型包的脚本，则此标志启用的行为通常更方便。）</p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="config_file.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">mypy 配置文件(mypy configuration file)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="running_mypy.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">运行 mypy 和管理导入(imports)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">mypy命令行(command line)</a><ul>
+<li><a class="reference internal" href="#what-to-type-check">指定类型检查的内容(what to type check)</a></li>
+<li><a class="reference internal" href="#arguments">可选参数(arguments)</a></li>
+<li><a class="reference internal" href="#config-file">配置文件(Config file)</a></li>
+<li><a class="reference internal" href="#import-discovery">导入发现(Import discovery)</a></li>
+<li><a class="reference internal" href="#platform-configuration">平台配置(Platform configuration)</a></li>
+<li><a class="reference internal" href="#disallow-dynamic-typing">禁止动态类型(Disallow dynamic typing)</a></li>
+<li><a class="reference internal" href="#untyped-definitions-and-calls">未类型化的定义和调用(Untyped definitions and calls)</a></li>
+<li><a class="reference internal" href="#none-optional-none-and-optional-handling">None 和 Optional 处理(None and Optional handling)</a></li>
+<li><a class="reference internal" href="#configuring-warnings">配置警告(Configuring warnings)</a></li>
+<li><a class="reference internal" href="#miscellaneous-strictness-flags">其他严格性标志(Miscellaneous strictness flags)</a></li>
+<li><a class="reference internal" href="#configuring-error-messages">配置错误消息(Configuring error messages)</a></li>
+<li><a class="reference internal" href="#incremental-mode">增量模式(Incremental mode)</a></li>
+<li><a class="reference internal" href="#advanced-options">高级选项(Advanced options)</a></li>
+<li><a class="reference internal" href="#report-generation">报告生成(Report generation)</a></li>
+<li><a class="reference internal" href="#enabling-incomplete-experimental-features">启用不完整/实验性功能(Enabling incomplete/experimental features)</a></li>
+<li><a class="reference internal" href="#miscellaneous">杂项(Miscellaneous)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

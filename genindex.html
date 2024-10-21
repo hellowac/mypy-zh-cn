@@ -1,0 +1,2630 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="#" /><link rel="search" title="搜索" href="search.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 --><title>索引 - mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">索引</h1>
+  <div class="genindex-jumpbox"><a href="#符号"><strong>符号</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#X"><strong>X</strong></a></div>
+</section>
+<section id="符号" class="genindex-section">
+  <h2>符号</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    --allow-redefinition
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-allow-redefinition">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --allow-untyped-globals
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-allow-untyped-globals">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --allowlist
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-allowlist">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --always-false
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-always-false">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --always-true
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-always-true">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --any-exprs-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-any-exprs-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --cache-dir
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-cache-dir">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --cache-fine-grained
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-cache-fine-grained">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --callsites
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-callsites">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --check-typeshed
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-check-typeshed">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --check-untyped-defs
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-check-untyped-defs">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --cobertura-xml-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-cobertura-xml-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --command
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-c">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --concise
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-concise">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --config-file
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-config-file">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --custom-typeshed-dir
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-custom-typeshed-dir">mypy命令行选项</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-custom-typeshed-dir">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --custom-typing-module
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-custom-typing-module">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disable-error-code
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disable-error-code">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-any-decorated
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-decorated">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-any-explicit
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-explicit">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-any-expr
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-expr">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-any-generics
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-generics">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-any-unimported
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-unimported">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-incomplete-defs
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-incomplete-defs">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-subclassing-any
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-subclassing-any">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-untyped-calls
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-calls">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-untyped-decorators
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-decorators">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --disallow-untyped-defs
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-defs">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --doc-dir
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-doc-dir">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --enable-error-code
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-enable-error-code">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --enable-incomplete-feature
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-enable-incomplete-feature">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --exclude
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-exclude">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --explicit-package-bases
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-explicit-package-bases">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --export-less
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-export-less">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --export-types
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-export-types">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --extra-checks
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-extra-checks">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --fast-module-lookup
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-fast-module-lookup">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --find-occurrences
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-find-occurrences">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --flex-any
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-flex-any">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --follow-imports
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-follow-imports">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --force-reload
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-force-reload">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --force-union-syntax
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-force-union-syntax">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --force-uppercase-builtins
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-force-uppercase-builtins">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --fswatcher-dump-file
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-fswatcher-dump-file">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --generate-allowlist
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-generate-allowlist">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --help
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-h">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-h">stubgen命令行选项</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-help">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --hide-error-codes
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-hide-error-codes">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --html-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-html-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --ignore-errors
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-ignore-errors">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --ignore-missing-imports
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-ignore-missing-imports">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --ignore-missing-stub
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-missing-stub">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --ignore-positional-only
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-positional-only">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --ignore-unused-allowlist
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-unused-allowlist">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --implicit-optional
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-implicit-optional">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --include-docstrings
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-include-docstrings">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --include-kind
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-kind">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --include-object-attrs
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-object-attrs">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --include-private
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-include-private">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --include-span
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-span">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --inspect-mode
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-inspect-mode">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --install-types
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-install-types">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --json
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-json">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --junit-xml
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-junit-xml">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --limit
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-limit">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --linecount-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-linecount-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --linecoverage-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-linecoverage-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --lineprecision-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-lineprecision-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --local-partial-types
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-local-partial-types">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --log-file
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-log-file">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --max-guesses
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-max-guesses">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --module
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-m">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-m">stubgen命令行选项</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    --mypy-config-file
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-mypy-config-file">stubtest命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-analysis
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-no-analysis">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-any
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-no-any">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-color-output
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-color-output">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-error-summary
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-error-summary">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-errors
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-no-errors">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-implicit-reexport
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-implicit-reexport">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-import
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-no-import">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-incremental
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-incremental">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-namespace-packages
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-namespace-packages">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-silence-site-packages
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-silence-site-packages">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-site-packages
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-site-packages">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-strict-optional
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-strict-optional">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --no-warn-no-return
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-no-warn-no-return">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --non-interactive
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-non-interactive">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --output
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-O">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-o">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --package
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-p">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-p">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --pdb
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-pdb">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --perf-stats-file
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-perf-stats-file">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --platform
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-platform">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --pretty
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-pretty">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --python-executable
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-python-executable">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --python-version
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-python-version">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --quiet
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-q">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --raise-exceptions
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-raise-exceptions">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --remove
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-remove">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --report-deprecated-as-error
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-report-deprecated-as-error">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --scripts-are-modules
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-scripts-are-modules">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --search-path
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-search-path">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --shadow-file
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-shadow-file">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-show">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-absolute-path
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-absolute-path">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-column-numbers
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-column-numbers">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-error-code-links
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-code-links">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-error-context
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-context">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-error-end
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-end">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --show-traceback
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-traceback">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --skip-cache-mtime-checks
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-skip-cache-mtime-checks">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --skip-version-check
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-skip-version-check">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --soft-error-limit
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-soft-error-limit">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --sqlite-cache
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-sqlite-cache">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --status-file
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-status-file">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --strict
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-strict">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --strict-equality
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-strict-equality">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --tb
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-show-traceback">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --timeout
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-timeout">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --txt-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-txt-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --union-attrs
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-union-attrs">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --untyped-calls-exclude
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-untyped-calls-exclude">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --update
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-update">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --use-fixme
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-use-fixme">dmypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --verbose
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-verbose">dmypy命令行选项</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-v">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-v">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --version
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-V">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-incomplete-stub
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-incomplete-stub">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-redundant-casts
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-redundant-casts">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-return-any
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-return-any">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-unreachable
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unreachable">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-unused-configs
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unused-configs">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --warn-unused-ignores
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unused-ignores">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    --xml-report
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-xml-report">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -c
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-c">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -h
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-h">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-h">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -m
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-m">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-m">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -O
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-O">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -o
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-o">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -p
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-p">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-p">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -q
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-q">stubgen命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -V
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-V">mypy命令行选项</a>
+</li>
+        </ul></li>
+        <li>
+    -v
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-v">mypy命令行选项</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-v">stubgen命令行选项</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    allow_redefinition
+
+        <ul>
+          <li><a href="config_file.html#confval-allow_redefinition">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    allow_untyped_globals
+
+        <ul>
+          <li><a href="config_file.html#confval-allow_untyped_globals">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    always_false
+
+        <ul>
+          <li><a href="config_file.html#confval-always_false">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    always_true
+
+        <ul>
+          <li><a href="config_file.html#confval-always_true">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    any_exprs_report
+
+        <ul>
+          <li><a href="config_file.html#confval-any_exprs_report">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    cache_dir
+
+        <ul>
+          <li><a href="config_file.html#confval-cache_dir">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    cache_fine_grained
+
+        <ul>
+          <li><a href="config_file.html#confval-cache_fine_grained">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    check_untyped_defs
+
+        <ul>
+          <li><a href="config_file.html#confval-check_untyped_defs">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    cobertura_xml_report
+
+        <ul>
+          <li><a href="config_file.html#confval-cobertura_xml_report">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    color_output
+
+        <ul>
+          <li><a href="config_file.html#confval-color_output">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    configuration value
+
+        <ul>
+          <li><a href="config_file.html#confval-allow_redefinition">allow_redefinition</a>
+</li>
+          <li><a href="config_file.html#confval-allow_untyped_globals">allow_untyped_globals</a>
+</li>
+          <li><a href="config_file.html#confval-always_false">always_false</a>
+</li>
+          <li><a href="config_file.html#confval-always_true">always_true</a>
+</li>
+          <li><a href="config_file.html#confval-any_exprs_report">any_exprs_report</a>
+</li>
+          <li><a href="config_file.html#confval-cache_dir">cache_dir</a>
+</li>
+          <li><a href="config_file.html#confval-cache_fine_grained">cache_fine_grained</a>
+</li>
+          <li><a href="config_file.html#confval-check_untyped_defs">check_untyped_defs</a>
+</li>
+          <li><a href="config_file.html#confval-cobertura_xml_report">cobertura_xml_report</a>
+</li>
+          <li><a href="config_file.html#confval-color_output">color_output</a>
+</li>
+          <li><a href="config_file.html#confval-custom_typeshed_dir">custom_typeshed_dir</a>
+</li>
+          <li><a href="config_file.html#confval-custom_typing_module">custom_typing_module</a>
+</li>
+          <li><a href="config_file.html#confval-disable_error_code">disable_error_code</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_any_decorated">disallow_any_decorated</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_any_explicit">disallow_any_explicit</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_any_expr">disallow_any_expr</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_any_generics">disallow_any_generics</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_any_unimported">disallow_any_unimported</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_incomplete_defs">disallow_incomplete_defs</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_subclassing_any">disallow_subclassing_any</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_untyped_calls">disallow_untyped_calls</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_untyped_decorators">disallow_untyped_decorators</a>
+</li>
+          <li><a href="config_file.html#confval-disallow_untyped_defs">disallow_untyped_defs</a>
+</li>
+          <li><a href="config_file.html#confval-enable_error_code">enable_error_code</a>
+</li>
+          <li><a href="config_file.html#confval-error_summary">error_summary</a>
+</li>
+          <li><a href="config_file.html#confval-exclude">exclude</a>
+</li>
+          <li><a href="config_file.html#confval-explicit_package_bases">explicit_package_bases</a>
+</li>
+          <li><a href="config_file.html#confval-files">files</a>
+</li>
+          <li><a href="config_file.html#confval-follow_imports">follow_imports</a>
+</li>
+          <li><a href="config_file.html#confval-follow_imports_for_stubs">follow_imports_for_stubs</a>
+</li>
+          <li><a href="config_file.html#confval-force_union_syntax">force_union_syntax</a>
+</li>
+          <li><a href="config_file.html#confval-force_uppercase_builtins">force_uppercase_builtins</a>
+</li>
+          <li><a href="config_file.html#confval-hide_error_codes">hide_error_codes</a>
+</li>
+          <li><a href="config_file.html#confval-html_report-xslt_html_report">html_report / xslt_html_report</a>
+</li>
+          <li><a href="config_file.html#confval-ignore_errors">ignore_errors</a>
+</li>
+          <li><a href="config_file.html#confval-ignore_missing_imports">ignore_missing_imports</a>
+</li>
+          <li><a href="config_file.html#confval-implicit_optional">implicit_optional</a>
+</li>
+          <li><a href="config_file.html#confval-implicit_reexport">implicit_reexport</a>
+</li>
+          <li><a href="config_file.html#confval-incremental">incremental</a>
+</li>
+          <li><a href="config_file.html#confval-junit_xml">junit_xml</a>
+</li>
+          <li><a href="config_file.html#confval-linecount_report">linecount_report</a>
+</li>
+          <li><a href="config_file.html#confval-linecoverage_report">linecoverage_report</a>
+</li>
+          <li><a href="config_file.html#confval-lineprecision_report">lineprecision_report</a>
+</li>
+          <li><a href="config_file.html#confval-local_partial_types">local_partial_types</a>
+</li>
+          <li><a href="config_file.html#confval-modules">modules</a>
+</li>
+          <li><a href="config_file.html#confval-mypy_path">mypy_path</a>
+</li>
+          <li><a href="config_file.html#confval-namespace_packages">namespace_packages</a>
+</li>
+          <li><a href="config_file.html#confval-no_silence_site_packages">no_silence_site_packages</a>
+</li>
+          <li><a href="config_file.html#confval-no_site_packages">no_site_packages</a>
+</li>
+          <li><a href="config_file.html#confval-packages">packages</a>
+</li>
+          <li><a href="config_file.html#confval-pdb">pdb</a>
+</li>
+          <li><a href="config_file.html#confval-platform">platform</a>
+</li>
+          <li><a href="config_file.html#confval-plugins">plugins</a>
+</li>
+          <li><a href="config_file.html#confval-pretty">pretty</a>
+</li>
+          <li><a href="config_file.html#confval-python_executable">python_executable</a>
+</li>
+          <li><a href="config_file.html#confval-python_version">python_version</a>
+</li>
+          <li><a href="config_file.html#confval-raise_exceptions">raise_exceptions</a>
+</li>
+          <li><a href="config_file.html#confval-scripts_are_modules">scripts_are_modules</a>
+</li>
+          <li><a href="config_file.html#confval-show_absolute_path">show_absolute_path</a>
+</li>
+          <li><a href="config_file.html#confval-show_column_numbers">show_column_numbers</a>
+</li>
+          <li><a href="config_file.html#confval-show_error_code_links">show_error_code_links</a>
+</li>
+          <li><a href="config_file.html#confval-show_error_context">show_error_context</a>
+</li>
+          <li><a href="config_file.html#confval-show_traceback">show_traceback</a>
+</li>
+          <li><a href="config_file.html#confval-skip_cache_mtime_checks">skip_cache_mtime_checks</a>
+</li>
+          <li><a href="config_file.html#confval-skip_version_check">skip_version_check</a>
+</li>
+          <li><a href="config_file.html#confval-sqlite_cache">sqlite_cache</a>
+</li>
+          <li><a href="config_file.html#confval-strict">strict</a>
+</li>
+          <li><a href="config_file.html#confval-strict_concatenate">strict_concatenate</a>
+</li>
+          <li><a href="config_file.html#confval-strict_equality">strict_equality</a>
+</li>
+          <li><a href="config_file.html#confval-strict_optional">strict_optional</a>
+</li>
+          <li><a href="config_file.html#confval-txt_report-xslt_txt_report">txt_report / xslt_txt_report</a>
+</li>
+          <li><a href="config_file.html#confval-untyped_calls_exclude">untyped_calls_exclude</a>
+</li>
+          <li><a href="config_file.html#confval-verbosity">verbosity</a>
+</li>
+          <li><a href="config_file.html#confval-warn_incomplete_stub">warn_incomplete_stub</a>
+</li>
+          <li><a href="config_file.html#confval-warn_no_return">warn_no_return</a>
+</li>
+          <li><a href="config_file.html#confval-warn_redundant_casts">warn_redundant_casts</a>
+</li>
+          <li><a href="config_file.html#confval-warn_return_any">warn_return_any</a>
+</li>
+          <li><a href="config_file.html#confval-warn_unreachable">warn_unreachable</a>
+</li>
+          <li><a href="config_file.html#confval-warn_unused_configs">warn_unused_configs</a>
+</li>
+          <li><a href="config_file.html#confval-warn_unused_ignores">warn_unused_ignores</a>
+</li>
+          <li><a href="config_file.html#confval-xml_report">xml_report</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    custom_typeshed_dir
+
+        <ul>
+          <li><a href="config_file.html#confval-custom_typeshed_dir">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    custom_typing_module
+
+        <ul>
+          <li><a href="config_file.html#confval-custom_typing_module">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    disable_error_code
+
+        <ul>
+          <li><a href="config_file.html#confval-disable_error_code">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_any_decorated
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_any_decorated">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_any_explicit
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_any_explicit">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_any_expr
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_any_expr">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_any_generics
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_any_generics">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_any_unimported
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_any_unimported">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_incomplete_defs
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_incomplete_defs">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_subclassing_any
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_subclassing_any">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_untyped_calls
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_untyped_calls">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_untyped_decorators
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_untyped_decorators">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    disallow_untyped_defs
+
+        <ul>
+          <li><a href="config_file.html#confval-disallow_untyped_defs">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    dmypy命令行选项
+
+        <ul>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-callsites">--callsites</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-export-types">--export-types</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-flex-any">--flex-any</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-force-reload">--force-reload</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-fswatcher-dump-file">--fswatcher-dump-file</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-kind">--include-kind</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-object-attrs">--include-object-attrs</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-include-span">--include-span</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-json">--json</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-limit">--limit</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-log-file">--log-file</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-max-guesses">--max-guesses</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-no-any">--no-any</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-no-errors">--no-errors</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-perf-stats-file">--perf-stats-file</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-remove">--remove</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-show">--show</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-status-file">--status-file</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-timeout">--timeout</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-union-attrs">--union-attrs</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-update">--update</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-use-fixme">--use-fixme</a>
+</li>
+          <li><a href="mypy_daemon.html#cmdoption-dmypy-verbose">--verbose</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    enable_error_code
+
+        <ul>
+          <li><a href="config_file.html#confval-enable_error_code">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    error_summary
+
+        <ul>
+          <li><a href="config_file.html#confval-error_summary">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    exclude
+
+        <ul>
+          <li><a href="config_file.html#confval-exclude">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    explicit_package_bases
+
+        <ul>
+          <li><a href="config_file.html#confval-explicit_package_bases">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    files
+
+        <ul>
+          <li><a href="config_file.html#confval-files">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    follow_imports
+
+        <ul>
+          <li><a href="config_file.html#confval-follow_imports">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    follow_imports_for_stubs
+
+        <ul>
+          <li><a href="config_file.html#confval-follow_imports_for_stubs">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    force_union_syntax
+
+        <ul>
+          <li><a href="config_file.html#confval-force_union_syntax">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    force_uppercase_builtins
+
+        <ul>
+          <li><a href="config_file.html#confval-force_uppercase_builtins">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    hide_error_codes
+
+        <ul>
+          <li><a href="config_file.html#confval-hide_error_codes">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    html_report / xslt_html_report
+
+        <ul>
+          <li><a href="config_file.html#confval-html_report-xslt_html_report">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    ignore_errors
+
+        <ul>
+          <li><a href="config_file.html#confval-ignore_errors">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    ignore_missing_imports
+
+        <ul>
+          <li><a href="config_file.html#confval-ignore_missing_imports">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    implicit_optional
+
+        <ul>
+          <li><a href="config_file.html#confval-implicit_optional">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    implicit_reexport
+
+        <ul>
+          <li><a href="config_file.html#confval-implicit_reexport">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    incremental
+
+        <ul>
+          <li><a href="config_file.html#confval-incremental">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    InlineTypedDict}
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-enable-incomplete-feature">mypy命令行选项</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    junit_xml
+
+        <ul>
+          <li><a href="config_file.html#confval-junit_xml">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    linecount_report
+
+        <ul>
+          <li><a href="config_file.html#confval-linecount_report">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    linecoverage_report
+
+        <ul>
+          <li><a href="config_file.html#confval-linecoverage_report">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    lineprecision_report
+
+        <ul>
+          <li><a href="config_file.html#confval-lineprecision_report">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    local_partial_types
+
+        <ul>
+          <li><a href="config_file.html#confval-local_partial_types">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    modules
+
+        <ul>
+          <li><a href="config_file.html#confval-modules">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    mypy_path
+
+        <ul>
+          <li><a href="config_file.html#confval-mypy_path">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    mypy命令行选项
+
+        <ul>
+          <li><a href="command_line.html#cmdoption-mypy-allow-redefinition">--allow-redefinition</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-allow-untyped-globals">--allow-untyped-globals</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-always-false">--always-false</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-always-true">--always-true</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-any-exprs-report">--any-exprs-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-cache-dir">--cache-dir</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-cache-fine-grained">--cache-fine-grained</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-check-untyped-defs">--check-untyped-defs</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-cobertura-xml-report">--cobertura-xml-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-c">--command</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-config-file">--config-file</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-custom-typeshed-dir">--custom-typeshed-dir</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-custom-typing-module">--custom-typing-module</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disable-error-code">--disable-error-code</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-decorated">--disallow-any-decorated</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-explicit">--disallow-any-explicit</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-expr">--disallow-any-expr</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-generics">--disallow-any-generics</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-any-unimported">--disallow-any-unimported</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-incomplete-defs">--disallow-incomplete-defs</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-subclassing-any">--disallow-subclassing-any</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-calls">--disallow-untyped-calls</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-decorators">--disallow-untyped-decorators</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-disallow-untyped-defs">--disallow-untyped-defs</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-enable-error-code">--enable-error-code</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-enable-incomplete-feature">--enable-incomplete-feature</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-exclude">--exclude</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-explicit-package-bases">--explicit-package-bases</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-extra-checks">--extra-checks</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-fast-module-lookup">--fast-module-lookup</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-find-occurrences">--find-occurrences</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-follow-imports">--follow-imports</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-force-union-syntax">--force-union-syntax</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-force-uppercase-builtins">--force-uppercase-builtins</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-h">--help</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-hide-error-codes">--hide-error-codes</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-html-report">--html-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-ignore-missing-imports">--ignore-missing-imports</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-implicit-optional">--implicit-optional</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-install-types">--install-types</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-junit-xml">--junit-xml</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-linecount-report">--linecount-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-linecoverage-report">--linecoverage-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-lineprecision-report">--lineprecision-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-local-partial-types">--local-partial-types</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-m">--module</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-color-output">--no-color-output</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-error-summary">--no-error-summary</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-implicit-reexport">--no-implicit-reexport</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-incremental">--no-incremental</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-namespace-packages">--no-namespace-packages</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-silence-site-packages">--no-silence-site-packages</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-site-packages">--no-site-packages</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-strict-optional">--no-strict-optional</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-no-warn-no-return">--no-warn-no-return</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-non-interactive">--non-interactive</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-O">--output</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-p">--package</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-pdb">--pdb</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-platform">--platform</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-pretty">--pretty</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-python-executable">--python-executable</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-python-version">--python-version</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-raise-exceptions">--raise-exceptions</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-report-deprecated-as-error">--report-deprecated-as-error</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-scripts-are-modules">--scripts-are-modules</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-shadow-file">--shadow-file</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-absolute-path">--show-absolute-path</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-column-numbers">--show-column-numbers</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-code-links">--show-error-code-links</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-context">--show-error-context</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-error-end">--show-error-end</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-traceback">--show-traceback</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-skip-cache-mtime-checks">--skip-cache-mtime-checks</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-skip-version-check">--skip-version-check</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-soft-error-limit">--soft-error-limit</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-sqlite-cache">--sqlite-cache</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-strict">--strict</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-strict-equality">--strict-equality</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-show-traceback">--tb</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-txt-report">--txt-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-untyped-calls-exclude">--untyped-calls-exclude</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-v">--verbose</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-V">--version</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-incomplete-stub">--warn-incomplete-stub</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-redundant-casts">--warn-redundant-casts</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-return-any">--warn-return-any</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unreachable">--warn-unreachable</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unused-configs">--warn-unused-configs</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-warn-unused-ignores">--warn-unused-ignores</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-xml-report">--xml-report</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-c">-c</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-h">-h</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-m">-m</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-O">-O</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-p">-p</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-v">-v</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-V">-V</a>
+</li>
+          <li><a href="command_line.html#cmdoption-mypy-enable-incomplete-feature">InlineTypedDict}</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    namespace_packages
+
+        <ul>
+          <li><a href="config_file.html#confval-namespace_packages">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    no_silence_site_packages
+
+        <ul>
+          <li><a href="config_file.html#confval-no_silence_site_packages">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    no_site_packages
+
+        <ul>
+          <li><a href="config_file.html#confval-no_site_packages">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    packages
+
+        <ul>
+          <li><a href="config_file.html#confval-packages">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    pdb
+
+        <ul>
+          <li><a href="config_file.html#confval-pdb">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    platform
+
+        <ul>
+          <li><a href="config_file.html#confval-platform">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    plugins
+
+        <ul>
+          <li><a href="config_file.html#confval-plugins">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    pretty
+
+        <ul>
+          <li><a href="config_file.html#confval-pretty">configuration value</a>
+</li>
+        </ul></li>
+        <li><a href="command_line.html#index-3">Python 增强建议；PEP 420</a>, <a href="config_file.html#index-0">[1]</a>
+</li>
+        <li><a href="error_code_list.html#index-0">Python 增强建议；PEP 484</a>, <a href="extending_mypy.html#index-0">[1]</a>, <a href="extending_mypy.html#index-1">[2]</a>, <a href="extending_mypy.html#index-2">[3]</a>, <a href="index.html#index-0">[4]</a>, <a href="stubgen.html#index-0">[5]</a>
+</li>
+        <li><a href="more_types.html#index-0">Python 增强建议；PEP 484#function-method-overloading</a>
+</li>
+        <li><a href="kinds_of_types.html#index-1">Python 增强建议；PEP 484#the-type-of-class-objects</a>, <a href="kinds_of_types.html#index-2">[1]</a>
+</li>
+        <li><a href="generics.html#index-2">Python 增强建议；PEP 484#type-aliases</a>
+</li>
+        <li><a href="more_types.html#index-1">Python 增强建议；PEP 492</a>
+</li>
+        <li><a href="runtime_troubles.html#index-4">Python 增强建议；PEP 508</a>
+</li>
+        <li><a href="more_types.html#index-2">Python 增强建议；PEP 525</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="faq.html#index-0">Python 增强建议；PEP 544</a>, <a href="protocols.html#index-0">[1]</a>
+</li>
+        <li><a href="generics.html#index-1">Python 增强建议；PEP 544#generic-protocols</a>
+</li>
+        <li><a href="additional_features.html#index-0">Python 增强建议；PEP 557</a>
+</li>
+        <li><a href="command_line.html#index-0">Python 增强建议；PEP 561</a>, <a href="command_line.html#index-1">[1]</a>, <a href="command_line.html#index-2">[2]</a>, <a href="command_line.html#index-4">[3]</a>, <a href="config_file.html#index-1">[4]</a>, <a href="config_file.html#index-2">[5]</a>, <a href="installed_packages.html#index-0">[6]</a>, <a href="installed_packages.html#index-2">[7]</a>, <a href="running_mypy.html#index-0">[8]</a>, <a href="stubs.html#index-0">[9]</a>
+</li>
+        <li><a href="installed_packages.html#index-1">Python 增强建议；PEP 561#stub-only-packages</a>
+</li>
+        <li><a href="runtime_troubles.html#index-0">Python 增强建议；PEP 563</a>
+</li>
+        <li><a href="runtime_troubles.html#index-2">Python 增强建议；PEP 585</a>
+</li>
+        <li><a href="runtime_troubles.html#index-1">Python 增强建议；PEP 604</a>, <a href="runtime_troubles.html#index-3">[1]</a>
+</li>
+        <li><a href="common_issues.html#index-0">Python 增强建议；PEP 613</a>, <a href="kinds_of_types.html#index-0">[1]</a>
+</li>
+        <li><a href="command_line.html#index-5">Python 增强建议；PEP 646</a>
+</li>
+        <li><a href="type_narrowing.html#index-0">Python 增强建议；PEP 647</a>, <a href="type_narrowing.html#index-1">[1]</a>
+</li>
+        <li><a href="error_code_list2.html#index-0">Python 增强建议；PEP 673</a>, <a href="generics.html#index-0">[1]</a>
+</li>
+        <li><a href="typed_dict.html#index-0">Python 增强建议；PEP 705</a>
+</li>
+        <li><a href="error_code_list2.html#index-1">Python 增强建议；PEP 742</a>, <a href="type_narrowing.html#index-2">[1]</a>
+</li>
+        <li>
+    python_executable
+
+        <ul>
+          <li><a href="config_file.html#confval-python_executable">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    python_version
+
+        <ul>
+          <li><a href="config_file.html#confval-python_version">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    raise_exceptions
+
+        <ul>
+          <li><a href="config_file.html#confval-raise_exceptions">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    scripts_are_modules
+
+        <ul>
+          <li><a href="config_file.html#confval-scripts_are_modules">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    show_absolute_path
+
+        <ul>
+          <li><a href="config_file.html#confval-show_absolute_path">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    show_column_numbers
+
+        <ul>
+          <li><a href="config_file.html#confval-show_column_numbers">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    show_error_code_links
+
+        <ul>
+          <li><a href="config_file.html#confval-show_error_code_links">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    show_error_context
+
+        <ul>
+          <li><a href="config_file.html#confval-show_error_context">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    show_traceback
+
+        <ul>
+          <li><a href="config_file.html#confval-show_traceback">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    skip_cache_mtime_checks
+
+        <ul>
+          <li><a href="config_file.html#confval-skip_cache_mtime_checks">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    skip_version_check
+
+        <ul>
+          <li><a href="config_file.html#confval-skip_version_check">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    sqlite_cache
+
+        <ul>
+          <li><a href="config_file.html#confval-sqlite_cache">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    strict
+
+        <ul>
+          <li><a href="config_file.html#confval-strict">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    strict_concatenate
+
+        <ul>
+          <li><a href="config_file.html#confval-strict_concatenate">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    strict_equality
+
+        <ul>
+          <li><a href="config_file.html#confval-strict_equality">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    strict_optional
+
+        <ul>
+          <li><a href="config_file.html#confval-strict_optional">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    stubgen命令行选项
+
+        <ul>
+          <li><a href="stubgen.html#cmdoption-stubgen-doc-dir">--doc-dir</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-export-less">--export-less</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-h">--help</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-ignore-errors">--ignore-errors</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-include-docstrings">--include-docstrings</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-include-private">--include-private</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-inspect-mode">--inspect-mode</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-m">--module</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-no-analysis">--no-analysis</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-no-import">--no-import</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-o">--output</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-p">--package</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-q">--quiet</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-search-path">--search-path</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-v">--verbose</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-h">-h</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-m">-m</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-o">-o</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-p">-p</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-q">-q</a>
+</li>
+          <li><a href="stubgen.html#cmdoption-stubgen-v">-v</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    stubtest命令行选项
+
+        <ul>
+          <li><a href="stubtest.html#cmdoption-stubtest-allowlist">--allowlist</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-check-typeshed">--check-typeshed</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-concise">--concise</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-custom-typeshed-dir">--custom-typeshed-dir</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-generate-allowlist">--generate-allowlist</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-help">--help</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-missing-stub">--ignore-missing-stub</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-positional-only">--ignore-positional-only</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-ignore-unused-allowlist">--ignore-unused-allowlist</a>
+</li>
+          <li><a href="stubtest.html#cmdoption-stubtest-mypy-config-file">--mypy-config-file</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    txt_report / xslt_txt_report
+
+        <ul>
+          <li><a href="config_file.html#confval-txt_report-xslt_txt_report">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    untyped_calls_exclude
+
+        <ul>
+          <li><a href="config_file.html#confval-untyped_calls_exclude">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    verbosity
+
+        <ul>
+          <li><a href="config_file.html#confval-verbosity">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    warn_incomplete_stub
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_incomplete_stub">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    warn_no_return
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_no_return">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    warn_redundant_casts
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_redundant_casts">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    warn_return_any
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_return_any">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    warn_unreachable
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_unreachable">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    warn_unused_configs
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_unused_configs">configuration value</a>
+</li>
+        </ul></li>
+        <li>
+    warn_unused_ignores
+
+        <ul>
+          <li><a href="config_file.html#confval-warn_unused_ignores">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="X" class="genindex-section">
+  <h2>X</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    xml_report
+
+        <ul>
+          <li><a href="config_file.html#confval-xml_report">configuration value</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

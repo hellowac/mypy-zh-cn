@@ -1,0 +1,826 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="入门" href="getting_started.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="#"><div class="brand">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mypy_light.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mypy 1.13.0+dev.8a8d58c8ce71cf4aa7a622681da888eeb514a8b3 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a></li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">项目链接</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/python/mypy">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://mypy-lang.org/">Website</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/blob/master/docs/source/index.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/python/mypy/edit/master/docs/source/index.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="mypy">
+<h1>欢迎来到 mypy 文档!<a class="headerlink" href="#mypy" title="Link to this heading">¶</a></h1>
+<p>Mypy 是一个用于 Python 的静态类型检查器。</p>
+<p>类型检查器帮助确保您在代码中正确使用变量和函数。通过 mypy，您可以为 Python 程序添加类型提示（<span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a>），当您不正确地使用这些类型时，mypy 将发出警告。</p>
+<p>Python 是一种动态语言，因此通常只有在尝试运行代码时才能看到错误。Mypy 是一个 <em>静态</em> 检查器，因此它能够在不运行程序的情况下发现程序中的错误!</p>
+<p>这里有一个小例子来激发您的兴趣：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">number</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;你最喜欢的数字是什么？&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;它是&quot;</span><span class="p">,</span> <span class="n">number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 错误：不支持的操作数类型用于 + (&quot;str&quot; 和 &quot;int&quot;)</span>
+</pre></div>
+</div>
+<p>为 mypy 添加类型提示不会干扰程序的运行方式。可以将类型提示视为类似于注释!即使 mypy 报告错误，您仍然可以使用 Python 解释器运行代码。</p>
+<p>Mypy 的设计考虑到了渐进式类型。这意味着您可以逐步为代码库添加类型提示，并且在静态类型不方便时，您始终可以回退到动态类型。</p>
+<p>Mypy 具有强大且易于使用的类型系统，支持类型推断、泛型、可调用类型、元组类型、联合类型、结构性子类型等功能。使用 mypy 将使您的程序更易于理解、调试和维护。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>尽管 mypy 已经准备好用于生产，但偶尔可能会有更改导致向后兼容性中断。mypy 开发团队会尽量减少对用户代码的影响。如果出现重大向后不兼容的更改，mypy 的主要版本号将被提高。</p>
+</div>
+<section id="id1">
+<h2>内容<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">入门</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#mypy">安装和运行 mypy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#getting-started-dynamic-vs-static">动态与静态类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id3">严格模式与配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id4">更复杂的类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id5">局部类型推断</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id6">来自库的类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id7">下一步</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cheat_sheet_py3.html">类型提示备忘单</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id2">变量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id3">有用的内置类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id4">函数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id5">类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id6">当你感到困惑或情况复杂时</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#duck-types">标准“鸭子类型(duck types)”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id7">前向引用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#id8">装饰器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheat_sheet_py3.html#asyncio">协程与 asyncio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="existing_code.html">在现有代码库中使用 mypy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id1">从小处着手</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id2">确保 mypy 一致运行并防止回归</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id3">忽略特定模块的错误</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id4">修复与导入相关的错误</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id5">优先为广泛导入的模块添加注释</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id6">在编写代码时逐步添加注释</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id7">自动化旧代码的注释</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#getting-to-strict">引入更严格的选项</a></li>
+<li class="toctree-l2"><a class="reference internal" href="existing_code.html#id9">加快 mypy 运行速度</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound" id="overview-type-system-reference">
+<p class="caption" role="heading"><span class="caption-text">类型系统参考</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_types.html">内置类型(Built-in)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builtin_types.html#id1">简单类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_types.html#id2">任意类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_types.html#id3">泛型类型</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="type_inference_and_annotations.html">类型推断和类型注解(annotations)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#id1">类型推断</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#explicit-var-types">显式变量类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#id3">显式集合类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#id4">容器类型的兼容性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#id5">类型推断中的上下文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_inference_and_annotations.html#silencing-type-errors">静默类型错误</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kinds_of_types.html">类型的种类(kinds)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#class">Class 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#any">Any 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#tuple">Tuple 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#callable-lambdas">Callable 类型（以及 lambdas）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#union">Union 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#optional-none">Optional 和 None 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#type-aliases">Type 别名(aliases)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#named-tuples">Named tuples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#type-of-class">类对象的类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kinds_of_types.html#generators">生成器(Generators)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="class_basics.html">Class 基础(basics)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#id2">实例和类属性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#init">注解 __init__ 方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#classvar">类属性注解(ClassVar)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#override">重写静态类型方法(override)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#abstract">抽象基类和多重继承(Abstract)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="class_basics.html#slots">槽（Slots）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="runtime_troubles.html">运行时的注解问题(Annotation issues)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#literal">字符串字面量类型和类型注解(literal)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#futrue-pep-563">未来(Futrue)的注解导入(PEP 563)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#typing-type-checking">typing.TYPE_CHECKING</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#forward-references">类名的前向引用(forward references)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#import-cycles">导入循环(Import cycles)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#not-generic-runtime">在存根中是泛型但运行时不是的类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#id5">使用在存根中定义但运行时不存在的类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#generic-builtins">使用泛型内置类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#x-y">使用 X | Y 语法表示联合类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime_troubles.html#typing">使用 typing 模块的新特性</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">协议(Protocol)与结构化子类型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#protocols">预定义协议(protocols)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#id1">简单的用户自定义协议(protocols)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#id2">定义子协议和协议子类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#invariance">协议属性的不变性(Invariance)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#recursive">递归协议(Recursive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#isinstance">使用 isinstance() 与协议</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#callback">回调协议(Callback)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html#predefined-protocols-reference">预定义协议参考(Predefined protocols)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_typing.html">动态类型代码(Dynamically)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_typing.html#any">对 Any 值的操作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_typing.html#any-object">Any 与 object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="type_narrowing.html">类型缩小(narrowing)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#expressions">类型缩小表达式(expressions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#casts">Casts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#user-defined-type-guards">User-Defined Type Guards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#id2">用户定义的类型保护(Type Guards)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#limitations">局限性(Limitations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_narrowing.html#typeis">TypeIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="duck_type_compatibility.html">鸭子类型兼容性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stubs.html">存根文件(Stub)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stubs.html#id1">创建存根文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubs.html#syntax">存根文件语法(syntax)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubs.html#runtime">在运行时使用存根文件语法(runtime)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="generics.html">泛型(Generics)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#generic-classes">定义泛型类(generic classes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#subclasses">定义泛型类的子类(subclasses)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#functions">泛型函数(functions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#type-variables">具有上界的类型变量(Type variables)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#self">泛型方法和泛型 self</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#typing-self-self">使用 typing.Self 自动注解 self 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#variance">泛型类型的变体(Variance)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#type-variable-value-restriction">带值限制的类型变量(Type variables)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#decorators">声明装饰器(decorators)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#protocols">泛型协议(protocols)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#aliases">泛型类型别名(aliases)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#differences">新旧语法之间的差异(Differences)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generics.html#internals">泛型类的内部机制(internals)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="more_types.html">更多类型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="more_types.html#noreturn">NoReturn 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more_types.html#newtypes">NewTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more_types.html#overload">函数重载(overload)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more_types.html#self-self-types">self类型的高级用法(self-types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more_types.html#async-await-typing">async/await 注解(Typing)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="literal_types.html">字面量类型(Literal types)和枚举(Enums)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="literal_types.html#literal-types">字面量类型(Literal types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literal_types.html#enums">枚举(Enums)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="typed_dict.html">TypedDict</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#totality">Totality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#supported-operations">Supported operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#id2">完整性(Totality)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#id3">支持的操作(Supported operations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#class-based">基于类的语法(Class-based)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#mixing">混合必须和非必须项(Mixing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#read-only">只读项(Read-only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#typeddicts-unions">TypedDicts的联合(Unions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typed_dict.html#typeddict-inline">内联TypedDict类型(Inline)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="final_attrs.html">最终名称, 方法和类(Final)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="final_attrs.html#final-names">最终名称(Final names)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="final_attrs.html#final-methods">最终方法(Final methods)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="final_attrs.html#final-classes">最终类(Final classes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metaclasses.html">元类(Metaclasses)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metaclasses.html#defining">定义元类(Defining)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metaclasses.html#example">元类使用示例(example)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metaclasses.html#gotchas-and-limitations">元类支持的陷阱和限制(Gotchas and limitations)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">配置和运行 mypy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="running_mypy.html">运行 mypy 和管理导入(imports)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#specifying">指定要检查的代码(Specifying)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#a-list-of-files">从文件读取文件列表(a list of files)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#module-mapping">映射文件路径到到模块(module mapping)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#mypy-handles-imports">mypy 如何处理导入(handles imports)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#missing-imports">缺失导入(Missing imports)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#found-import">如何发现导入(found import)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_mypy.html#following-imports">跟踪导入(Following imports)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">mypy命令行(command line)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#what-to-type-check">指定类型检查的内容(what to type check)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#arguments">可选参数(arguments)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#config-file">配置文件(Config file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#import-discovery">导入发现(Import discovery)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#platform-configuration">平台配置(Platform configuration)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#disallow-dynamic-typing">禁止动态类型(Disallow dynamic typing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#untyped-definitions-and-calls">未类型化的定义和调用(Untyped definitions and calls)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#none-optional-none-and-optional-handling">None 和 Optional 处理(None and Optional handling)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#configuring-warnings">配置警告(Configuring warnings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#miscellaneous-strictness-flags">其他严格性标志(Miscellaneous strictness flags)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#configuring-error-messages">配置错误消息(Configuring error messages)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#incremental-mode">增量模式(Incremental mode)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#advanced-options">高级选项(Advanced options)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#report-generation">报告生成(Report generation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#enabling-incomplete-experimental-features">启用不完整/实验性功能(Enabling incomplete/experimental features)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line.html#miscellaneous">杂项(Miscellaneous)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">mypy 配置文件(mypy configuration file)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#config-file-format">配置文件格式(Config file format)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#per-module-and-global-options">单个模块和全局选项(Per-module and global options)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#inverting-option-values">反转选项值(Inverting option values)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#mypy-ini-example"><code class="docutils literal notranslate"><span class="pre">mypy.ini</span></code> 示例 (Example)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#import-discovery">导入发现(Import discovery)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#platform-configuration">平台配置(Platform configuration)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#disallow-dynamic-typing">禁止动态类型(Disallow dynamic typing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#untyped-definitions-and-calls">未类型定义和调用(Untyped definitions and calls)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#none-optional-none-and-optional-handling">None 和 Optional 处理(None and Optional handling)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#configuring-warnings">配置警告(Configuring warnings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#suppressing-errors">抑制错误(Suppressing errors)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#miscellaneous-strictness-flags">其他严格性标志(Miscellaneous strictness flags)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#configuring-error-messages">配置错误消息(Configuring error messages)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#incremental-mode">增量模式(Incremental mode)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#advanced-options">高级选项(Advanced options)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#report-generation">报告生成(Report generation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#miscellaneous">其他(Miscellaneous)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#pyproject-toml-using-a-pyproject-toml-file">使用 pyproject.toml 文件(Using a pyproject.toml file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file.html#pyproject-toml-example">pyproject.toml 示例(Example)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inline_config.html">内联配置(Inline configuration)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inline_config.html#configuration-comment-format">配置注释格式(Configuration comment format)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mypy_daemon.html">Mypy 守护进程 (mypy 服务)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mypy_daemon.html#basic-usage">基本用法(Basic usage)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mypy_daemon.html#daemon-client-commands">守护进程客户端命令(Daemon client commands)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mypy_daemon.html#additional-daemon-flags">附加守护进程标志(Additional daemon flags)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mypy_daemon.html#static-inference-of-annotations">静态推断注解(Static inference of annotations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mypy_daemon.html#statically-inspect-expressions">静态检查表达式(Statically inspect expressions)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installed_packages.html">使用已安装的包(Using installed packages)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installed_packages.html#mypy-pep-561">在 mypy 中使用已安装的包(PEP 561)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installed_packages.html#pep-561-creating-pep-561-compatible-packages">创建符合 PEP 561 的包(Creating PEP 561 compatible packages)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending_mypy.html">扩展和集成 mypy(Extending and integrating mypy)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#mypy-python-integrating-mypy-into-another-python-application">将 mypy 集成到另一个 Python 应用中(Integrating mypy into another Python application)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#mypy-extending-mypy-using-plugins">使用插件扩展 mypy(Extending mypy using plugins)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#mypy-configuring-mypy-to-use-plugins">配置 mypy 使用插件(Configuring mypy to use plugins)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#high-level-overview">高级概览(High-level overview)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#current-list-of-plugin-hooks">当前的插件钩子列表(Current list of plugin hooks)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_mypy.html#useful-tools">实用工具(Useful tools)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stubgen.html">自动存根生成(Automatic stub generation) (stubgen)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stubgen.html#specifying-what-to-stub">指定要生成存根的内容(Specifying what to stub)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubgen.html#specifying-how-to-generate-stubs">指定如何生成存根(Specifying how to generate stubs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubgen.html#additional-flags">附加标志(Additional flags)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stubtest.html">自动化存根测试(Automatic stub testing)(stubtest)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stubtest.html#stubtest-what-stubtest-does-and-does-not-do">stubtest 的功能与限制(What stubtest does and does not do)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubtest.html#example">示例(Example)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stubtest.html#usage">使用方法(Usage)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">其他</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common_issues.html">常见问题及解决方案(Common issues and solutions)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#no-errors-reported-for-obviously-wrong-code">明显错误的代码未报告错误(No errors reported for obviously wrong code)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#spurious-errors-and-locally-silencing-the-checker">冗余错误与局部静默检查器(Spurious errors and locally silencing the checker)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#ignoring-a-whole-file">忽略整个文件(Ignoring a whole file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#issues-with-code-at-runtime">运行时代码问题(Issues with code at runtime)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#mypy-mypy-runs-are-slow">Mypy 运行速度慢(Mypy runs are slow)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#types-of-empty-collections">空集合的类型(Types of empty collections)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#redefinitions-with-incompatible-types">不兼容类型的重新定义(Redefinitions with incompatible types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#invariance-vs-covariance">不变性与协变性(Invariance vs covariance)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#declaring-a-supertype-as-variable-type">将超类型声明为变量类型(Declaring a supertype as variable type)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#complex-type-tests">复杂的类型测试(Complex type tests)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#python-python-version-and-system-platform-checks">Python 版本和系统平台检查(Python version and system platform checks)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#displaying-the-type-of-an-expression">显示表达式的类型(Displaying the type of an expression)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#silencing-linters">静默代码检查工具(Silencing linters)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#covariant-subtyping-of-mutable-protocol-members-is-rejected">可变协议成员的协变子类型被拒绝(Covariant subtyping of mutable protocol members is rejected)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#dealing-with-conflicting-names">处理冲突的名称(Dealing with conflicting names)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#mypy-using-a-development-mypy-build">使用开发版 mypy(Using a development mypy build)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#variables-vs-type-aliases">变量与类型别名(Variables vs type aliases)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#incompatible-overrides">不兼容的重写(Incompatible overrides)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#unreachable-code">不可达代码(Unreachable code)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common_issues.html#narrowing-and-inner-functions">缩小范围和内部函数(Narrowing and inner functions)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="supported_python_features.html">支持的 Python 特性(Supported Python features)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="supported_python_features.html#runtime-definition-of-methods-and-functions">方法和函数的运行时定义(Runtime definition of methods and functions)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error_codes.html">错误代码(Error codes)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="error_codes.html#silencing-errors-based-on-error-codes">基于错误代码静默错误(Silencing errors based on error codes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_codes.html#enabling-disabling-specific-error-codes-globally">全局启用/禁用特定错误代码(Enabling/disabling specific error codes globally)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_codes.html#per-module-enabling-disabling-error-codes">每个模块启用/禁用错误代码(Per-module enabling/disabling error codes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_codes.html#subcodes-of-error-codes">错误代码的子代码(Subcodes of error codes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_codes.html#requiring-error-codes">强制要求错误代码(Requiring error codes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list.html">默认启用的错误代码(Error codes enabled by default)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#attr-defined">检查属性是否存在 [attr-defined]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#union-attr">检查每个联合项中属性是否存在 [union-attr]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#name-defined">检查名称是否定义 [name-defined]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#used-before-def">检查变量在定义之前是否被使用 [used-before-def]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#call-arg">检查调用中的参数 [call-arg]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#arg-type">检查参数类型 [arg-type]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#call-overload">检查对重载函数的调用 [call-overload]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#valid-type">检查类型的有效性 [valid-type]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#var-annotated">当变量类型不明确时要求注解 [var-annotated]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#override">检查重写的有效性 [override]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#return">检查函数是否返回值 [return]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#empty-body">检查函数的主体不为空 [empty-body]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#return-value">检查返回值是否兼容 [return-value]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#assignment">检查赋值语句中的类型 [assignment]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#method-assign">检查赋值目标是否为方法 [method-assign]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#type-var">检查类型变量值 [type-var]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#operator">检查各种运算符的使用 [operator]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#index">检查索引操作 [index]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#list-item">检查列表项 [list-item]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#dict-item">检查字典项 [dict-item]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#typeddict-typeddict-item">检查 TypedDict 项 [typeddict-item]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#typeddict-typeddict-unknown-key">检查 TypedDict 键 [typeddict-unknown-key]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#has-type">检查目标的类型是否已知 [has-type]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#import">检查导入问题 [import]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#import-not-found">检查导入目标是否可以找到 [import-not-found]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#import-untyped">检查导入目标是否可以找到 [import-untyped]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#no-redef">检查每个名称是否仅定义一次 [no-redef]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#func-returns-value">检查被调用函数是否返回值 [func-returns-value]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#abstract">检查抽象类的实例化 [abstract]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#type-abstract">安全处理抽象类型对象类型 [type-abstract]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#super-safe-super">检查通过 super 调用抽象方法是否有效 [safe-super]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#newtype-valid-newtype">检查 NewType 的目标 [valid-newtype]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#exit-exit-return">检查 __exit__ 的返回类型 [exit-return]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#name-match">检查命名的一致性 [name-match]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#literal-required">检查字面量在预期位置的使用 [literal-required]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#no-overload-impl">检查重载函数是否有实现 [no-overload-impl]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#unused-coroutine">检查协程返回值是否被使用 [unused-coroutine]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#await-top-level-await">关于顶层 await 表达式发出警告 [top-level-await]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#await-await-not-async">关于在协程外使用 await 表达式发出警告 [await-not-async]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#assert-type-assert-type">检查 assert_type 中的类型 [assert-type]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#truthy-function">检查函数未在布尔上下文中使用 [truthy-function]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#str-format">检查字符串格式化/插值是否类型安全 [str-format]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#str-bytes-safe">检查隐式字节强制转换 [str-bytes-safe]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#overload-overlap">检查重载函数是否重叠 [overload-overlap]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#overload-cannot-match">检查无法匹配的重载签名 [overload-cannot-match]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#annotation-unchecked">通知未检查函数中的注释 [annotation-unchecked]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#prop-decorator">装饰器在属性之前不支持 [prop-decorator]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#syntax">报告语法错误 [syntax]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#typeddict-typeddict-readonly-mutated">只读 TypedDict 的键被修改 [typeddict-readonly-mutated]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list.html#misc">杂项检查 [misc]</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error_code_list2.html">可选检查的错误代码(Error codes for optional checks)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#type-arg">检查类型参数是否存在 [type-arg]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#no-untyped-def">检查每个函数是否有注释 [no-untyped-def]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#redundant-cast">检查类型转换是否冗余 [redundant-cast]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#self-redundant-self">检查方法是否具有冗余的 Self 注解 [redundant-self]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#comparison-overlap">检查比较是否重叠 [comparison-overlap]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#no-untyped-call">检查未注解的函数未被调用 [no-untyped-call]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#any-no-any-return">检查函数不返回 Any 值 [no-any-return]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#any-no-any-unimported">检查由于缺少导入而没有 Any 组件的类型 [no-any-unimported]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#unreachable">检查语句或表达式是否不可达 [unreachable]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#deprecated">检查导入或使用的特性是否已弃用 [deprecated]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#redundant-expr">检查表达式是否冗余 [redundant-expr]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#possibly-undefined">警告有关仅在某些执行路径中定义的变量 [possibly-undefined]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#truthy-bool">检查表达式在布尔上下文中不隐式为真 [truthy-bool]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#truthy-iterable">检查可迭代对象在布尔上下文中不隐式为真 [truthy-iterable]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#type-ignore-ignore-without-code">检查 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 是否包含错误代码 [ignore-without-code]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#unused-awaitable">检查可等待返回值是否被使用 [unused-awaitable]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#type-ignore-unused-ignore">检查 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> 注释是否被使用 [unused-ignore]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#override-explicit-override">检查在重写基类方法时是否使用 <code class="docutils literal notranslate"><span class="pre">&#64;override</span></code> [explicit-override]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#mutable-override">检查可变属性的重写是否安全 [mutable-override]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#reveal-type-typing-typing-extensions-unimported-reveal">检查 <code class="docutils literal notranslate"><span class="pre">reveal_type</span></code> 是否从 typing 或 typing_extensions 导入 [unimported-reveal]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_code_list2.html#typeis-narrowed-type-not-subtype">检查 <code class="docutils literal notranslate"><span class="pre">TypeIs</span></code> 是否缩小类型 [narrowed-type-not-subtype]</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_features.html">附加功能(Additional features)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="additional_features.html#dataclasses">数据类(Dataclasses)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="additional_features.html#data-class-transforms">数据类转换(Data Class Transforms)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="additional_features.html#attrs-the-attrs-package">attrs 包(The attrs package)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="additional_features.html#mypy-using-a-remote-cache-to-speed-up-mypy-runs">使用远程缓存加速 mypy 运行(Using a remote cache to speed up mypy runs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="additional_features.html#extended-callable-types">扩展可调用类型(Extended Callable types)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答(Frequently Asked Questions)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-have-both-dynamic-and-static-typing">为什么同时有动态和静态类型？(Why have both dynamic and static typing?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#would-my-project-benefit-from-static-typing">我的项目会受益于静态类型吗？(Would my project benefit from static typing?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-python-can-i-use-mypy-to-type-check-my-existing-python-code">我可以使用 mypy 来检查我现有的 Python 代码吗？(Can I use mypy to type check my existing Python code?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#will-static-typing-make-my-programs-run-faster">静态类型会使我的程序运行得更快吗？(Will static typing make my programs run faster)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-is-mypy-free">mypy 是免费的吗？(Is mypy free?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-can-i-use-duck-typing-with-mypy">我可以在 mypy 中使用鸭子类型吗？(Can I use duck typing with mypy?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#python-i-like-python-and-i-have-no-need-for-static-typing">我喜欢 Python，但我不需要静态类型(I like Python and I have no need for static typing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-python-how-are-mypy-programs-different-from-normal-python">mypy 程序与普通 Python 程序有什么不同？(How are mypy programs different from normal Python?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-cython-how-is-mypy-different-from-cython">mypy 与 Cython 有什么不同？(How is mypy different from Cython?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#pypy-does-it-run-on-pypy">它在 PyPy 上运行吗？(Does it run on PyPy?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mypy-mypy-is-a-cool-project-can-i-help">mypy 是一个很棒的项目。我可以帮助吗？(Mypy is a cool project. Can I help?)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Mypy 版本说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">下一个版本</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-12">Mypy 1.12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-11">Mypy 1.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-10">Mypy 1.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-9">Mypy 1.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-8">Mypy 1.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-7">Mypy 1.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-6">Mypy 1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-4">Mypy 1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-2">Mypy 1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-1-1">Mypy 1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mypy-1-0">Mypy 1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id137">以前的版本</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+<section id="id2">
+<h1>索引表<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">索引</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">搜索页面</span></a></p></li>
+</ul>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="getting_started.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">入门</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2012-2022 Jukka Lehtosalo and mypy contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">欢迎来到 mypy 文档!</a><ul>
+<li><a class="reference internal" href="#id1">内容</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">索引表</a></li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=48a57134"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>
